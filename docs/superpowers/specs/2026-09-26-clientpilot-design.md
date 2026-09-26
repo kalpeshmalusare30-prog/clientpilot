@@ -47,7 +47,9 @@ moves it to the cloud as an installable PWA and reuses that code.
 ## 3. Architecture
 
 - **Next.js 15 (App Router) + TypeScript + React 19**, deployed to **Vercel Hobby** as project `clientpilot`. Repo `C:\kalpesh\kal\clientpilot` (git).
-- **Storage: Vercel Blob** (first-party, no new account). JSON documents under a random 32-hex prefix `BLOB_PREFIX` (env). All reads and writes go through server code; blob URLs are never sent to the browser; no secrets are stored in Blob. Reads must bypass the CDN cache so a read right after a write sees the write.
+- **Storage: a private Vercel Blob store** (first-party, no new account; `@vercel/blob` ≥ 2.3; OIDC auth on Vercel, no long-lived token in code). Every read needs authentication, so data is never reachable by URL. No secrets are stored in Blob.
+  - Hobby free quota: 2,000 advanced ops (writes/lists) and 10,000 simple ops (origin reads/heads) per month; **exceeding it blocks Blob for 30 days**, so the design keeps both low: two documents only, one write per user action, no Blob writes on login attempts, cached reads where a ≤ 60 s stale view is harmless.
+  - User-data reads use `get(..., { useCache: false })` (always latest). Writes use `ifMatch: <etag>`; on `BlobPreconditionFailedError` the change is re-applied to a fresh read (max 3 tries), so the cron and a phone action never overwrite each other.
 - **Daily cron: Vercel Cron** at `30 1 * * *` UTC (07:00 IST) calling `/api/cron/gigs`.
 - **AI: Gemini** via `@google/genai`, key `GEMINI_API_KEY` (Kalpesh's existing free key, same one ReelPilot uses), model fallback list `GEMINI_MODEL` (comma separated), same skip-on-429/503/404 logic as ReelPilot's `GeminiProvider`.
 - **PWA**: web manifest, icons, a minimal service worker (app-shell cache only; data always from network). Installable from Chrome on Android.
@@ -56,8 +58,8 @@ moves it to the cloud as an installable PWA and reuses that code.
 
 | Unit | Does | Depends on |
 |---|---|---|
-| `lib/store.ts` | typed get/put of each JSON document in Blob | `@vercel/blob`, `BLOB_PREFIX` |
-| `lib/auth.ts` | password check (constant time), HMAC-signed session token (Web Crypto, edge-safe), lockout bookkeeping | `APP_PASSWORD`, `SESSION_SECRET`, store (`auth.json`) |
+| `lib/store.ts` | typed read/mutate of the two JSON documents (conditional writes + retry); an in-memory backend for tests | `@vercel/blob` |
+| `lib/auth/*` | password check (constant time), HMAC-signed session token (Web Crypto, edge-safe), in-memory lockout, `requireSession()` guard used by every route handler and page | `APP_PASSWORD`, `SESSION_SECRET` |
 | `middleware.ts` | redirect/401 for anything not public | `lib/auth` token verify |
 | `lib/gigs/sources/*.ts` | one fetcher per source, ported from `lead-hunter/bot.js` (`srcFreelancerCom`, `srcHackerNews`, `srcRemotive`, `srcRemoteOK`, `srcWWR`, `srcWorkingNomads`, `srcJobicy`, `srcHimalayas`, `srcArbeitnow`). Reddit is dropped (blocks cloud IPs). | fetch |
 | `lib/gigs/score.ts` | `score()` and keyword hits, ported from `bot.js` | — |
@@ -72,13 +74,13 @@ moves it to the cloud as an installable PWA and reuses that code.
 
 ### 3.2 Data (Blob documents)
 
-- `gigs.json` — `{ updatedAt, items: Gig[] }`. Gig = `{ id, source, title, desc, url, budget, date, tags, score, fetchedAt }`. **Written only by the cron and the one-time import.**
-- `state.json` — `{ [leadId]: LeadState }`. LeadState = `{ kind: 'gig'|'local', status, proposal?, bidAmount?, bidCurrency?, sentAt?, followUpAt?, notes?, updatedAt }`. Status ∈ `new | drafted | sent | replied | won | lost | skipped`. **Written only by user actions.**
-- `local.json` — `{ items: LocalBiz[] }`. LocalBiz = `{ id, slug, name, area, catKey, catLabel, waNum, telNum, phoneDisplay, email, website, social, segment, evidence, whatsapp, emailSubject, emailBody, template, createdAt }`. Written by user actions (search, edit).
-- `settings.json` — `{ facts, never, allowedLinks, pricing, waTemplate, updatedAt }`.
-- `auth.json` — `{ [ip]: { fails, lockedUntil, last } }`.
+- `gigs.json` — `{ updatedAt, lastRun, items: Gig[] }`. Gig = `{ id, source, title, desc, url, budget, date, tags, score, fetchedAt }`. `lastRun` = `{ at, added, failed: string[] }`. **Written only by the cron and the one-time import.** Read with the default CDN cache (it changes once a day).
+- `data.json` — `{ state, local, settings, updatedAt }`, **written only by user actions and the import**, always read with `useCache: false`:
+  - `state` — `{ [leadId]: LeadState }`. LeadState = `{ kind: 'gig'|'local', status, proposal?, bidAmount?, bidCurrency?, sentAt?, followUpAt?, notes?, updatedAt }`. Status ∈ `new | drafted | sent | replied | won | lost | skipped`. A lead with no entry is `new`.
+  - `local` — `LocalBiz[]`. LocalBiz = `{ id, slug, name, area, catKey, catLabel, waNum, telNum, phoneDisplay, email, website, social, segment, evidence, whatsapp, emailSubject, emailBody, template, createdAt }`.
+  - `settings` — `{ facts, never, allowedLinks, pricing, waTemplate }`.
 
-Keeping cron output (`gigs.json`) and user decisions (`state.json`) in separate documents means the cron can never overwrite a status Kalpesh set. Single user, so user-vs-user write races are accepted.
+Keeping cron output and user decisions in separate documents means the cron never rewrites user data; conditional writes cover the rest.
 
 ### 3.3 API routes
 
@@ -110,13 +112,15 @@ Pages render on the server from Blob and use these routes for changes.
 
 ### Demos
 - `/d/<slug>` renders the template picked from the category (`print`, `dental`, `cafe`, else `general`). `print`, `dental` and `cafe` are copied from `lead-hunter/templates/demo-*.html`; `general` is a new template built from the same structure with neutral copy (services, contact, WhatsApp, map) for any other local business. Every page carries the "Demo preview — made for <name>" badge and `noindex`.
+- Demo pages read `data.json` with the default CDN cache and the response is cached for 5 minutes, so businesses viewing their demo do not use the Blob quota.
 - The search category picker offers the categories that `map-hunter.js` `categoryOf()` already maps.
 - Unknown slug → 404. Demo pages are the only public pages besides login.
 - Existing demos at `demos-kal1201.vercel.app` stay as they are.
 
 ### Security
 - `APP_PASSWORD`: generated passphrase (4 random words + number), shown to Kalpesh once in chat; stored only in Vercel env.
-- Lockout: 5 failed attempts per client IP → 15 minutes locked; counter kept in `auth.json` so it survives cold starts. Failures older than 15 minutes are forgotten. The client IP is read from Vercel's `x-real-ip` header (set by Vercel's edge, not by the client).
+- Lockout: 5 failed attempts per client IP → 15 minutes locked; failures older than 15 minutes are forgotten. Counters live in function memory (not Blob, so failed logins cannot burn the Blob quota); a cold start resets them, which is acceptable because the passphrase (4 random words + number) cannot be brute-forced online. The client IP is read from Vercel's `x-real-ip` header (set by Vercel's edge, not by the client).
+- Every route handler and server page calls `requireSession()` itself; middleware redirects are a convenience, not the only check.
 - Session token = `expiry.HMAC(SESSION_SECRET, expiry)`, verified in middleware with Web Crypto; constant-time compare.
 - Cron route refuses requests without the exact `CRON_SECRET` bearer.
 - Security headers: `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, `X-Content-Type-Options: nosniff`.
@@ -130,11 +134,12 @@ Pages render on the server from Blob and use these routes for changes.
 
 One-time script `scripts/import.mjs` (run from the PC during setup) uploads:
 - `gigs.json` from `lead-hunter/leads.json` (164 gigs).
-- `local.json` from `lead-hunter/map-leads.json` (101 businesses, with their existing messages; the three existing demo businesses keep their slugs).
-- `state.json`:
+- `data.json`, built from:
+- `local` ← `lead-hunter/map-leads.json` (101 businesses, with their existing messages; the three existing demo businesses keep their slugs).
+- `state`:
   - 4 bids placed on 2026-09-26 → `sent` with amounts (Freelancer ids 40734895 ₹18,000; 40734538 ₹7,000; 40734499 ₹18,000; 40695993 $380), follow-up 2026-09-29.
   - A9 Digital Prints → `sent` (first pitch Sept 19–20, replied "?"), follow-up 2026-09-28 11:00 IST, notes = the approved follow-up message from `lead-hunter/hunts/2026-09-26.json`.
-- `settings.json`: facts, NEVER list and allowed links from the Sept 26 facts sheet; pricing from `GUIDE.md` §6; WhatsApp template from `map-hunter.js`.
+- `settings`: facts, NEVER list and allowed links from the Sept 26 facts sheet; pricing from `GUIDE.md` §6; WhatsApp template from `map-hunter.js`.
 
 ## 6. Testing
 
@@ -144,7 +149,7 @@ One-time script `scripts/import.mjs` (run from the PC during setup) uploads:
 
 ## 7. Setup steps (all done by Claude from the PC, once)
 
-1. Create Vercel project `clientpilot`; create and link a Blob store.
-2. Set env vars: `APP_PASSWORD`, `SESSION_SECRET`, `CRON_SECRET`, `BLOB_PREFIX`, `GEMINI_API_KEY`, `GEMINI_MODEL`.
+1. Create Vercel project `clientpilot`; `vercel blob create-store clientpilot-data --access private --region bom1 --yes` (connects it to the project).
+2. Set env vars: `APP_PASSWORD`, `SESSION_SECRET`, `CRON_SECRET`, `GEMINI_API_KEY`, `GEMINI_MODEL`.
 3. Run the import; deploy to production; run the smoke test.
 4. Give Kalpesh the URL and password; he opens it on the phone and taps "Install app".
