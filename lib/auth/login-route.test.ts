@@ -30,4 +30,33 @@ describe("POST /api/login", () => {
     // another IP is unaffected
     expect((await login("river lamp tiger 42", "10.0.0.3")).status).toBe(200);
   });
+  it("locks after exactly 5 concurrent wrong attempts from one IP (no race)", async () => {
+    const results = await Promise.all(Array.from({ length: 10 }, () => login("wrong", "10.0.0.4")));
+    const statuses = results.map((r) => r.status);
+    expect(statuses.filter((s) => s === 401)).toHaveLength(5);
+    expect(statuses.filter((s) => s === 429)).toHaveLength(5);
+  });
+  it("does not admit a correct password fired alongside 5 concurrent wrong ones", async () => {
+    const results = await Promise.all([
+      login("wrong", "10.0.0.5"),
+      login("wrong", "10.0.0.5"),
+      login("wrong", "10.0.0.5"),
+      login("wrong", "10.0.0.5"),
+      login("wrong", "10.0.0.5"),
+      login("river lamp tiger 42", "10.0.0.5"),
+    ]);
+    const correct = results[results.length - 1]!;
+    expect(correct.status).not.toBe(200);
+    expect(correct.status).toBe(429);
+  });
+  it("treats a JSON body of null as a wrong password, not a crash", async () => {
+    const res = await POST(
+      new Request("https://x.test/api/login", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-real-ip": "10.0.0.6" },
+        body: "null",
+      }),
+    );
+    expect(res.status).toBe(401);
+  });
 });

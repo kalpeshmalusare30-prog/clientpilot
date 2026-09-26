@@ -6,6 +6,12 @@ import { recordFailure, recordSuccess, retryAfterMs } from "@/lib/auth/lockout";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
+  const body = (await req.json().catch(() => null)) as { password?: unknown } | null;
+  const password = typeof body?.password === "string" ? body.password : "";
+
+  // No await from here to recordFailure/recordSuccess: check-then-record must
+  // run as one synchronous step, or concurrent requests can all pass the
+  // lock check before any of them is recorded.
   const ip = clientIp(req);
   const lockMs = retryAfterMs(ip);
   if (lockMs > 0) {
@@ -14,8 +20,6 @@ export async function POST(req: Request) {
       { status: 429, headers: { "Retry-After": String(Math.ceil(lockMs / 1000)) } },
     );
   }
-  const body = (await req.json().catch(() => ({}))) as { password?: unknown };
-  const password = typeof body.password === "string" ? body.password : "";
   if (!password || !checkPassword(password)) {
     recordFailure(ip);
     return NextResponse.json({ ok: false, error: "Wrong password" }, { status: 401 });
