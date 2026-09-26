@@ -46,11 +46,11 @@ moves it to the cloud as an installable PWA and reuses that code.
 
 ## 3. Architecture
 
-- **Next.js 15 (App Router) + TypeScript + React 19**, deployed to **Vercel Hobby** as project `clientpilot`. Repo `C:\kalpesh\kal\clientpilot` (git).
+- **Next.js 16 (App Router) + TypeScript + React 19**, deployed to **Vercel Hobby** as project `clientpilot`, region `bom1`. Repo `C:\kalpesh\kal\clientpilot` (git). (Next 15 leaves maintenance on 2026-10-21, so a new app starts on 16; its route gate file is `proxy.ts`.)
 - **Storage: a private Vercel Blob store** (first-party, no new account; `@vercel/blob` ≥ 2.3; OIDC auth on Vercel, no long-lived token in code). Every read needs authentication, so data is never reachable by URL. No secrets are stored in Blob.
   - Hobby free quota: 2,000 advanced ops (writes/lists) and 10,000 simple ops (origin reads/heads) per month; **exceeding it blocks Blob for 30 days**, so the design keeps both low: two documents only, one write per user action, no Blob writes on login attempts, cached reads where a ≤ 60 s stale view is harmless.
   - User-data reads use `get(..., { useCache: false })` (always latest). Writes use `ifMatch: <etag>`; on `BlobPreconditionFailedError` the change is re-applied to a fresh read (max 3 tries), so the cron and a phone action never overwrite each other.
-- **Daily cron: Vercel Cron** at `30 1 * * *` UTC (07:00 IST) calling `/api/cron/gigs`.
+- **Daily cron: Vercel Cron** at `30 1 * * *` UTC calling `/api/cron/gigs`. Hobby precision is ±59 min, so it runs between 06:30 and 07:29 IST.
 - **AI: Gemini** via `@google/genai`, key `GEMINI_API_KEY` (Kalpesh's existing free key, same one ReelPilot uses), model fallback list `GEMINI_MODEL` (comma separated), same skip-on-429/503/404 logic as ReelPilot's `GeminiProvider`.
 - **PWA**: web manifest, icons, a minimal service worker (app-shell cache only; data always from network). Installable from Chrome on Android.
 
@@ -60,7 +60,7 @@ moves it to the cloud as an installable PWA and reuses that code.
 |---|---|---|
 | `lib/store.ts` | typed read/mutate of the two JSON documents (conditional writes + retry); an in-memory backend for tests | `@vercel/blob` |
 | `lib/auth/*` | password check (constant time), HMAC-signed session token (Web Crypto, edge-safe), in-memory lockout, `requireSession()` guard used by every route handler and page | `APP_PASSWORD`, `SESSION_SECRET` |
-| `middleware.ts` | redirect/401 for anything not public | `lib/auth` token verify |
+| `proxy.ts` | redirect/401 for anything not public (Next 16 name for middleware) | `lib/auth` token verify |
 | `lib/gigs/sources/*.ts` | one fetcher per source, ported from `lead-hunter/bot.js` (`srcFreelancerCom`, `srcHackerNews`, `srcRemotive`, `srcRemoteOK`, `srcWWR`, `srcWorkingNomads`, `srcJobicy`, `srcHimalayas`, `srcArbeitnow`). Reddit is dropped (blocks cloud IPs). | fetch |
 | `lib/gigs/score.ts` | `score()` and keyword hits, ported from `bot.js` | — |
 | `lib/gigs/merge.ts` | merge fetched gigs into `gigs.json`: dedupe by id, keep last 30 days, cap 600 | — |
