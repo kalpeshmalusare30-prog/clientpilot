@@ -70,4 +70,29 @@ describe("store", () => {
     await s.writeAll({ updatedAt: "t", lastRun: null, items: [] }, data);
     expect((await s.readData()).state["a"]?.status).toBe("won");
   });
+
+  it("first write is create-only: a concurrent first writer is retried, not overwritten", async () => {
+    const b = new MemoryBackend();
+    const s = createStore(b, clock);
+    b.beforeNextPut = () => {
+      const other = emptyData("t");
+      other.state["other"] = { kind: "local", status: "replied", updatedAt: "t" };
+      b.set(DATA_PATH, JSON.stringify(other)); // someone else created the document first
+    };
+    await s.mutateData((d) => {
+      d.state["mine"] = { kind: "gig", status: "skipped", updatedAt: "t" };
+      return d;
+    });
+    const d = await s.readData();
+    expect(d.state["other"]?.status).toBe("replied");
+    expect(d.state["mine"]?.status).toBe("skipped");
+  });
+});
+
+describe("MemoryBackend", () => {
+  it("put with create:true rejects when the path already has a document", async () => {
+    const b = new MemoryBackend();
+    b.set(DATA_PATH, "{}");
+    await expect(b.put(DATA_PATH, "{}", { create: true })).rejects.toBeInstanceOf(PreconditionFailed);
+  });
 });

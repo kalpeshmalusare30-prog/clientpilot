@@ -10,7 +10,25 @@ export class BlobBackend implements Backend {
     return { text, etag: res.blob.etag };
   }
 
-  async put(path: string, text: string, opts: { ifMatch?: string }): Promise<{ etag: string }> {
+  async put(path: string, text: string, opts: { ifMatch?: string; create?: boolean }): Promise<{ etag: string }> {
+    if (opts.create) {
+      try {
+        const r = await put(path, text, {
+          access: "private",
+          allowOverwrite: false,
+          addRandomSuffix: false,
+          contentType: "application/json",
+        });
+        return { etag: r.etag };
+      } catch (e) {
+        if (e instanceof BlobPreconditionFailedError) throw new PreconditionFailed(path);
+        // The SDK may throw a different error for "already exists" than for a stale ifMatch.
+        // Check whether someone else created the document first before treating this as unexpected.
+        const existing = await this.get(path, { fresh: true });
+        if (existing) throw new PreconditionFailed(path);
+        throw e;
+      }
+    }
     try {
       const r = await put(path, text, {
         access: "private",

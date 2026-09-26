@@ -12,10 +12,11 @@ export class MemoryBackend implements Backend {
     return f ? { ...f } : null;
   }
 
-  async put(path: string, text: string, opts: { ifMatch?: string } = {}): Promise<{ etag: string }> {
+  async put(path: string, text: string, opts: { ifMatch?: string; create?: boolean } = {}): Promise<{ etag: string }> {
     const hook = this.beforeNextPut;
     this.beforeNextPut = null;
     hook?.();
+    if (opts.create && this.files.has(path)) throw new PreconditionFailed(path);
     const cur = this.files.get(path);
     if (opts.ifMatch !== undefined && cur?.etag !== opts.ifMatch) throw new PreconditionFailed(path);
     return this.set(path, text);
