@@ -377,3 +377,10 @@ a.list-row:active { background: var(--surface-2); }
 .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: var(--surface-2); border: 1px solid var(--border); color: var(--text); padding: 10px 16px; border-radius: var(--radius-pill); font-size: 14px; z-index: 50; box-shadow: var(--shadow); }
 /* ReelPilot puts .list-row__meta beside the topic (max-width 40%); ClientPilot stacks it under the topic, so it gets the full width. */
 .list-row > div > .list-row__meta { max-width: none; }
+/* A stacked meta that must be read in full (Aaj: "failed: …" sources) wraps instead of being cut off. */
+.list-row__meta.list-row__meta--wrap { max-width: none; white-space: normal; overflow-wrap: anywhere; }
+/* iOS standalone uses the black-translucent status bar with viewport-fit=cover: keep the header below it. */
+.app-bar { padding-top: max(14px, env(safe-area-inset-top)); }
+@media (max-width: 640px) {
+  .app-bar { padding-top: max(12px, env(safe-area-inset-top)); }
+}

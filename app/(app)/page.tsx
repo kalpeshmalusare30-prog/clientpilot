@@ -33,9 +33,9 @@ export default async function TodayPage() {
 
       <div className="section-label">Gigs</div>
       <Link href="/gigs?f=new" className="list-row">
-        <div style={{ flex: 1 }}>
+        <div style={{ minWidth: 0, flex: 1 }}>
           <div className="list-row__topic">{s.newGigs} navin gigs (last 24 tas)</div>
-          <div className="list-row__meta">
+          <div className="list-row__meta list-row__meta--wrap">
             {s.lastRun ? `Last fetch ${formatIST(s.lastRun.at)} · +${s.lastRun.added}` : "Ajun fetch zala nahi"}
             {s.lastRun?.failed.length ? ` · failed: ${s.lastRun.failed.join(", ")}` : ""}
           </div>

@@ -63,15 +63,16 @@ export function createStore(backend: Backend, nowIso: () => string = () => new D
   };
 }
 
-let current: Store | null = null;
+// The singleton lives on globalThis, not in a module-level variable: Next loads this module once per
+// bundle (route handlers and pages get separate instances), and STORE_BACKEND=memory only works if
+// every bundle in the process sees the same store.
+const slot = globalThis as typeof globalThis & { __cpStore?: Store };
 
 export function getStore(): Store {
-  if (!current) {
-    current = createStore(process.env.STORE_BACKEND === "memory" ? new MemoryBackend() : new BlobBackend());
-  }
-  return current;
+  slot.__cpStore ??= createStore(process.env.STORE_BACKEND === "memory" ? new MemoryBackend() : new BlobBackend());
+  return slot.__cpStore;
 }
 
 export function setStoreForTests(store: Store): void {
-  current = store;
+  slot.__cpStore = store;
 }
