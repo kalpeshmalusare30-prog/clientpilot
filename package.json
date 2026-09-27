@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "gen:templates": "node scripts/gen-templates.mjs",
+    "dev": "npm run gen:templates && next dev",
+    "build": "npm run gen:templates && next build",
     "start": "next start",
-    "test": "vitest run",
+    "test": "npm run gen:templates && vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
