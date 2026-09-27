@@ -99,6 +99,16 @@ export interface Candidate {
   evidence: string;
 }
 
+/** OSM separates several values with ";" (people also use "," or a space before the next address): keep the first. */
+function firstValue(raw: string): string {
+  return (
+    raw
+      .split(/\s*[;,]\s*|\s+(?=https?:|www\.)/i)
+      .map((s) => s.trim().replace(/[.,;\s]+$/, ""))
+      .find(Boolean) ?? ""
+  );
+}
+
 /** "excluded" = chain/bank/non-Latin (counted), null = unusable (no name or no contact). */
 export function toCandidate(el: OsmElement, area: string): Candidate | "excluded" | null {
   const t = el.tags ?? {};
@@ -111,7 +121,7 @@ export function toCandidate(el: OsmElement, area: string): Candidate | "excluded
   if (!phone && !email) return null;
   const cat = categoryOf(t);
   if (EXCLUDE_CATS.has(cat.key)) return "excluded";
-  const site = (t.website || t["contact:website"] || "").trim().replace(/[.,;\s]+$/, "");
+  const site = firstValue(t.website || t["contact:website"] || "");
   const social = (t["contact:instagram"] || t["contact:facebook"] || "").trim().replace(/[.,;\s]+$/, "");
   const addr = [t["addr:housenumber"], t["addr:street"], t["addr:suburb"]].filter(Boolean).join(", ") || (t["addr:full"] || "").slice(0, 60);
   const hasRealSite = !!site && !SOCIAL_RE.test(site);

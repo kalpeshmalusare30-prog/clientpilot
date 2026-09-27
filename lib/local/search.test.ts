@@ -54,4 +54,56 @@ describe("searchLocal", () => {
     expect(audited).toEqual([]);
     expect(r.added.map((b) => b.name)).toEqual(["Sai Dental Care"]);
   });
+
+  // Two tiles: a 0.15° tall box splits into 2 rows of at most 0.09°.
+  const twoTiles = async () => ({ bbox: { south: 19.0, west: 72.8, north: 19.15, east: 72.85 }, label: "Andheri" });
+
+  it("keeps the first tile's leads and reports partial when a later tile fails (T8-2)", async () => {
+    let fetches = 0;
+    const d: SearchDeps = {
+      ...deps(),
+      geocode: twoTiles,
+      fetchElements: async () => {
+        if (fetches++ === 0) return ELEMENTS;
+        throw new Error("Overpass HTTP 504");
+      },
+    };
+    const r = await searchLocal({ ...base, deadline: Date.now() + 50_000 }, d);
+    expect(fetches).toBe(2);
+    expect(r.partial).toBe(true);
+    expect(r.scanned).toBe(ELEMENTS.length);
+    expect(r.added.map((b) => b.name)).toEqual(["Sai Dental Care", "Old Site Clinic"]);
+  });
+  it("still fails when the first tile fails, since there is nothing to show", async () => {
+    const d: SearchDeps = { ...deps(), geocode: twoTiles, fetchElements: async () => Promise.reject(new Error("Overpass HTTP 504")) };
+    await expect(searchLocal({ ...base, deadline: Date.now() + 50_000 }, d)).rejects.toThrow("Overpass HTTP 504");
+  });
+
+  it("counts an audit the deadline cut short as skipped, never as a site_down lead (T8-1)", async () => {
+    const d: SearchDeps = {
+      ...deps(),
+      audit: async (url, _name, signal) =>
+        url.includes("oldsite")
+          ? { verdict: "UNKNOWN", evidence: "audit cut short", incomplete: true }
+          : { verdict: signal.aborted ? "UNKNOWN" : "OK", evidence: "" },
+    };
+    const r = await searchLocal({ ...base, deadline: Date.now() + 50_000 }, d);
+    expect(r.partial).toBe(true);
+    expect(r.skippedAudits).toBe(1);
+    expect(r.added.map((b) => [b.name, b.segment])).toEqual([["Sai Dental Care", "no_website"]]);
+  });
+
+  it("clears an email only when it is at the dead domain itself or a subdomain (T8-8)", async () => {
+    const d: SearchDeps = {
+      ...deps(),
+      fetchElements: async () => [
+        el(11, { name: "Shop One", shop: "clothes", phone: "9820011122", website: "https://shop.example", email: "info@myshop.example" }),
+        el(12, { name: "Shop Two", shop: "clothes", phone: "9820011133", website: "https://www.dead.example", email: "Owner@Dead.Example" }),
+        el(13, { name: "Shop Three", shop: "clothes", phone: "9820011144", website: "https://third.example", email: "sales@mail.third.example" }),
+      ],
+      audit: async (url) => ({ verdict: "DOWN", evidence: "the domain does not seem to be working any more", url }),
+    };
+    const r = await searchLocal({ ...base, deadline: Date.now() + 50_000 }, d);
+    expect(Object.fromEntries(r.added.map((b) => [b.name, b.email]))).toEqual({ "Shop One": "info@myshop.example", "Shop Two": "", "Shop Three": "" });
+  });
 });

@@ -58,7 +58,15 @@ export async function searchLocal(input: SearchInput, deps: SearchDeps = realDep
       partial = true;
       break;
     }
-    elements.push(...(await deps.fetchElements(tile, selectors, signal)));
+    let got: OsmElement[];
+    try {
+      got = await deps.fetchElements(tile, selectors, signal);
+    } catch (e) {
+      if (i === 0) throw e; // nothing to show without the first tile
+      partial = true; // a later tile failed or hit the deadline: keep what we have
+      break;
+    }
+    elements.push(...got);
   }
 
   // Normalise, exclude, and drop anything already stored (by OSM id).
@@ -84,11 +92,16 @@ export async function searchLocal(input: SearchInput, deps: SearchDeps = realDep
         continue;
       }
       const a = await deps.audit(c.website, c.name, signal).catch((): AuditResult => ({ verdict: "UNKNOWN", evidence: "" }));
+      if (a.incomplete) {
+        // Cut short, refused or unconfirmable: not a verdict, so no lead; a later search can audit it again.
+        skippedAudits++;
+        continue;
+      }
       if (a.url) c.website = a.url;
       if (a.verdict === "DOWN") {
         c.segment = "site_down";
         c.evidence = a.evidence;
-        if (/domain/.test(a.evidence) && c.email.endsWith(regDomainOf(c.website))) c.email = "";
+        if (/domain/.test(a.evidence) && emailAtDomain(c.email, regDomainOf(c.website))) c.email = "";
       } else if (a.verdict === "OLD") {
         c.segment = "old_site";
         c.evidence = a.evidence;
@@ -138,4 +151,11 @@ function regDomainOf(u: string): string {
   } catch {
     return "\u0000"; // never matches an email
   }
+}
+
+/** The email is at `domain` itself or one of its subdomains (not merely a name that ends the same way). */
+function emailAtDomain(email: string, domain: string): boolean {
+  const e = email.toLowerCase();
+  const d = domain.toLowerCase();
+  return e.endsWith("@" + d) || e.endsWith("." + d);
 }

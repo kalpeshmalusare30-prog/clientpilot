@@ -44,4 +44,14 @@ describe("toCandidate", () => {
     expect(toCandidate(el(7, { name: "No Contact Shop", shop: "clothes" }), "A")).toBeNull();
     expect(toCandidate(el(8, { shop: "clothes" }), "A")).toBeNull();
   });
+  it.each([
+    ["https://a.example;https://b.example", "https://a.example"],
+    ["https://a.example; https://b.example", "https://a.example"],
+    ["https://a.example, https://b.example", "https://a.example"],
+    ["www.a.example www.b.example", "www.a.example"],
+    ["http://a.example https://b.example", "http://a.example"],
+    [";https://b.example", "https://b.example"],
+  ])("keeps only the first value of a multi-value website tag: %s", (website, want) => {
+    expect(toCandidate(el(9, { name: "Two Sites", shop: "clothes", phone: "9820099999", website }), "A")).toMatchObject({ website: want, segment: undefined });
+  });
 });
