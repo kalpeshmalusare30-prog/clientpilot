@@ -1,24 +1,34 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postJSON, putJSON } from "@/lib/client/api";
+import { settingsResult } from "@/lib/client-forms";
 import { DEFAULT_ALLOWED_LINKS } from "@/lib/defaults";
 import type { Settings } from "@/lib/types";
+
+type Result = ReturnType<typeof settingsResult>;
 
 export function SettingsForm({ initial }: { initial: Settings }) {
   const [s, setS] = useState(initial);
   const [links, setLinks] = useState(initial.allowedLinks.join("\n"));
   const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState("");
+  const [result, setResult] = useState<Result | null>(null);
+
+  // "Saved" clears itself; an error stays until closed or retried.
+  useEffect(() => {
+    if (!result?.clearAfterMs) return;
+    const t = setTimeout(() => setResult(null), result.clearAfterMs);
+    return () => clearTimeout(t);
+  }, [result]);
 
   async function save() {
     setBusy(true);
-    setMsg("");
+    setResult(null);
     try {
       const allowedLinks = links.split("\n").map((l) => l.trim()).filter(Boolean);
       await putJSON("/api/settings", { ...s, allowedLinks });
-      setMsg("Saved");
+      setResult(settingsResult(null));
     } catch (e) {
-      setMsg((e as Error).message);
+      setResult(settingsResult(e));
     } finally {
       setBusy(false);
     }
@@ -54,7 +64,13 @@ export function SettingsForm({ initial }: { initial: Settings }) {
         <button className="btn btn--primary" onClick={save} disabled={busy}>{busy ? "Saving…" : "Save"}</button>
         <button className="btn btn--ghost" onClick={logout}>Logout</button>
       </div>
-      {msg ? <div className="toast" role="status">{msg}</div> : null}
+      {/* Inline under the buttons, never a fixed toast over them. */}
+      {result ? (
+        <div className="btn-row" style={{ marginTop: 0, alignItems: "center" }}>
+          <p className="note" role={result.role} style={{ margin: 0, flex: 1, color: result.role === "alert" ? "var(--danger)" : undefined }}>{result.text}</p>
+          <button className="btn btn--ghost" onClick={() => setResult(null)} aria-label="Close">✕</button>
+        </div>
+      ) : null}
     </div>
   );
 }
