@@ -22,6 +22,7 @@ const byRank = (a: Gig, b: Gig) => b.score - a.score || (when(b) || 0) - (when(a
  * Merge a cron run into the stored list. Existing gigs keep their first fetchedAt;
  * everything is rescored; gigs older than `keepDays` are dropped and the list is
  * capped at `cap` — except `keepIds` (gigs Kalpesh has acted on), which always stay.
+ * `added` counts only the new gigs that made it into the returned list.
  */
 export function mergeGigs(
   existing: Gig[],
@@ -35,13 +36,13 @@ export function mergeGigs(
   const nowIso = new Date(now).toISOString();
 
   const byId = new Map(existing.map((g) => [g.id, g]));
-  let added = 0;
+  const newIds = new Set<string>();
   for (const f of fresh) {
     const prev = byId.get(f.id);
     if (prev) byId.set(f.id, { ...prev, ...f, fetchedAt: prev.fetchedAt, score: 0 });
     else {
       byId.set(f.id, { ...f, fetchedAt: nowIso, score: 0 });
-      added++;
+      newIds.add(f.id);
     }
   }
 
@@ -53,5 +54,6 @@ export function mergeGigs(
     .filter((g) => !keepIds.has(g.id))
     .sort(byRank)
     .slice(0, Math.max(0, cap - pinned.length));
-  return { items: [...pinned, ...rest].sort(byRank), added };
+  const items = [...pinned, ...rest].sort(byRank);
+  return { items, added: items.filter((g) => newIds.has(g.id)).length };
 }

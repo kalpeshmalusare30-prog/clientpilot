@@ -50,4 +50,13 @@ describe("mergeGigs", () => {
     expect(items).toHaveLength(3);
     expect(items.map((g) => g.id)).toContain("g9");
   });
+
+  it("counts as added only the new gigs that make it into the list", () => {
+    const strong = lead("strong", { title: "React node dashboard saas api" });
+    expect(mergeGigs([], [strong, lead("weak")], NOW, { cap: 1 })).toMatchObject({ added: 1 });
+    const pinned = old("p");
+    const r = mergeGigs([pinned], [lead("a")], NOW, { cap: 1, keepIds: new Set(["p"]) });
+    expect(r.items.map((g) => g.id)).toEqual(["p"]);
+    expect(r.added).toBe(0);
+  });
 });
