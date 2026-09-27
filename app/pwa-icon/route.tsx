@@ -1,9 +1,9 @@
 import { ImageResponse } from "next/og";
+import { iconSize } from "@/lib/pwa-icon";
 
 export function GET(req: Request) {
-  // Whole pixels only: a non-numeric or fractional size makes ImageResponse throw (500).
-  const n = Math.round(Number(new URL(req.url).searchParams.get("size") ?? 512));
-  const size = Math.min(1024, Math.max(48, Number.isFinite(n) ? n : 512));
+  // Fixed sizes only (other query params are ignored): an outsider cannot force a new render per ?size= value.
+  const size = iconSize(new URL(req.url).searchParams.get("size"));
   return new ImageResponse(
     (
       <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#0a0f1c" }}>
