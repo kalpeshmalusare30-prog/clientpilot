@@ -384,3 +384,17 @@ a.list-row:active { background: var(--surface-2); }
 @media (max-width: 640px) {
   .app-bar { padding-top: max(12px, env(safe-area-inset-top)); }
 }
+/* Gig detail: a long unbroken word (a URL in a gig title or description) wraps instead of widening the page. */
+.page-title { overflow-wrap: anywhere; }
+.desc { overflow-wrap: anywhere; }
+/* Proposal over the character limit: said in words, not only by the counter's colour. */
+.limit-alert { color: var(--danger); font-size: 13px; font-weight: 600; margin: 6px 0 0; }
+/* Toasts size to their text but stay inside the screen; an error toast carries Retry and a close button. */
+.toast { display: flex; align-items: center; gap: 10px; width: max-content; max-width: calc(100vw - 32px); overflow-wrap: anywhere; }
+.toast--warn { border-color: var(--warn); }
+.toast--error { border-color: var(--danger); }
+/* Warnings and errors can run to two lines, which a pill shape would clip at the corners. */
+.toast--warn, .toast--error { border-radius: var(--radius); }
+.toast__text { min-width: 0; }
+.toast__btn { flex: none; }
+.toast__close { flex: none; min-width: 44px; min-height: 44px; background: none; border: 0; color: var(--text-dim); font-size: 16px; cursor: pointer; }
