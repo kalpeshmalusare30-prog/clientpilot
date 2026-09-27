@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{BIZ_NAME}} — Coffee &amp; Kitchen in {{AREA}}, Mumbai</title>
-<meta name="description" content="{{BIZ_NAME}} is an all-day coffee house in {{AREA}}, Mumbai — small-batch roasts, all-day breakfast, and bakes out of the oven every morning. Order on WhatsApp or reserve a table.">
+<title>{{BIZ_NAME}} — {{CATEGORY}} in {{AREA}}</title>
+<meta name="description" content="{{BIZ_NAME}} — {{CATEGORY}} in {{AREA}}. See the menu, check timings, and order or reserve with one message or call.">
 <meta name="theme-color" content="#2b1b12">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -288,12 +288,14 @@
   .band h2{font-size:clamp(1.75rem,6vw,2.6rem);color:#fff;max-width:18ch;margin-top:.7rem}
   .band p{margin-top:.85rem;color:rgba(255,255,255,.92);max-width:44ch}
   .band .btn-wa{background:#fff;color:var(--terracotta-deep);margin-top:1.7rem;box-shadow:0 16px 34px -14px rgba(0,0,0,.4)}
+  .band .btn-ghost{margin-top:.8rem;color:#fff;border-color:rgba(255,255,255,.6)}
   .band .btn-wa:hover{background:#fff5ee;color:var(--terracotta-deep)}
 
   /* ---------- footer ---------- */
   footer{background:var(--espresso);color:rgba(246,237,224,.82);padding-block:2.8rem 6rem}
   .foot-grid{display:grid;gap:1.8rem}
-  .foot-brand{display:flex;align-items:center;gap:.6rem;font-family:var(--serif);font-size:1.22rem;color:var(--cream);font-weight:600}
+  .foot-grid>*{min-width:0}
+  .foot-brand{display:flex;align-items:center;gap:.6rem;overflow-wrap:anywhere;font-family:var(--serif);font-size:1.22rem;color:var(--cream);font-weight:600}
   .foot-brand .bean{width:32px;height:32px;border-radius:50%;background:radial-gradient(120% 120% at 30% 25%,#5a3a26,#2b1b12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
   .foot-sub{font-size:.92rem;margin-top:.75rem;max-width:38ch;color:rgba(246,237,224,.72)}
   .ig{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;margin-top:.6rem;font-weight:600;color:#f4b485}
@@ -316,7 +318,8 @@
     box-shadow:0 -10px 30px -18px rgba(43,27,18,.5);
   }
   .sticky-bar .btn{flex:1 1 0;min-height:50px;padding:.8rem 1rem;font-size:.98rem}
-  .sticky-bar .btn-call{flex:0 0 auto;background:var(--espresso);color:var(--cream)}
+  .sticky-bar .btn-wa{flex:2 1 0}
+  .sticky-bar .btn-call{flex:1 1 auto;background:var(--espresso);color:var(--cream)}
   .sticky-bar .btn-call:hover{background:#3d281a}
 
   /* ---------- responsive ---------- */
@@ -368,23 +371,23 @@
   <!-- hero -->
   <section class="hero" id="top">
     <div class="wrap">
-      <span class="hero-tag"><span class="dot"></span>Small-batch roasts · All-day kitchen · {{AREA}}</span>
-      <h1>Where {{AREA}} slows down for <em>good coffee</em> &amp; honest food.</h1>
-      <p class="lede">{{BIZ_NAME}} is an all-day coffee house in {{AREA}}, Mumbai — beans roasted in small batches, breakfast served till close, and bakes pulled warm from the oven each morning. Come for the flat white, stay for the second slice.</p>
+      <span class="hero-tag"><span class="dot"></span>{{CATEGORY}} · {{AREA}}</span>
+      <h1>Good food in {{AREA}}, <em>one message away</em>.</h1>
+      <p class="lede">{{BIZ_NAME}} — {{CATEGORY}} in {{AREA}}. See the menu, check timings, and order or reserve on WhatsApp, straight from your phone.</p>
       <div class="hero-cta">
         <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20place%20an%20order.">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-5.6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.6-1.2a.4.4 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a.9.9 0 0 0-.7.3A2.8 2.8 0 0 0 6.8 10a4.9 4.9 0 0 0 1 2.5 11 11 0 0 0 4.3 3.8c1.6.7 1.9.6 2.3.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.3-.2-.5-.3z"/></svg>
           Order on WhatsApp
         </a>
-        <a class="btn btn-ghost" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20reserve%20a%20table.%20Date%2Ftime%3A">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-          Reserve a table
+        <a class="btn btn-ghost" href="tel:+{{WA_NUMBER}}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.6 9.8a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>
+          Call to reserve
         </a>
       </div>
       <div class="hero-meta">
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.2H22l-6 4.4 2.3 7.2-6.3-4.6L5.7 20.8 8 13.6 2 9.2h7.6z"/></svg><b>4.8</b>&nbsp;on Google · 900+ reviews</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5 5 0 0 1 7 0"/><path d="M2 9a15 15 0 0 1 20 0"/><circle cx="12" cy="19.2" r="1.1" fill="currentColor" stroke="none"/></svg>Free Wi-Fi · Pet friendly</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Open till 11 PM</span>
+        <span data-wa>Order on WhatsApp</span>
+        <span>Call to reserve</span>
+        <span>Sample menu below</span>
       </div>
     </div>
   </section>
@@ -393,9 +396,9 @@
   <section class="section menu" id="menu">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="eyebrow">The Menu</span>
-        <h2>Little plates, proper coffee, everyday favourites.</h2>
-        <p>A short, seasonal menu we actually love making. Roasts rotate every month — ask our team what's brewing today at {{BIZ_NAME}}.</p>
+        <span class="eyebrow">Sample menu</span>
+        <h2>Everyday favourites.</h2>
+        <p>Your real dishes and prices go here — this is only an example.</p>
       </div>
 
       <div class="menu-groups">
@@ -403,39 +406,39 @@
         <div class="menu-card coffee reveal">
           <div class="mc-head">
             <span class="mc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h2a2 2 0 0 1 0 4h-2"/><path d="M7 2c0 1-1 1-1 2s1 1 1 2M11 2c0 1-1 1-1 2s1 1 1 2"/></svg></span>
-            <div><span class="k">01 · Sip</span><h3>Coffee &amp; Beverages</h3></div>
+            <div><span class="k">01 · Sip</span><h3>Drinks</h3></div>
           </div>
-          <div class="item"><span><span class="nm">Slow-brewed Filter Coffee<span class="tag">house</span></span><span class="ds">South-Indian style, chicory blend</span></span><span class="dots"></span><span class="pr">Rs 120</span></div>
-          <div class="item"><span><span class="nm">Flat White</span><span class="ds">Double ristretto, velvet micro-foam</span></span><span class="dots"></span><span class="pr">Rs 180</span></div>
-          <div class="item"><span><span class="nm">Hazelnut Cold Brew</span><span class="ds">18-hour steep, over big ice</span></span><span class="dots"></span><span class="pr">Rs 220</span></div>
-          <div class="item"><span><span class="nm">Masala Chai &amp; Kokum Cooler</span><span class="ds">Cutting chai or a Konkan chiller</span></span><span class="dots"></span><span class="pr">Rs 90</span></div>
+          <div class="item"><span><span class="nm">Masala Chai</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 30</span></div>
+          <div class="item"><span><span class="nm">Filter Coffee</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 40</span></div>
+          <div class="item"><span><span class="nm">Fresh Lime Soda</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 60</span></div>
+          <div class="item"><span><span class="nm">Lassi</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 70</span></div>
         </div>
 
         <!-- breakfast -->
         <div class="menu-card olive reveal">
           <div class="mc-head">
             <span class="mc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M12 10a3 3 0 0 0 0 6"/><path d="M5 4l1 2M12 3v2M19 4l-1 2"/></svg></span>
-            <div><span class="k">02 · Feast</span><h3>All-day Breakfast</h3></div>
+            <div><span class="k">02 · Eat</span><h3>Mains &amp; snacks</h3></div>
           </div>
-          <div class="item"><span><span class="nm">Bombay Masala Omelette</span><span class="ds">Three eggs, green chilli, sourdough toast</span></span><span class="dots"></span><span class="pr">Rs 240</span></div>
-          <div class="item"><span><span class="nm">Smashed Avo on Toast<span class="tag">veg</span></span><span class="ds">Chilli-lime, feta, poached egg</span></span><span class="dots"></span><span class="pr">Rs 290</span></div>
-          <div class="item"><span><span class="nm">Buttermilk Pancake Stack</span><span class="ds">Maple, banana, roasted almond</span></span><span class="dots"></span><span class="pr">Rs 260</span></div>
-          <div class="item"><span><span class="nm">Keema Pav &amp; Fried Egg</span><span class="ds">Slow-cooked keema, buttered pav</span></span><span class="dots"></span><span class="pr">Rs 280</span></div>
+          <div class="item"><span><span class="nm">Veg Sandwich</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 90</span></div>
+          <div class="item"><span><span class="nm">Paneer Roll</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 120</span></div>
+          <div class="item"><span><span class="nm">Masala Dosa</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 110</span></div>
+          <div class="item"><span><span class="nm">Veg Thali</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 180</span></div>
         </div>
 
         <!-- bakes -->
         <div class="menu-card reveal">
           <div class="mc-head">
             <span class="mc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-5a8 8 0 0 1 16 0v5z"/><path d="M4 21h16"/><path d="M12 8V5M9 8V6M15 8V6"/></svg></span>
-            <div><span class="k">03 · Sweet</span><h3>Bakes &amp; Desserts</h3></div>
+            <div><span class="k">03 · Sweet</span><h3>Sweets</h3></div>
           </div>
-          <div class="item"><span><span class="nm">Sea-salt Chocolate Cookie<span class="tag">daily</span></span><span class="ds">Gooey centre, baked fresh at 8 AM</span></span><span class="dots"></span><span class="pr">Rs 110</span></div>
-          <div class="item"><span><span class="nm">Butter Croissant</span><span class="ds">48-hour laminated, flaky layers</span></span><span class="dots"></span><span class="pr">Rs 150</span></div>
-          <div class="item"><span><span class="nm">Basque Burnt Cheesecake</span><span class="ds">Caramelised top, custard middle</span></span><span class="dots"></span><span class="pr">Rs 240</span></div>
-          <div class="item"><span><span class="nm">Tiramisu Jar</span><span class="ds">Our espresso, mascarpone cream</span></span><span class="dots"></span><span class="pr">Rs 220</span></div>
+          <div class="item"><span><span class="nm">Gulab Jamun</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 60</span></div>
+          <div class="item"><span><span class="nm">Kaju Katli</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 90</span></div>
+          <div class="item"><span><span class="nm">Fruit Custard</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 80</span></div>
+          <div class="item"><span><span class="nm">Shrikhand</span><span class="ds">Sample item</span></span><span class="dots"></span><span class="pr">Rs 80</span></div>
         </div>
       </div>
-      <p class="menu-note">All prices inclusive of taxes · Full menu &amp; today's specials shared on WhatsApp.</p>
+      <p class="menu-note">Sample dishes and prices — your real menu goes here.</p>
     </div>
   </section>
 
@@ -444,21 +447,20 @@
     <div class="wrap">
       <div class="reveal">
         <span class="eyebrow">Our Story</span>
-        <h2>A warm little room in {{AREA}} that feels like <em>your</em> living room.</h2>
-        <p>{{BIZ_NAME}} started with one roaster, a handful of mismatched chairs, and a simple idea — that {{AREA}} deserved an unhurried place to meet. Morning sun through the window, warm lamplight by evening, low jazz in the background, and the smell of fresh bakes drifting from the kitchen.</p>
-        <p>We roast in small batches, bake every morning, and know most of our regulars by name — and by order. First date, laptop afternoon, or a quiet chai on your own: pull up a chair, you're always welcome.</p>
+        <h2>About {{BIZ_NAME}}</h2>
+        <p>Your story goes here — how you started, what you are known for, and what regulars always order.</p>
         <div class="story-stats">
-          <div class="st"><span class="num">Est. 2019</span><span class="lbl">Serving {{AREA}}</span></div>
-          <div class="st"><span class="num">15 hrs</span><span class="lbl">Open every day</span></div>
-          <div class="st"><span class="num">100%</span><span class="lbl">Fresh-roasted beans</span></div>
+          <div class="st"><span class="num">Dine-in</span></div>
+          <div class="st"><span class="num">Takeaway</span></div>
+          <div class="st"><span class="num">WhatsApp orders</span></div>
         </div>
       </div>
       <div class="reveal" aria-hidden="true">
         <div class="strip" style="grid-template-columns:1fr 1fr;gap:.8rem">
-          <div class="tile t2" style="min-height:124px"><div class="photo" data-src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Morning pour<small>House filter</small></span></div>
-          <div class="tile t3" style="min-height:124px"><div class="photo" data-src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Corner seat<small>Window light</small></span></div>
-          <div class="tile t4" style="min-height:124px"><div class="photo" data-src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">The counter<small>Fresh bakes</small></span></div>
-          <div class="tile t1" style="min-height:124px"><div class="photo" data-src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Slow afternoons<small>Good company</small></span></div>
+          <div class="tile t2" style="min-height:124px"><div class="photo" data-src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Sample photo</span></div>
+          <div class="tile t3" style="min-height:124px"><div class="photo" data-src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Sample photo</span></div>
+          <div class="tile t4" style="min-height:124px"><div class="photo" data-src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Sample photo</span></div>
+          <div class="tile t1" style="min-height:124px"><div class="photo" data-src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Sample photo</span></div>
         </div>
       </div>
     </div>
@@ -469,15 +471,15 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="eyebrow">The Vibe</span>
-        <h2>The kind of place you photograph before your first sip.</h2>
-        <p>Warm woods, terracotta tiles, a wall of plants, and always a fresh batch cooling on the counter.</p>
+        <h2>Your photos go here.</h2>
+        <p>Stock photos for now — your own food and place photos replace them.</p>
       </div>
       <div class="strip reveal">
-        <div class="tile t2 wide"><div class="photo" data-src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=900&q=55"></div><span class="lbl">Signature flat white<small>Rosetta, every time</small></span></div>
-        <div class="tile t3"><div class="photo" data-src="https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">All-day brunch<small>Served till 5 PM</small></span></div>
-        <div class="tile t5"><div class="photo" data-src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Fresh bakes<small>Out at 8 AM</small></span></div>
-        <div class="tile t6"><div class="photo" data-src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Cosy corners<small>Wi-Fi &amp; plug points</small></span></div>
-        <div class="tile t1 wide"><div class="photo" data-src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&w=900&q=55"></div><span class="lbl">Evenings at {{BIZ_NAME}}<small>Lamplight &amp; low jazz</small></span></div>
+        <div class="tile t2 wide"><div class="photo" data-src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=900&q=55"></div><span class="lbl">Sample photo</span></div>
+        <div class="tile t3"><div class="photo" data-src="https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Sample photo</span></div>
+        <div class="tile t5"><div class="photo" data-src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Sample photo</span></div>
+        <div class="tile t6"><div class="photo" data-src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=600&q=55"></div><span class="lbl">Sample photo</span></div>
+        <div class="tile t1 wide"><div class="photo" data-src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&w=900&q=55"></div><span class="lbl">Sample photo</span></div>
       </div>
     </div>
   </section>
@@ -488,15 +490,15 @@
       <div class="sec-head reveal">
         <span class="eyebrow">Find Us</span>
         <h2>Come say hi in {{AREA}}.</h2>
-        <p>Walk in, order ahead on WhatsApp, or book a table for the evening — whatever suits you.</p>
+        <p>Message or call before you come — the timings below are samples.</p>
       </div>
       <div class="visit-grid">
         <div class="info-card reveal">
-          <span class="open-pill"><span class="dot"></span>Open now · till 11:00 PM</span>
+          <span class="open-pill"><span class="dot"></span>Sample timings</span>
           <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Opening Hours</h3>
           <div class="hours-row"><span class="d">Monday – Thursday</span><span class="t">8:00 AM – 11:00 PM</span></div>
           <div class="hours-row"><span class="d">Friday</span><span class="t">8:00 AM – 11:30 PM</span></div>
-          <div class="hours-row today"><span class="d">Saturday · Today</span><span class="t">8:00 AM – 11:30 PM</span></div>
+          <div class="hours-row"><span class="d">Saturday</span><span class="t">8:00 AM – 11:30 PM</span></div>
           <div class="hours-row"><span class="d">Sunday</span><span class="t">8:30 AM – 11:00 PM</span></div>
           <div class="visit-cta">
             <a class="btn btn-sm btn-solid" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20reserve%20a%20table.%20Date%2Ftime%3A">Reserve on WhatsApp</a>
@@ -506,15 +508,15 @@
 
         <div class="info-card reveal">
           <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Where to find us</h3>
-          <p class="addr"><strong>{{BIZ_NAME}}</strong><br>Ground Floor, Linking Road corner,<br>{{AREA}}, Mumbai – 400 053<br>Maharashtra, India</p>
-          <div class="map" role="img" aria-label="Map showing {{BIZ_NAME}} in {{AREA}}, Mumbai">
+          <p class="addr"><strong>{{BIZ_NAME}}</strong><br>{{AREA}}<br><small>{{ADDR}}</small></p>
+          <div class="map" role="img" aria-label="Map showing {{BIZ_NAME}} in {{AREA}}">
             <span class="road r1"></span>
             <span class="road r2"></span>
             <span class="pin"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg></span>
-            <span class="maplbl">{{AREA}}, Mumbai</span>
+            <span class="maplbl">{{AREA}}</span>
           </div>
           <div class="visit-cta">
-            <a class="btn btn-sm btn-solid" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20could%20you%20share%20your%20location%2Fdirections%3F">Get directions</a>
+            <a class="btn btn-sm btn-solid" href="https://www.google.com/maps/search/?api=1&query={{BIZ_NAME}}+{{AREA}}">Get directions</a>
           </div>
         </div>
       </div>
@@ -526,11 +528,12 @@
     <div class="wrap">
       <span class="eyebrow">Hungry already?</span>
       <h2>Your table — or your order — is one message away.</h2>
-      <p>Tell us what you're craving and we'll have it ready. Delivery, takeaway, or a cosy seat at {{BIZ_NAME}}.</p>
+      <p>Order, takeaway or a table — ask {{BIZ_NAME}} with one message or call.</p>
       <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20place%20an%20order.">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-5.6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.6-1.2a.4.4 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a.9.9 0 0 0-.7.3A2.8 2.8 0 0 0 6.8 10a4.9 4.9 0 0 0 1 2.5 11 11 0 0 0 4.3 3.8c1.6.7 1.9.6 2.3.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.3-.2-.5-.3z"/></svg>
         Order on WhatsApp
       </a>
+      <a class="btn btn-ghost" href="tel:+{{WA_NUMBER}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.6 9.8a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>Call {{PHONE_DISPLAY}}</a>
     </div>
   </section>
 
@@ -539,11 +542,7 @@
     <div class="wrap foot-grid">
       <div>
         <div class="foot-brand"><span class="bean" aria-hidden="true"></span>{{BIZ_NAME}}</div>
-        <p class="foot-sub">An all-day coffee house in {{AREA}}, Mumbai. Slow coffee, honest food, and a seat that's always warm for you.</p>
-        <a class="ig" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20found%20you%20on%20Instagram.">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
-          @{{BIZ_NAME}}.cafe
-        </a>
+        <p class="foot-sub">{{CATEGORY}} in {{AREA}}.</p>
       </div>
       <div class="foot-col">
         <h4>Explore</h4>
@@ -557,7 +556,7 @@
       </div>
     </div>
     <div class="wrap foot-bar">
-      <span>{{BIZ_NAME}} · {{AREA}}, Mumbai · © {{YEAR}}</span>
+      <span>{{BIZ_NAME}} · {{AREA}} · © {{YEAR}}</span>
       <span>Website by <a href="#top">Kalpesh Malusare</a> · Web Developer, Mumbai</span>
     </div>
   </footer>

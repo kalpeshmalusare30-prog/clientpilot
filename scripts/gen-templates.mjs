@@ -1,9 +1,16 @@
 // Bundles lib/demo/templates/*.html into lib/demo/templates.gen.ts (Vercel functions have no template files at runtime).
-// Transforms: tokens inside href="…" become URL-encoded variants; a robots noindex meta is ensured; badge wording unified.
+// Transforms: tokens inside href="…" become URL-encoded variants; a robots noindex meta is ensured; badge wording unified;
+// a visible "sample content" notice follows the demo badge; every wa.me link is marked data-wa (hidden for landlines).
 import { readFileSync, writeFileSync } from "node:fs";
 
 const dir = new URL("../lib/demo/templates/", import.meta.url);
 const keys = ["print", "dental", "cafe", "general"];
+
+/** In normal page flow (not ellipsized like the fixed badge), so it is always readable. */
+export const SAMPLE_NOTICE =
+  '<div class="demo-sample-notice" style="background:#fef3c7;color:#78350f;font:500 13px/1.45 system-ui,sans-serif;padding:8px 16px;text-align:center;overflow-wrap:anywhere">' +
+  "Free demo made for {{BIZ_NAME}} by Kalpesh Malusare. Text, menu, prices, timings and photos are samples, not real details of {{BIZ_NAME}}.</div>";
+
 const out = {};
 for (const k of keys) {
   let html = readFileSync(new URL(`${k}.html`, dir), "utf8");
@@ -14,6 +21,17 @@ for (const k of keys) {
     html = html.replace(/<head[^>]*>/i, (m) => `${m}\n<meta name="robots" content="noindex, nofollow">`);
   }
   html = html.replaceAll("Demo preview - made for", "Demo preview — made for");
+
+  // The badge is a <div class="demo-badge"> with no nested <div>; the notice goes right after its closing tag.
+  const badge = /<div class="demo-badge"[^>]*>(?:(?!<\/?div\b)[\s\S])*?<\/div>/.exec(html);
+  if (!badge) throw new Error(`${k}.html: no <div class="demo-badge"> found — cannot add the sample-content notice`);
+  if (!html.includes("demo-sample-notice")) {
+    const end = badge.index + badge[0].length;
+    html = `${html.slice(0, end)}\n${SAMPLE_NOTICE}${html.slice(end)}`;
+  }
+
+  // Landline businesses: render.ts hides [data-wa], so every WhatsApp link must carry it.
+  html = html.replace(/<a\b(?![^>]*\sdata-wa\b)(?=[^>]*href="[^"]*wa\.me\/)/g, "<a data-wa");
   out[k] = html;
 }
 writeFileSync(

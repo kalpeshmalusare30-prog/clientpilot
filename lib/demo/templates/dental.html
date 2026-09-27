@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{BIZ_NAME}} - Gentle, Modern Dentistry in {{AREA}}, Mumbai</title>
-<meta name="description" content="Painless, unhurried dental care in {{AREA}}, Mumbai. Single-sitting root canals, cleaning, braces, implants and kids dentistry at {{BIZ_NAME}}. Book on WhatsApp.">
+<title>{{BIZ_NAME}} - Dental Clinic in {{AREA}}</title>
+<meta name="description" content="{{BIZ_NAME}} - dental clinic in {{AREA}}. Cleaning, braces, root canal, implants and kids dentistry. Message or call to book.">
 <style>
   :root{
     --mint-50:#f2fbf9;
@@ -245,6 +245,7 @@
     background:radial-gradient(circle at 35% 30%, #ffffff, #dff4ee 72%);
     box-shadow:0 20px 44px rgba(6,32,27,.4), inset 0 2px 0 rgba(255,255,255,.9);
   }
+  .avatar svg{width:46%;height:46%}
   .avatar::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:2px solid rgba(255,255,255,.35)}
   .dentist-photo .badge{
     position:absolute;left:16px;bottom:16px;background:rgba(255,255,255,.96);color:var(--navy-900);
@@ -340,7 +341,7 @@
   .foot-brand{display:flex;align-items:center;gap:12px}
   .foot-brand .logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(150deg,var(--teal-400),var(--teal-600));display:grid;place-items:center;flex:0 0 auto}
   .foot-brand .logo svg{width:24px;height:24px}
-  .foot-brand .name{font-family:var(--font-display);font-size:21px;color:#fff;font-weight:600}
+  .foot-brand .name{overflow-wrap:anywhere;font-family:var(--font-display);font-size:21px;color:#fff;font-weight:600}
   .foot-brand .loc{font-size:13px;color:#8fb3ac;font-weight:600}
   .foot-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px}
   .foot-cols h4{font-size:12.5px;text-transform:uppercase;letter-spacing:.1em;color:#79a49b;margin:0 0 13px;font-weight:800}
@@ -349,7 +350,7 @@
   .foot-cols a:hover{color:var(--teal-400)}
   .foot-cols ul{list-style:none;padding:0;margin:0}
   .foot-bottom{margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:7px}
-  .foot-bottom .biz{font-size:14px;color:#e6f2ef;font-weight:700}
+  .foot-bottom .biz{overflow-wrap:anywhere;font-size:14px;color:#e6f2ef;font-weight:700}
   .foot-bottom .credit{font-size:13.5px;color:#8fb3ac;font-weight:500}
   .foot-bottom .credit b{color:var(--teal-400);font-weight:700}
 
@@ -362,7 +363,8 @@
     box-shadow:0 -6px 20px rgba(12,40,49,.09);
   }
   .sticky-cta .btn{flex:1;padding:14px 12px;font-size:15.5px;min-height:52px}
-  .sticky-cta .btn-call{flex:0 0 auto;padding:14px 20px}
+  .sticky-cta .btn-wa{flex:2 1 0}
+  .sticky-cta .btn-call{flex:1 1 auto;padding:14px 20px}
 
   /* reveal */
   .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1)}
@@ -421,7 +423,7 @@
     </a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#services">Services</a>
-      <a href="#dentist">Our Dentist</a>
+      <a href="#dentist">Your Dentist</a>
       <a href="#reviews">Reviews</a>
       <a href="#visit">Visit Us</a>
     </nav>
@@ -438,9 +440,9 @@
   <section class="hero">
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <span class="eyebrow">Gentle Dental Studio · {{AREA}}, Mumbai</span>
+        <span class="eyebrow">Dental clinic · {{AREA}}</span>
         <h1>Dentistry in {{AREA}} that finally feels <span class="accent">calm.</span></h1>
-        <p class="lede">At {{BIZ_NAME}} we pair single-sitting root canals and digital scans with an unhurried, no-judgement chair-side manner. The result: a clinic the whole family actually looks forward to visiting.</p>
+        <p class="lede">At {{BIZ_NAME}}, every treatment is explained in plain language before it starts, so the whole family feels at ease.</p>
         <div class="hero-actions">
           <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6a10 10 0 0 1-3.8-3.4c-.3-.4-.9-1.3-.9-2.4 0-1.2.6-1.7.8-2 .2-.2.4-.2.6-.2h.4c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.5.9 1 1.4 1.7 1.9.3.2.5.2.7 0l.5-.6c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.2.1.7 0 1.2Z"/></svg>
@@ -452,16 +454,9 @@
           </a>
         </div>
         <div class="hero-meta">
-          <span class="stars" aria-label="Rated 4.9 out of 5">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg>
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg>
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg>
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg>
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg>
-          </span>
-          <small>4.9 rating · 300+ patients</small>
-          <span class="divider" aria-hidden="true"></span>
-          <small>Open today till 8:30 PM</small>
+          <small data-wa>Book on WhatsApp</small>
+          <span class="divider" aria-hidden="true" data-wa></span>
+          <small>Sample timings below</small>
         </div>
       </div>
 
@@ -478,7 +473,7 @@
         </div>
         <div class="float-card fc-2">
           <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></span>
-          <span><b>100% sterilised</b><span>Sealed instruments</span></span>
+          <span><b>Hygiene first</b><span>Clean, calm clinic</span></span>
         </div>
       </div>
     </div>
@@ -497,7 +492,7 @@
       </div>
       <div class="trust-item">
         <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14.1l-3-3"/></svg></span>
-        <div><b>Experienced team</b><span>15+ years</span></div>
+        <div><b>Clear explanations</b><span>Before every treatment</span></div>
       </div>
       <div class="trust-item">
         <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>
@@ -527,14 +522,14 @@
           <div class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16"/><path d="M4 8v8"/><path d="M20 8v8"/><rect x="6.5" y="10.5" width="3" height="3" rx=".8"/><rect x="14.5" y="10.5" width="3" height="3" rx=".8"/><path d="M9.5 12h5"/></svg></div>
           <h3>Braces &amp; clear aligners</h3>
           <p>Metal, ceramic or near-invisible aligners, mapped out with a clear timeline and honest cost before you commit.</p>
-          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Free smile assessment</span>
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Clear plan before you start</span>
         </article>
 
         <article class="svc reveal">
           <div class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3 0-5 2-5 5 0 2 .8 3.5 1.3 5.4.5 2 .5 5.6 1.9 5.6 1 0 1-2 1.8-2s.8 2 1.8 2c1.4 0 1.4-3.6 1.9-5.6.5-1.9 1.3-3.4 1.3-5.4 0-3-2-5-5-5Z"/><path d="M12 3v9"/></svg></div>
           <h3>Root canal treatment</h3>
-          <p>Single-sitting, genuinely painless RCT that saves the natural tooth and ends that deep, throbbing ache for good.</p>
-          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Often single sitting</span>
+          <p>Root canal treatment that aims to save the natural tooth and end that deep, throbbing ache.</p>
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Saves the natural tooth</span>
         </article>
 
         <article class="svc reveal">
@@ -566,19 +561,19 @@
     <div class="wrap">
       <div class="dentist reveal">
         <div class="dentist-photo">
-          <div class="avatar" aria-label="Portrait placeholder for Dr. Aditi Rane" role="img">AR</div>
-          <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14.1l-3-3"/></svg> BDS, MDS · 15+ yrs</span>
+          <div class="avatar" aria-label="Photo of your dentist goes here" role="img"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.4C10.4 2 8.3 1.7 6.9 2.7 5.4 3.7 4.6 5.7 4.9 8.1c.2 1.6.6 2.9.9 4.6.4 2 .5 3.6 1.1 5.4.3 1 .8 2.3 1.7 2.3.8 0 1-1 1.2-1.9.2-1 .4-2.1 1.2-2.1s1 1.1 1.2 2.1c.2.9.4 1.9 1.2 1.9.9 0 1.4-1.3 1.7-2.3.6-1.8.7-3.4 1.1-5.4.3-1.7.7-3 .9-4.6.3-2.4-.5-4.4-2-5.4-1.4-1-3.5-.7-5.1.7Z" fill="currentColor"/></svg></div>
+          <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14.1l-3-3"/></svg> Your dentist</span>
         </div>
         <div class="dentist-body">
           <span class="eyebrow">Meet your dentist</span>
           <h2>We listen first, then treat</h2>
-          <p class="role">Dr. Aditi Rane · Founder &amp; Chief Dental Surgeon</p>
-          <p>Dr. Rane opened {{BIZ_NAME}} in {{AREA}} on a single belief: nobody should dread the dentist. She explains every option in plain language, never upsells, and is the dentist anxious patients and their kids ask for by name.</p>
+          <p class="role">Your dentist's name &amp; qualifications go here</p>
+          <p>This section introduces the dentist at {{BIZ_NAME}} — qualifications, experience and how they care for patients — with your real details.</p>
           <div class="creds">
-            <span>BDS, MDS (Prosthodontics)</span>
-            <span>Certified Implantologist</span>
-            <span>Clear Aligner Provider</span>
-            <span>Painless RCT Specialist</span>
+            <span>Qualifications</span>
+            <span>Specialities</span>
+            <span>Years of practice</span>
+            <span>Languages spoken</span>
           </div>
         </div>
       </div>
@@ -589,35 +584,29 @@
   <section id="reviews" class="band band-tint">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="eyebrow">Patient stories</span>
-        <h2>Loved by families across {{AREA}}</h2>
-        <p>Real words from neighbours who now actually look forward to their dental visits.</p>
+        <span class="eyebrow">Reviews</span>
+        <h2>What patients say</h2>
+        <p>Your real Google reviews can be shown here.</p>
       </div>
       <div class="reviews">
         <figure class="review reveal">
-          <div class="rstars" aria-label="5 out of 5"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg></div>
           <p>I put off my root canal for two years out of fear. Here it was genuinely painless and done in one sitting. I can't believe I waited so long.</p>
           <figcaption class="who">
-            <span class="av a" aria-hidden="true">PS</span>
-            <span><b>Priya Sardesai</b><span>{{AREA}} · Root canal patient</span></span>
+            <span><b>Sample review</b><span>Patient</span></span>
           </figcaption>
         </figure>
 
         <figure class="review reveal">
-          <div class="rstars" aria-label="5 out of 5"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg></div>
           <p>My six-year-old usually cries at clinics, but the team made it a game. Now he reminds me about his own check-up. That says everything.</p>
           <figcaption class="who">
-            <span class="av b" aria-hidden="true">RK</span>
-            <span><b>Rahul Kamble</b><span>Parent · Kids dentistry</span></span>
+            <span><b>Sample review</b><span>Patient</span></span>
           </figcaption>
         </figure>
 
         <figure class="review reveal">
-          <div class="rstars" aria-label="5 out of 5"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.8 6.1 20l1.2-6.5L2.5 8.9 9.1 8z"/></svg></div>
           <p>Got my clear aligners here with the full plan and honest pricing upfront. Six months in and my smile is already transformed. Highly recommend.</p>
           <figcaption class="who">
-            <span class="av c" aria-hidden="true">MD</span>
-            <span><b>Meher Doshi</b><span>{{AREA}} · Clear aligners</span></span>
+            <span><b>Sample review</b><span>Patient</span></span>
           </figcaption>
         </figure>
       </div>
@@ -630,13 +619,13 @@
       <div class="sec-head reveal">
         <span class="eyebrow">Plan your visit</span>
         <h2>Timings &amp; location in {{AREA}}</h2>
-        <p>Easy to reach, easy to book. Walk-ins are welcome, but a quick WhatsApp means zero waiting.</p>
+        <p>Message or call before you come — the timings below are samples.</p>
       </div>
 
       <div class="info-grid">
         <div class="info-card reveal">
           <h3><span class="hic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span> Clinic timings</h3>
-          <span class="pill-open"><span class="dot" aria-hidden="true"></span> Open now · closes 8:30 PM</span>
+          <span class="pill-open"><span class="dot" aria-hidden="true"></span> Sample timings</span>
           <ul class="hours">
             <li><span class="day">Monday to Friday</span><span class="time">10:00 AM - 8:30 PM</span></li>
             <li><span class="day">Saturday</span><span class="time">10:00 AM - 9:00 PM</span></li>
@@ -651,19 +640,17 @@
 
         <div class="info-card reveal">
           <h3><span class="hic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span> Find us</h3>
-          <div class="map" role="img" aria-label="Map showing {{BIZ_NAME}} in {{AREA}}, Mumbai">
+          <div class="map" role="img" aria-label="Map showing {{BIZ_NAME}} in {{AREA}}">
             <span class="road r3"></span>
             <span class="road r1"></span>
             <span class="road r2"></span>
             <span class="pin" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.6" fill="#fff"/></svg></span>
-            <span class="maplabel"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg> {{AREA}}, Mumbai</span>
+            <span class="maplabel"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg> {{AREA}}</span>
           </div>
           <p class="addr">
-            <span class="lbl">{{BIZ_NAME}}</span>
-            Ground Floor, Sai Plaza, Junction Road,<br>
-            {{AREA}}, Mumbai 400053<br>
-            <strong>Landmark:</strong> Opposite {{AREA}} Metro Station
+            <span class="lbl">{{BIZ_NAME}}</span>{{AREA}}<br><small>{{ADDR}}</small>
           </p>
+          <a class="btn btn-call" style="margin-bottom:10px" href="https://www.google.com/maps/search/?api=1&query={{BIZ_NAME}}+{{AREA}}">Get directions</a>
           <a class="btn btn-call" href="tel:+{{WA_NUMBER}}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
             Call {{PHONE_DISPLAY}}
@@ -678,7 +665,7 @@
     <div class="wrap">
       <div class="final reveal">
         <h2>Your calmest dental visit starts with one message</h2>
-        <p>Tell us what's bothering you, from a routine cleaning to the tooth you've been putting off. {{BIZ_NAME}} takes it from there.</p>
+        <p>Tell {{BIZ_NAME}} what's bothering you, from a routine cleaning to the tooth you've been putting off.</p>
         <div class="actions">
           <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6a10 10 0 0 1-3.8-3.4c-.3-.4-.9-1.3-.9-2.4 0-1.2.6-1.7.8-2 .2-.2.4-.2.6-.2h.4c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.5.9 1 1.4 1.7 1.9.3.2.5.2.7 0l.5-.6c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.2.1.7 0 1.2Z"/></svg>
@@ -707,7 +694,7 @@
             <div class="loc">Gentle &amp; modern dental care</div>
           </div>
         </div>
-        <p style="margin-top:16px;max-width:36ch;font-size:14.5px;color:#a7c6c0;font-weight:500">Caring for smiles across {{AREA}}, Mumbai, one calm and painless visit at a time.</p>
+        <p style="margin-top:16px;max-width:36ch;font-size:14.5px;color:#a7c6c0;font-weight:500">Caring for smiles in {{AREA}}, one calm visit at a time.</p>
       </div>
 
       <div class="foot-cols">
@@ -724,7 +711,7 @@
           <h4>Clinic</h4>
           <ul>
             <li><a href="#dentist">Our dentist</a></li>
-            <li><a href="#reviews">Patient reviews</a></li>
+            <li><a href="#reviews">Reviews</a></li>
             <li><a href="#visit">Timings</a></li>
             <li><a href="#visit">Location</a></li>
           </ul>
@@ -734,15 +721,15 @@
           <ul>
             <li><a href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">WhatsApp booking</a></li>
             <li><a href="tel:+{{WA_NUMBER}}">{{PHONE_DISPLAY}}</a></li>
-            <li>{{AREA}}, Mumbai</li>
-            <li>Mon to Sat, Sun half day</li>
+            <li>{{AREA}}</li>
+            <li>Call or message for timings</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="foot-bottom">
-      <span class="biz">© {{YEAR}} {{BIZ_NAME}} · {{AREA}}, Mumbai</span>
+      <span class="biz">© {{YEAR}} {{BIZ_NAME}} · {{AREA}}</span>
       <span class="credit">Website designed by <b>Kalpesh Malusare</b> · Web Developer, Mumbai</span>
     </div>
   </div>

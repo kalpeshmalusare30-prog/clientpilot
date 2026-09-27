@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{BIZ_NAME}} — Fast Printing & Xerox in {{AREA}}, Mumbai</title>
-<meta name="description" content="{{BIZ_NAME}} in {{AREA}}, Mumbai. WhatsApp your files and collect crisp prints, photocopies, colour printing, binding, passport photos and more. Open 7 days.">
+<title>{{BIZ_NAME}} — Printing &amp; Xerox in {{AREA}}</title>
+<meta name="description" content="{{BIZ_NAME}} — print &amp; xerox in {{AREA}}. Send your files and collect prints, photocopies, colour printing, binding, passport photos and more.">
 <meta name="theme-color" content="#0a1636">
 <style>
   :root{
@@ -347,8 +347,9 @@
   /* ---------- footer ---------- */
   footer{background:#070f24;color:#aebad9;padding:44px 0 100px}
   .foot-grid{display:grid;gap:28px}
+  .foot-grid>*{min-width:0}
   .foot-brand{display:flex;align-items:center;gap:11px;margin-bottom:14px}
-  .foot-brand .brand-name{font-size:18px}
+  .foot-brand .brand-name{font-size:18px;white-space:normal;overflow-wrap:anywhere}
   footer p.f-desc{font-size:14.5px;color:#93a1c5;max-width:40ch;line-height:1.6}
   .foot-contact a{display:flex;align-items:center;gap:11px;padding:9px 0;min-height:44px;font-size:14.5px;color:#d4ddf5;font-weight:500}
   .foot-contact a svg{width:17px;height:17px;color:var(--amber-2);flex:none}
@@ -368,8 +369,8 @@
     padding:9px;border-radius:16px;box-shadow:0 12px 30px rgba(4,10,28,.5);
   }
   .sticky-cta .btn{flex:1;padding:14px 12px;min-height:50px;font-size:15px;border-radius:11px}
-  .sticky-cta .btn-call{flex:0 0 56px;padding:14px 0}
-  .sticky-cta .btn-call span{display:none}
+  .sticky-cta .btn-wa{flex:2 1 0}
+  .sticky-cta .btn-call{flex:1 1 auto;padding:14px 16px}
 
   /* ---------- responsive up ---------- */
   @media(min-width:640px){
@@ -435,9 +436,9 @@
 <section class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <span class="kicker on-ink">Print &amp; photocopy · {{AREA}}, Mumbai</span>
-      <h1>WhatsApp your files. Collect <span class="hl">crisp prints</span> in minutes.</h1>
-      <p class="lede">{{BIZ_NAME}} is the print &amp; xerox shop {{AREA}} keeps coming back to. No email, no queue — send the file, we'll message you when it's ready.</p>
+      <span class="kicker on-ink">Print &amp; photocopy · {{AREA}}</span>
+      <h1>Send your files. Collect <span class="hl">crisp prints</span>.</h1>
+      <p class="lede">{{BIZ_NAME}} — print &amp; xerox in {{AREA}}. Send your file on WhatsApp and collect it when it is ready.</p>
 
       <div class="hero-cta">
         <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20want%20to%20get%20some%20documents%20printed.%20Here%20are%20my%20files%3A">
@@ -451,16 +452,16 @@
       </div>
 
       <div class="trust-row">
-        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Ready in ~10 min</span>
-        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Open 7 days</span>
-        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Student &amp; bulk rates</span>
+        <span class="chip" data-wa><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>WhatsApp your files</span>
+        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Call before you come</span>
+        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Sample rates below</span>
       </div>
     </div>
 
     <!-- print ticket mock -->
     <div class="ticket" aria-hidden="true">
       <div class="ticket-head">
-        <span class="t">Order · {{AREA}}</span>
+        <span class="t">Sample order · {{AREA}}</span>
         <span class="ticket-status"><span class="dot"></span>Ready to collect</span>
       </div>
       <div class="ticket-rows">
@@ -490,21 +491,21 @@
         <div class="step-num">STEP 01</div>
         <div class="step-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 20.5l1.5-5.1A8.4 8.4 0 1 1 21 11.5Z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></div>
         <h3>Send your file</h3>
-        <p>WhatsApp us your PDF, photo or document. Tell us copies, colour or B/W, and paper size.</p>
+        <p>Send your PDF, photo or document. Tell us copies, colour or B/W, and paper size.</p>
         <div class="step-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       </div>
       <div class="step reveal">
         <div class="step-num">STEP 02</div>
         <div class="step-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg></div>
         <h3>We print it</h3>
-        <p>We confirm the price, then print on serviced machines. Most jobs are done in 10–15 minutes.</p>
+        <p>We confirm the price and the time before printing.</p>
         <div class="step-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       </div>
       <div class="step reveal">
         <div class="step-num">STEP 03</div>
         <div class="step-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
         <h3>Come collect</h3>
-        <p>Pick up at our {{AREA}} counter — or ask for home delivery on bulk orders. Pay by UPI or cash.</p>
+        <p>Pick up at the {{AREA}} counter.</p>
       </div>
     </div>
   </div>
@@ -567,31 +568,25 @@
 <section id="why">
   <div class="wrap">
     <div class="why reveal">
-      <span class="kicker on-ink">Why {{AREA}} chooses us</span>
-      <h2>Reliable prints, honest rates, always on time.</h2>
+      <span class="kicker on-ink">Why use {{BIZ_NAME}}</span>
+      <h2>Reliable prints, clear rates.</h2>
       <div class="why-list">
         <div class="why-item">
           <span class="why-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 11-13h-7z"/></svg></span>
-          <div><h3>Fast turnaround</h3><p>Walk-in copies on the spot; most WhatsApp jobs ready in 10–15 minutes.</p></div>
+          <div><h3>Fast turnaround</h3><p>Send the file ahead so it can be ready when you arrive.</p></div>
         </div>
         <div class="why-item">
           <span class="why-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></span>
-          <div><h3>Student &amp; bulk orders welcome</h3><p>Sharper rates for college projects, coaching notes &amp; office bulk printing.</p></div>
+          <div><h3>Student &amp; bulk orders</h3><p>Ask about rates for college projects, coaching notes &amp; office printing.</p></div>
         </div>
         <div class="why-item">
           <span class="why-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 15l2 2 4-4"/></svg></span>
-          <div><h3>Open 7 days a week</h3><p>Here when you need us — morning to late evening, weekends included.</p></div>
+          <div><h3>Order ahead on WhatsApp</h3><p>Send your files and details before you come.</p></div>
         </div>
         <div class="why-item">
           <span class="why-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/><path d="M8 12l2.5 2.5L16 9"/></svg></span>
-          <div><h3>Quality you can trust</h3><p>Genuine toner, clean scans and neat finishing — no smudges, no reprints.</p></div>
+          <div><h3>Quality you can trust</h3><p>Clean scans and neat finishing.</p></div>
         </div>
-      </div>
-      <div class="why-stats">
-        <div class="stat"><div class="n">~10 min</div><div class="l">Avg. turnaround</div></div>
-        <div class="stat"><div class="n">7 days</div><div class="l">Open all week</div></div>
-        <div class="stat"><div class="n">₹1</div><div class="l">From, per copy</div></div>
-        <div class="stat"><div class="n">UPI</div><div class="l">&amp; cash accepted</div></div>
       </div>
     </div>
   </div>
@@ -602,16 +597,16 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">Visit the shop</span>
-      <h2>Find {{BIZ_NAME}} in {{AREA}}, Mumbai</h2>
-      <p>Drop in for instant copies, or WhatsApp ahead and skip the wait entirely.</p>
+      <h2>Find {{BIZ_NAME}} in {{AREA}}</h2>
+      <p>Message or call before you come — the timings below are samples.</p>
     </div>
     <div class="info-grid">
       <div class="card reveal">
         <div class="card-pad">
           <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Opening hours</h3>
-          <div class="open-now"><span class="dot"></span>Open now · closes 10:00 PM</div>
+          <div class="open-now"><span class="dot"></span>Sample timings</div>
           <div class="hours-list">
-            <div class="hrow today"><span class="d">Monday – Friday</span><span class="t">9:00 AM – 10:00 PM</span></div>
+            <div class="hrow"><span class="d">Monday – Friday</span><span class="t">9:00 AM – 10:00 PM</span></div>
             <div class="hrow"><span class="d">Saturday</span><span class="t">9:00 AM – 10:00 PM</span></div>
             <div class="hrow"><span class="d">Sunday</span><span class="t">10:00 AM – 8:00 PM</span></div>
             <div class="hrow"><span class="d">Public holidays</span><span class="t">10:00 AM – 6:00 PM</span></div>
@@ -619,7 +614,7 @@
         </div>
       </div>
       <div class="card reveal">
-        <div class="map" role="img" aria-label="Approximate location of {{BIZ_NAME}} in {{AREA}}, Mumbai">
+        <div class="map" role="img" aria-label="Approximate location of {{BIZ_NAME}} in {{AREA}}">
           <span class="road r3"></span>
           <span class="road r1"></span>
           <span class="road r2"></span>
@@ -630,8 +625,8 @@
         </div>
         <div class="card-pad">
           <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.5"/></svg>Our address</h3>
-          <p class="addr"><strong>{{BIZ_NAME}}</strong><br>Shop-front near the main market road,<br>{{AREA}}, Mumbai, Maharashtra</p>
-          <a class="btn btn-dark block" style="margin-top:16px" href="https://www.google.com/maps/search/?api=1&query={{BIZ_NAME}}+{{AREA}}+Mumbai">
+          <p class="addr"><strong>{{BIZ_NAME}}</strong><br>{{AREA}}<br><small>{{ADDR}}</small></p>
+          <a class="btn btn-dark block" style="margin-top:16px" href="https://www.google.com/maps/search/?api=1&query={{BIZ_NAME}}+{{AREA}}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l19-9-9 19-2-8-8-2Z"/></svg>
             Get directions
           </a>
@@ -647,7 +642,7 @@
     <div class="cta-band reveal">
       <span class="kicker on-ink" style="justify-content:center">Ready when you are</span>
       <h2>Got something to print? Send it now.</h2>
-      <p>Message your files to {{BIZ_NAME}} on WhatsApp and we'll have them ready before you reach {{AREA}}.</p>
+      <p>Send your files to {{BIZ_NAME}}, or call to ask about rates and timing.</p>
       <div class="hero-cta">
         <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20want%20to%20get%20some%20documents%20printed.%20Here%20are%20my%20files%3A">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.4.1.2.1.9-.3 1.6Z"/></svg>
@@ -672,7 +667,7 @@
         </span>
         <span class="brand-name" style="color:#fff">{{BIZ_NAME}}</span>
       </div>
-      <p class="f-desc">Your neighbourhood print &amp; xerox shop in {{AREA}}, Mumbai. Photocopy, colour printing, binding, photos, lamination and more — done fast, done right.</p>
+      <p class="f-desc">Print &amp; xerox in {{AREA}}. Photocopy, colour printing, binding, photos, lamination and more.</p>
     </div>
     <div class="foot-contact">
       <p class="foot-h">Get in touch</p>
@@ -684,9 +679,9 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
         Call: {{PHONE_DISPLAY}}
       </a>
-      <a href="https://www.google.com/maps/search/?api=1&query={{BIZ_NAME}}+{{AREA}}+Mumbai">
+      <a href="https://www.google.com/maps/search/?api=1&query={{BIZ_NAME}}+{{AREA}}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        {{AREA}}, Mumbai · Get directions
+        {{AREA}} · Get directions
       </a>
     </div>
     <div class="foot-contact">
@@ -699,8 +694,8 @@
   </div>
   <div class="wrap">
     <div class="foot-bottom">
-      <span class="biz">{{BIZ_NAME}} · {{AREA}}, Mumbai</span>
-      <span class="credit">© {{YEAR}} {{BIZ_NAME}}. All rights reserved.</span>
+      <span class="biz">{{BIZ_NAME}} · {{AREA}}</span>
+      <span class="credit">© {{YEAR}} {{BIZ_NAME}}</span>
       <span class="credit">Website designed by <a href="#top">Kalpesh Malusare</a> · Web Developer, Mumbai</span>
     </div>
   </div>
