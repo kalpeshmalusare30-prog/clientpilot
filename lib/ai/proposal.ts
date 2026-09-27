@@ -119,30 +119,53 @@ export function isAllowedLink(url: string, allowed: string[]): boolean {
   });
 }
 
-/* Link detection. Three shapes, matched in one pass so a kept URL is never re-scanned:
+/* Link detection. Four shapes, matched in one pass so a kept URL is never re-scanned:
  *  - markdown links [text](url)
- *  - any scheme, any case: https://, HTTPS://, http://, ftp://
- *  - bare domains: github.com/x, www.evil.io, agentbandhu.com — a label, a dot and a known TLD, word-bounded,
- *    so "Node.js", "next.config.js", "README.md", "e.g." and ".NET" are not domains, and emails are skipped. */
+ *  - any scheme, any case. http(s)/ftp(s)/ws(s) match wherever they start, so "Step 1.https://x", "2https://x"
+ *    and "-https://x" cannot hide a link; other schemes need a word start.
+ *  - www.<anything>, whatever the TLD
+ *  - bare domains: a dotted host whose last label has a letter, ending in ANY 2–24 letter TLD except file/code
+ *    extensions (js, json, html, …). Extensions that are also real TLDs (sh, md, py, zip, …) count only with a
+ *    path ("surge.sh/x"). So "Node.js", "next.config.js", "README.md", "e.g.", ".NET", "v1.2.3", "Step 1.Build"
+ *    and emails are not links, while "linktr.ee", "evil.store" and "my.page" are. */
 const URL_CHARS = `[^\\s<>"'()\\[\\]{}\\u201C\\u201D\\u2018\\u2019]`;
-const SCHEME_URL = `(?<![a-z0-9+.-])[a-z][a-z0-9+.-]*:\\/\\/${URL_CHARS}+`;
-/** Common TLDs; leaves out file-extension/code words that are also TLDs (js is none; md, py, sh, rs, zip, email, link, page, name, id). */
-const TLDS = [
-  "com", "net", "org", "edu", "gov", "io", "co", "ai", "app", "dev", "me", "in", "us", "uk", "ca", "au", "de", "fr", "nl", "es",
-  "eu", "ru", "cn", "jp", "br", "sg", "ae", "pk", "nz", "za", "ch", "se", "ie", "info", "biz", "xyz", "tech", "site", "online",
-  "shop", "blog", "live", "pro", "cloud", "website", "space", "digital", "agency", "studio", "design", "club", "top", "tv", "fm",
-  "ly", "gg", "so", "to", "be", "gl", "gd", "la", "ws", "tk", "ml", "icu", "click", "software",
+const SCHEME_URL = `(?:(?:https?|ftps?|wss?|hxxps?):\\/\\/|(?<![a-z0-9+.-])[a-z][a-z0-9+.-]*:\\/\\/)${URL_CHARS}+`;
+/** File and code extensions that are not TLDs: never a link on their own. */
+const CODE_EXTS = [
+  "js", "jsx", "mjs", "cjs", "ts", "tsx", "mts", "cts", "json", "html", "htm", "css", "scss", "sass", "less", "vue", "svelte", "astro",
+  "yml", "yaml", "toml", "ini", "env", "lock", "log", "txt", "csv", "tsv", "xml", "svg", "png", "jpg", "jpeg", "gif", "webp", "ico",
+  "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "sql", "db", "php", "java", "kt", "kts", "rb", "swift", "dart", "cs", "cpp",
+  "hpp", "exe", "dll", "bat", "cmd", "ps1", "config", "conf", "map", "min", "gz", "tar", "rar", "mdx", "ipynb", "jar", "apk", "gradle",
 ].join("|");
+/** Extensions that are also real TLDs: a link only when a path follows ("surge.sh/x", not "deploy.sh"). .zip and .mov are
+ * always links (abused gTLDs). */
+const AMBIGUOUS_EXTS = ["sh", "md", "py", "rs", "so", "pl", "ps", "go"].join("|");
 const LABEL = "[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?";
-const BARE_DOMAIN = `(?<![\\w@.-])(?:${LABEL}\\.)+(?:${TLDS})(?![\\w@-]|\\.[a-z0-9])(?::\\d{1,5})?(?:[/?#]${URL_CHARS}*)?`;
+const TLD = `(?:(?!(?:${CODE_EXTS}|${AMBIGUOUS_EXTS})(?![a-z0-9-]))[a-z]{2,24}|(?:${AMBIGUOUS_EXTS})(?=[/?#]))`;
+const PORT_PATH = `(?::\\d{1,5})?(?:[/?#]${URL_CHARS}*)?`;
+const WWW_HOST = `(?<![\\w@.-])www\\.(?:${LABEL}\\.)*${LABEL}(?![\\w@-]|\\.[a-z0-9])${PORT_PATH}`;
+const BARE_DOMAIN = `(?<![\\w@.-])(?:${LABEL}\\.)*(?=[a-z0-9-]*[a-z])${LABEL}\\.${TLD}(?![\\w@-]|\\.[a-z0-9]|:\\/)${PORT_PATH}`;
+const BARE = `${WWW_HOST}|${BARE_DOMAIN}`;
 const LINK_RE = new RegExp(
-  `(?<md>\\[(?<mdText>[^\\[\\]\\n]{0,300})\\]\\(\\s*(?<mdUrl>${SCHEME_URL}|${BARE_DOMAIN})\\s*\\))|(?<url>${SCHEME_URL})|(?<bare>${BARE_DOMAIN})`,
+  `(?<md>\\[(?<mdText>[^\\[\\]\\n]{0,300})\\]\\(\\s*(?<mdUrl>${SCHEME_URL}|${BARE})\\s*\\))|(?<url>${SCHEME_URL})|(?<bare>${BARE})`,
   "gi",
 );
 const TRAILING_PUNCT = /[.,;:!?]+$/;
 /** Technology names that are written like domains but are not links in a bid. */
-const TECH_NAMES = new Set(["asp.net", "ado.net", "vb.net", "socket.io"]);
+const TECH_NAMES = new Set(["asp.net", "ado.net", "vb.net", "ml.net", "socket.io", "system.io"]);
 const HAS_SCHEME = /^[a-z][a-z0-9+.-]*:\/\//i;
+/** TLDs that stay links even when written with capitals ("Evil.Com"). */
+const COMMON_TLDS = new Set(["com", "net", "org", "io", "in", "co", "ai", "app", "dev", "me", "info", "biz", "xyz", "site", "online", "store", "shop"]);
+
+/**
+ * Words run together with a capitalised last part ("B.Tech", "M.Sc", "it.Then", "Mr.Kalpesh") are text, not links:
+ * a bare host (no www., path or port) whose TLD has a capital letter and is not a common TLD.
+ */
+function capitalisedText(bare: string): boolean {
+  if (/^www\./i.test(bare) || /[/?#:]/.test(bare)) return false;
+  const tld = bare.slice(bare.lastIndexOf(".") + 1);
+  return /[A-Z]/.test(tld) && !COMMON_TLDS.has(tld.toLowerCase());
+}
 
 function linkAllowed(link: string, allowed: string[]): boolean {
   return isAllowedLink(HAS_SCHEME.test(link) ? link : `https://${link}`, allowed);
@@ -176,7 +199,7 @@ export function stripDisallowedLinks(text: string, allowed: string[]): { text: s
     const raw = g.url ?? g.bare ?? "";
     const link = raw.replace(TRAILING_PUNCT, "");
     const tail = raw.slice(link.length);
-    if ((g.bare !== undefined && TECH_NAMES.has(link.toLowerCase())) || linkAllowed(link, allowed)) {
+    if ((g.bare !== undefined && (TECH_NAMES.has(link.toLowerCase()) || capitalisedText(link))) || linkAllowed(link, allowed)) {
       out += raw;
       continue;
     }

@@ -235,3 +235,40 @@ describe("T7-5: only plain https links on the allowed hosts", () => {
     expect(r.removed).toEqual(["http://agentbandhu.com", "https://evil.io@agentbandhu.com", "https://agentbandhu.com:8443/x"]);
   });
 });
+
+describe("F-2: no link survives the stripper by position or TLD", () => {
+  it.each([
+    ["Step 1.https://evil.store now", "Step 1. now", ["https://evil.store"]],
+    ["see 2https://evil.store ok", "see 2 ok", ["https://evil.store"]],
+    ["see -https://evil.store ok", "see - ok", ["https://evil.store"]],
+    ["see +https://evil.store ok", "see + ok", ["https://evil.store"]],
+    ["Step 1.https://evil.com/x now", "Step 1. now", ["https://evil.com/x"]],
+    ["see www.evil.store today", "see today", ["www.evil.store"]],
+    ["see evil.store/x now", "see now", ["evil.store/x"]],
+    ["linktr.ee/kal and surge.sh/x", "and", ["linktr.ee/kal", "surge.sh/x"]],
+    ["portal portal-verify.store or evil.zip", "portal or", ["portal-verify.store", "evil.zip"]],
+    ["Visit my.page and x.lol", "Visit and", ["my.page", "x.lol"]],
+    ["demo:https://evil.io done", "demo: done", ["https://evil.io"]],
+  ])("%s", (input, text, removed) => {
+    expect(stripDisallowedLinks(input, allowed)).toEqual({ text, removed });
+  });
+  it("keeps allowed links right after a digit or dot", () => {
+    const t = "Plan: 1.https://agentbandhu.com and 2.https://kalpesh-malusare.vercel.app/work ok";
+    expect(stripDisallowedLinks(t, allowed)).toEqual({ text: t, removed: [] });
+  });
+  it("keeps tech names, abbreviations, file names, versions and emails", () => {
+    const t =
+      "Node.js/Express, Next.js 14, Vue.js, ASP.NET Core, ADO.NET, .NET 8, Socket.IO, e.g. i.e. etc. v18.2.0 and 1.5x, " +
+      "next.config.js, README.md, package.json, index.html, styles.css, app.tsx, deploy.sh, main.py, docker-compose.yml, " +
+      "Step 1.Build the API, BSc IT, mail kalpesh@gmail.com or hire@evil.io.";
+    expect(stripDisallowedLinks(t, allowed)).toEqual({ text: t, removed: [] });
+  });
+});
+
+describe("F-2: capitalised run-together words stay text", () => {
+  it("keeps B.Tech, M.Sc, it.Then and Mr.Kalpesh but removes Evil.Com and evil.tech", () => {
+    const r = stripDisallowedLinks("B.Tech and M.Sc, built it.Then Mr.Kalpesh; see Evil.Com or evil.tech ok", allowed);
+    expect(r.removed).toEqual(["Evil.Com", "evil.tech"]);
+    expect(r.text).toBe("B.Tech and M.Sc, built it.Then Mr.Kalpesh; see or ok");
+  });
+});
