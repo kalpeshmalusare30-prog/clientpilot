@@ -208,6 +208,20 @@ describe("LocalPanel", () => {
     expect(html({ email: "hi@smile.example" })).toContain("Email pathav");
   });
 
+  it("F-8: a landline gets a Call link instead of WhatsApp", () => {
+    const h = html({ isMobile: false, phone: "912226543210" });
+    expect(h).not.toContain("WhatsApp var pathav");
+    expect(h).toMatch(/<a [^>]*href="tel:\+912226543210"[^>]*>Call kar<\/a>/);
+  });
+  it("F-8: every lead has a visible way to record contact made outside the app", () => {
+    for (const p of [{}, { isMobile: false, phone: "912226543210" }, { phone: "", email: "hi@smile.example" }]) {
+      expect(html(p)).toMatch(/<button[^>]*>Contact kela \(sent mark kar\)<\/button>/);
+    }
+  });
+  it("F-11: hides Email pathav for an address that could inject mailto headers", () => {
+    expect(html({ email: "shop@x.com?bcc=spy%40evil.com" })).not.toContain("Email pathav");
+  });
+
   it("caps the message at the length the server accepts, so an edit can always be saved", () => {
     expect(html()).toMatch(/<textarea[^>]*maxLength="4000"/);
   });

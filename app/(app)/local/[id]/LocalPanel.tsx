@@ -3,6 +3,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { patchJSON, patchState } from "@/lib/client/api";
 import { mailtoLink, waLink } from "@/lib/local/messages";
+import { sendResultText } from "@/lib/state-rules";
+import type { LeadState } from "@/lib/types";
 
 /** PATCH /api/local/[id] accepts a WhatsApp message up to this length. */
 const MAX_WA_CHARS = 4000;
@@ -58,9 +60,10 @@ export function LocalPanel(p: {
     }
   }
 
+  /** The toast reads the stored status: a replied/won/lost lead keeps it (lib/state.ts). */
   const markSentWrite = async () => {
-    await patchState(p.param, "local", { type: "sent" });
-    setToast({ text: "Sent mark kela · follow-up 3 divasani", tone: "ok" });
+    const j = (await patchState(p.param, "local", { type: "sent" })) as { state?: LeadState };
+    setToast({ text: sendResultText(j.state?.status ?? "sent", "sent"), tone: "ok" });
     router.refresh();
   };
 
@@ -77,8 +80,12 @@ export function LocalPanel(p: {
     void run("wa", markSentWrite, "mark");
   };
 
+  // "" for an address that fails the strict check; the button is hidden then.
+  const mailto = mailtoLink(p.email, p.emailSubject, p.emailBody);
+
   const sendEmail = () => {
-    window.location.href = mailtoLink(p.email, p.emailSubject, p.emailBody);
+    if (!mailto) return;
+    window.location.href = mailto;
     void run("email", markSentWrite, "mark");
   };
 
@@ -121,17 +128,21 @@ export function LocalPanel(p: {
         <span className="field__label">WhatsApp message</span>
         <textarea className="textarea-lg" value={text} maxLength={MAX_WA_CHARS} onChange={(e) => setText(e.target.value)} />
       </label>
-      {!p.isMobile && p.phone ? <p className="note">Ha landline number ahe — WhatsApp var nasel. Call karun bagh.</p> : null}
+      {!p.isMobile && p.phone ? <p className="note">Ha landline number ahe — WhatsApp var nasel. Call karun bagh, mag &quot;Contact kela&quot; dab.</p> : null}
       <div className="btn-row">
-        <button className="btn btn--ok" onClick={sendWa} disabled={!p.phone || !!busy}>WhatsApp var pathav</button>
+        {!p.isMobile && p.phone ? (
+          <a className="btn btn--ok" href={`tel:+${p.phone}`}>Call kar</a>
+        ) : (
+          <button className="btn btn--ok" onClick={sendWa} disabled={!p.phone || !!busy}>WhatsApp var pathav</button>
+        )}
         {text !== saved ? <button className="btn" onClick={save} disabled={!!busy}>Save</button> : null}
         <button className="btn btn--ghost" onClick={regen} disabled={!!busy}>Message parat banva</button>
       </div>
-      {p.email ? (
-        <div className="btn-row">
-          <button className="btn" onClick={sendEmail} disabled={!!busy}>Email pathav</button>
-        </div>
-      ) : null}
+      <div className="btn-row">
+        {mailto ? <button className="btn" onClick={sendEmail} disabled={!!busy}>Email pathav</button> : null}
+        {/* Records a call, or a WhatsApp/email sent outside the app. */}
+        <button className="btn btn--ghost" onClick={markSent} disabled={!!busy}>Contact kela (sent mark kar)</button>
+      </div>
       {toast ? (
         <div className={`toast toast--${toast.tone}`} role={toast.tone === "ok" ? "status" : "alert"}>
           <span className="toast__text">{toast.text}</span>
