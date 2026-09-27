@@ -13,11 +13,6 @@ export interface Store {
   readData(opts?: { fresh?: boolean }): Promise<DataDoc>;
   mutateGigs(fn: (doc: GigsDoc) => GigsDoc): Promise<GigsDoc>;
   mutateData(fn: (doc: DataDoc) => DataDoc): Promise<DataDoc>;
-  /**
-   * Unconditional overwrite of both documents. Only for the one-time import (scripts/import.ts),
-   * which refuses to run when data already exists unless --force.
-   */
-  writeAll(gigs: GigsDoc, data: DataDoc): Promise<void>;
 }
 
 export function createStore(backend: Backend, nowIso: () => string = () => new Date().toISOString()): Store {
@@ -54,12 +49,6 @@ export function createStore(backend: Backend, nowIso: () => string = () => new D
     readData: async (o) => (await read(DATA_PATH, o?.fresh ?? true, () => emptyData(nowIso()), normalizeData)).doc,
     mutateGigs: (fn) => mutate(GIGS_PATH, () => emptyGigs(nowIso()), same, fn),
     mutateData: (fn) => mutate(DATA_PATH, () => emptyData(nowIso()), normalizeData, fn),
-    // Unconditional overwrite of both documents. Only for the one-time import (scripts/import.ts),
-    // which refuses to run when data already exists unless --force.
-    async writeAll(gigs, data) {
-      await backend.put(GIGS_PATH, JSON.stringify(gigs), {});
-      await backend.put(DATA_PATH, JSON.stringify(data), {});
-    },
   };
 }
 

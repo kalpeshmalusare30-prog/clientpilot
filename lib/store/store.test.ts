@@ -62,15 +62,6 @@ describe("store", () => {
     await expect(s.mutateGigs((g) => g)).rejects.toBeInstanceOf(PreconditionFailed);
   });
 
-  it("writeAll overwrites both documents", async () => {
-    const b = new MemoryBackend();
-    const s = createStore(b, clock);
-    const data = emptyData("t");
-    data.state["a"] = { kind: "gig", status: "won", updatedAt: "t" };
-    await s.writeAll({ updatedAt: "t", lastRun: null, items: [] }, data);
-    expect((await s.readData()).state["a"]?.status).toBe("won");
-  });
-
   it("first write is create-only: a concurrent first writer is retried, not overwritten", async () => {
     const b = new MemoryBackend();
     const s = createStore(b, clock);
