@@ -138,8 +138,10 @@ export async function searchLocal(input: SearchInput, deps: SearchDeps = realDep
     const slug = uniqueSlug(c.name, takenSlugs);
     const template = templateFor(c.catKey, c.catLabel);
     const url = hasPhone(c) ? demoUrl(input.origin, slug) : null;
-    const msgs = buildMessages({ ...c, segment: c.segment }, input.settings, url);
-    added.push({ ...c, segment: c.segment, slug, template, ...msgs, createdAt: input.nowIso });
+    // The audit behind site_down/old_site ran during this search; the message dates its claim with it.
+    const audited = c.segment === "site_down" || c.segment === "old_site" ? { auditedAt: input.nowIso } : {};
+    const msgs = buildMessages({ ...c, segment: c.segment, ...audited }, input.settings, url, input.nowIso);
+    added.push({ ...c, segment: c.segment, ...audited, slug, template, ...msgs, createdAt: input.nowIso });
   }
   added.sort((a, b) => rank(a.segment) - rank(b.segment) || a.name.localeCompare(b.name));
   return { added, partial, scanned: elements.length, skippedAudits, areaLabel: geo.label };

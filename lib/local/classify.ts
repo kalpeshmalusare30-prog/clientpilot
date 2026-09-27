@@ -1,4 +1,5 @@
 import type { Segment } from "@/lib/types";
+import { isValidEmail } from "./messages";
 
 const CAT_LABELS: Record<string, string> = {
   restaurant: "restaurant", cafe: "cafe", fast_food: "fast food outlet",
@@ -99,11 +100,12 @@ export interface Candidate {
   evidence: string;
 }
 
-/** OSM separates several values with ";" (people also use "," or a space before the next address): keep the first. */
+/** OSM separates several values with ";" (people also use "," or a space before the next address): keep the first.
+ * A comma splits only when a new URL follows, so "https://x.in/a,b" stays whole. */
 function firstValue(raw: string): string {
   return (
     raw
-      .split(/\s*[;,]\s*|\s+(?=https?:|www\.)/i)
+      .split(/\s*;\s*|\s*,\s*(?=https?:|www\.)|\s+(?=https?:|www\.)/i)
       .map((s) => s.trim().replace(/[.,;\s]+$/, ""))
       .find(Boolean) ?? ""
   );
@@ -117,7 +119,7 @@ export function toCandidate(el: OsmElement, area: string): Candidate | "excluded
   if (EXCLUDE_NAME_RE.test(t.name)) return "excluded";
   const phone = normalizePhone(t.phone || t["contact:phone"] || t["contact:mobile"]);
   let email = (t.email || t["contact:email"] || "").split(/[;,\s]/)[0] || "";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) email = "";
+  if (!isValidEmail(email)) email = "";
   if (!phone && !email) return null;
   const cat = categoryOf(t);
   if (EXCLUDE_CATS.has(cat.key)) return "excluded";

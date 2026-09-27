@@ -36,13 +36,14 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   }
   const { regenerate, ...fields } = parsed.data;
   const origin = publicOrigin(req);
+  const now = new Date().toISOString();
 
   let updated: LocalBiz | undefined;
   await getStore().mutateData((d) => {
     const i = d.local.findIndex((b) => b.id === id);
     if (i < 0) return d;
     let b: LocalBiz = { ...d.local[i]!, ...fields };
-    if (regenerate) b = { ...b, ...buildMessages(b, d.settings, hasPhone(b) ? demoUrl(origin, b.slug) : null) };
+    if (regenerate) b = { ...b, ...buildMessages(b, d.settings, hasPhone(b) ? demoUrl(origin, b.slug) : null, now) };
     d.local[i] = b;
     updated = b;
     return d;

@@ -54,4 +54,19 @@ describe("toCandidate", () => {
   ])("keeps only the first value of a multi-value website tag: %s", (website, want) => {
     expect(toCandidate(el(9, { name: "Two Sites", shop: "clothes", phone: "9820099999", website }), "A")).toMatchObject({ website: want, segment: undefined });
   });
+  it.each([
+    ["https://x.in/a,b", "https://x.in/a,b"],
+    ["https://x.in/menu;jsessionid=1", "https://x.in/menu"],
+    ["https://x.in/p?a=1,2", "https://x.in/p?a=1,2"],
+    ["https://a.example,www.b.example", "https://a.example"],
+  ])("F-12: a comma inside a URL does not cut it: %s", (website, want) => {
+    expect(toCandidate(el(10, { name: "Comma Site", shop: "clothes", phone: "9820099999", website }), "A")).toMatchObject({ website: want });
+  });
+  it("F-11: rejects emails that could inject mailto headers, keeps normal ones", () => {
+    const c = (email: string) => toCandidate(el(11, { name: "Mail Shop", shop: "clothes", phone: "9820099999", email }), "A") as { email: string };
+    expect(c("shop@x.com?bcc=spy%40evil.com&x=").email).toBe("");
+    expect(c("shop@x.com&to=a").email).toBe("");
+    expect(c("a@b").email).toBe("");
+    expect(c("sales@a9-prints.co.in").email).toBe("sales@a9-prints.co.in");
+  });
 });

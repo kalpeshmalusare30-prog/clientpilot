@@ -67,6 +67,8 @@ export interface LocalBiz {
   social: string;
   segment: Segment;
   evidence: string;
+  /** When the website check behind site_down/old_site ran (ISO date or timestamp); outreach dates its claim with it. */
+  auditedAt?: string;
   whatsapp: string;
   emailSubject: string;
   emailBody: string;
