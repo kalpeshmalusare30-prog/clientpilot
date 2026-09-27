@@ -8,7 +8,8 @@
     "build": "npm run gen:templates && next build",
     "start": "next start",
     "test": "npm run gen:templates && vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "import": "node --env-file=.env.local --import tsx scripts/import.ts"
   },
   "dependencies": {
     "@google/genai": "^2.24.0",
