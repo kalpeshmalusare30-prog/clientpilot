@@ -67,6 +67,17 @@ describe("gig detail helpers", () => {
     expect(r.notes).toEqual(["Removed link not on your allow-list: https://evil.io/a", "Removed link not on your allow-list: https://x.io"]);
   });
 
+  it("F-4: an unchecked draft gets a warning that stays until closed", () => {
+    const r = describeProposal({ text: "t", changes: [], removedLinks: [], overLimit: false, checked: false }, 1500);
+    expect(r.warning).toMatch(/Honesty check zala nahi/);
+    expect(r.tone).toBe("error");
+    const both = describeProposal({ text: "x".repeat(1600), changes: [], removedLinks: [], overLimit: true, checked: false }, 1500);
+    expect(both.warning).toMatch(/Honesty check zala nahi/);
+    expect(both.warning).toMatch(/1600/);
+    expect(both.tone).toBe("error");
+    expect(describeProposal({ text: "x".repeat(1600), changes: [], removedLinks: [], overLimit: true, checked: true }, 1500).tone).toBe("warn");
+  });
+
   it("tolerates a reply that lacks the optional fields", () => {
     expect(describeProposal({ text: "t" } as never, 1500)).toEqual({ notes: [], warning: null });
   });

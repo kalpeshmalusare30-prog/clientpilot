@@ -121,9 +121,10 @@ describe("T7-1: 1500-character cap", () => {
     expect(r.changes).toContain(`Over 1500 characters (${long.length}) — trim before sending`);
   });
   it("strips links again after shortening", async () => {
-    const llm = new ScriptedLLM(["draft", "Short one. See https://evil.io/x now."], { text: long, changes: [] });
+    // Long enough to pass the F-3 floor (min(600, half the original)).
+    const llm = new ScriptedLLM(["draft", `${sentences(40)} See https://evil.io/x now.`], { text: long, changes: [] });
     const r = await draftProposal(llm, gig, settings);
-    expect(r.text).toBe("Short one. See now.");
+    expect(r.text).toBe(`${sentences(40)} See now.`);
     expect(r.removedLinks).toEqual(["https://evil.io/x"]);
     expect(r.overLimit).toBe(false);
   });
@@ -270,5 +271,61 @@ describe("F-2: capitalised run-together words stay text", () => {
     const r = stripDisallowedLinks("B.Tech and M.Sc, built it.Then Mr.Kalpesh; see Evil.Com or evil.tech ok", allowed);
     expect(r.removed).toEqual(["Evil.Com", "evil.tech"]);
     expect(r.text).toBe("B.Tech and M.Sc, built it.Then Mr.Kalpesh; see or ok");
+  });
+});
+
+describe("F-3: the shorten pass can never replace a checked proposal with junk or time it out", () => {
+  const long = sentences(80); // 1759 chars
+  it("rejects a 'Sure' reply and keeps the checked text flagged overLimit", async () => {
+    const r = await draftProposal(new ScriptedLLM(["draft", "Sure"], { text: long, changes: [] }), gig, settings);
+    expect(r.text).toBe(long);
+    expect(r.overLimit).toBe(true);
+    expect(r.checked).toBe(true);
+  });
+  it("rejects a truncated fragment under min(600, half the original)", async () => {
+    const frag = sentences(20); // ~439 chars
+    const r = await draftProposal(new ScriptedLLM(["draft", frag], { text: long, changes: [] }), gig, settings);
+    expect(r.text).toBe(long);
+  });
+  it("rejects a reply that is only a preamble, and strips a preamble line before an acceptable text", async () => {
+    const pre = await draftProposal(new ScriptedLLM(["draft", `Here is the shortened proposal: ${"x".repeat(700)}`], { text: long, changes: [] }), gig, settings);
+    expect(pre.text).toBe(long);
+    const short = sentences(50);
+    const ok = await draftProposal(new ScriptedLLM(["draft", `Sure! Here's the shorter version:\n\n${short}`], { text: long, changes: [] }), gig, settings);
+    expect(ok.text).toBe(short);
+    expect(ok.overLimit).toBe(false);
+  });
+  it("skips the shorten pass once ~35 s have passed", async () => {
+    let t = 0;
+    const llm = new ScriptedLLM(["draft", sentences(50)], { text: long, changes: [] });
+    const origJSON = llm.completeJSON.bind(llm);
+    llm.completeJSON = async (p, s) => {
+      t = 36_000;
+      return origJSON(p, s);
+    };
+    const r = await draftProposal(llm, gig, settings, { now: () => t });
+    expect(llm.textPrompts).toHaveLength(1);
+    expect(r.text).toBe(long);
+    expect(r.overLimit).toBe(true);
+  });
+  it("gives up on a hanging shorten call before the function deadline and keeps the checked text", async () => {
+    let t = 0;
+    const llm: LLM = {
+      completeText: async (p: string) => (p.includes("Shorten this") ? new Promise<string>(() => {}) : "draft"),
+      completeJSON: async <T,>(_p: string, schema: z.ZodType<T>) => {
+        t = 34_990;
+        return schema.parse({ text: long, changes: [] });
+      },
+    };
+    const r = await draftProposal(llm, gig, settings, { now: () => t, totalBudgetMs: 35_050 });
+    expect(r.text).toBe(long);
+    expect(r.overLimit).toBe(true);
+  });
+});
+
+describe("F-4: draftProposal says whether the honesty check ran", () => {
+  it("checked: true when the check succeeded, false when it failed", async () => {
+    expect((await draftProposal(new FakeLLM("d", { text: "ok text", changes: [] }), gig, settings)).checked).toBe(true);
+    expect((await draftProposal(new FakeLLM("d", new Error("503")), gig, settings)).checked).toBe(false);
   });
 });

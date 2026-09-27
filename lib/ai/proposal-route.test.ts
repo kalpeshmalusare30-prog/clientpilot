@@ -56,6 +56,7 @@ describe("POST /api/ai/proposal", () => {
     expect(json.text).toBe("Checked proposal https://agentbandhu.com");
     expect(json.chars).toBe(json.text.length);
     expect(json.overLimit).toBe(false);
+    expect((json as { checked?: boolean }).checked).toBe(true);
     const d = await getStore().readData();
     expect(d.state["freelancer.com:9"]).toMatchObject({ status: "drafted", proposal: json.text });
   });

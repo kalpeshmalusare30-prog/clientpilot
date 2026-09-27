@@ -216,31 +216,72 @@ export function stripDisallowedLinks(text: string, allowed: string[]): { text: s
   return { text: out + text.slice(last), removed };
 }
 
+/** Start the shorten pass only this early: draft + check can take long, and the route has maxDuration 60 s. */
+export const SHORTEN_START_BUDGET_MS = 35_000;
+/** The shorten call is abandoned at this point, so a checked proposal is always returned (and saved) in time. */
+export const TOTAL_BUDGET_MS = 50_000;
+/** A reply that opens with chat filler ("Sure! Here's the shorter version:") instead of the bid. */
+const PREAMBLE_RE = /^\s*(?:sure|okay|ok|certainly|of course|absolutely|here(?:'s|\u2019s| is| are)|below is|i(?:'ve|\u2019ve| have) shortened)\b/i;
+
+/** The shortened bid without a leading chat-filler line; "" when the reply is nothing but filler. */
+function withoutPreamble(reply: string): string {
+  const t = reply.trim();
+  if (!PREAMBLE_RE.test(t)) return t;
+  const nl = t.indexOf("\n");
+  return nl < 0 ? "" : t.slice(nl + 1).trim();
+}
+
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error("shorten pass timed out")), Math.max(0, ms));
+  });
+  return Promise.race([p, timeout]).finally(() => clearTimeout(timer));
+}
+
+export interface DraftResult {
+  text: string;
+  changes: string[];
+  removedLinks: string[];
+  overLimit: boolean;
+  /** false when the honesty check could not run: the text is the unchecked draft. */
+  checked: boolean;
+}
+
 export async function draftProposal(
   llm: LLM,
   gig: Gig,
   s: Settings,
-): Promise<{ text: string; changes: string[]; removedLinks: string[]; overLimit: boolean }> {
+  opts: { now?: () => number; shortenStartBudgetMs?: number; totalBudgetMs?: number } = {},
+): Promise<DraftResult> {
+  const now = opts.now ?? Date.now;
+  const started = now();
   const draft = await llm.completeText(buildDraftPrompt(gig, s));
   let text = draft;
   let changes: string[] = [];
+  let checked = true;
   try {
-    const checked = await llm.completeJSON(buildCheckPrompt(gig, s, draft), CheckSchema);
-    text = checked.text;
-    changes = checked.changes;
+    const c = await llm.completeJSON(buildCheckPrompt(gig, s, draft), CheckSchema);
+    text = c.text;
+    changes = c.changes;
   } catch {
+    checked = false;
     changes = ["Honesty check was unavailable — read the text carefully before sending."];
   }
   const stripped = stripDisallowedLinks(text, s.allowedLinks);
   let final = stripped.text.trim();
   const removedLinks = [...stripped.removed];
 
-  if (final.length > MAX_PROPOSAL_CHARS) {
+  const elapsed = () => now() - started;
+  if (final.length > MAX_PROPOSAL_CHARS && elapsed() < (opts.shortenStartBudgetMs ?? SHORTEN_START_BUDGET_MS)) {
     // One shorten pass, never a blind cut: a truncated bid would stop mid-sentence and lose its questions.
     try {
-      const again = stripDisallowedLinks(await llm.completeText(buildShortenPrompt(final, s)), s.allowedLinks);
+      const reply = await withTimeout(llm.completeText(buildShortenPrompt(final, s)), (opts.totalBudgetMs ?? TOTAL_BUDGET_MS) - elapsed());
+      const again = stripDisallowedLinks(withoutPreamble(reply), s.allowedLinks);
       const shorter = again.text.trim();
-      if (shorter && shorter.length < final.length) {
+      // A real shortening keeps most of the bid: "Sure" or a cut-off fragment never replaces the checked text.
+      const floor = Math.min(600, Math.floor(final.length * 0.5));
+      if (shorter.length >= floor && shorter.length < final.length) {
         changes = [...changes, `Shortened from ${final.length} to ${shorter.length} characters to fit the ${MAX_PROPOSAL_CHARS}-character limit`];
         final = shorter;
         for (const l of again.removed) if (!removedLinks.includes(l)) removedLinks.push(l);
@@ -251,5 +292,5 @@ export async function draftProposal(
   }
   const overLimit = final.length > MAX_PROPOSAL_CHARS;
   if (overLimit) changes = [...changes, `Over ${MAX_PROPOSAL_CHARS} characters (${final.length}) — trim before sending`];
-  return { text: final, changes, removedLinks, overLimit };
+  return { text: final, changes, removedLinks, overLimit, checked };
 }

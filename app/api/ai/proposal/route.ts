@@ -43,5 +43,6 @@ export async function POST(req: Request) {
     changes: result.changes,
     removedLinks: result.removedLinks,
     overLimit: result.overLimit,
+    checked: result.checked,
   });
 }

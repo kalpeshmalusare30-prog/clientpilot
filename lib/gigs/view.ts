@@ -55,16 +55,24 @@ export interface ProposalReply {
   changes: string[];
   removedLinks: string[];
   overLimit: boolean;
+  /** false when the AI honesty check could not run (older replies lack it: treated as checked). */
+  checked?: boolean;
 }
 
-/** What the panel shows after an AI draft: the change notes, and a warning when the AI could not fit the limit. */
-export function describeProposal(r: ProposalReply, max: number): { notes: string[]; warning: string | null } {
+/** What the panel shows after an AI draft: the change notes, and a warning when the AI could not fit the limit or
+ * the honesty check did not run. An unchecked draft is an "error" toast, so it stays until closed. */
+export function describeProposal(
+  r: ProposalReply,
+  max: number,
+): { notes: string[]; warning: string | null; tone?: "warn" | "error" } {
   // The same link is often stripped several times from one draft; say it once.
   const removed = [...new Set(r.removedLinks ?? [])];
   const notes = [...(r.changes ?? []), ...removed.map((l) => `Removed link not on your allow-list: ${l}`)];
-  const warning =
-    r.overLimit === true
-      ? `AI la ${max} characters madhe basavta ala nahi (${r.chars ?? (r.text ?? "").length}) — pathavnyapurvi kami kar.`
-      : null;
-  return { notes, warning };
+  const parts: string[] = [];
+  if (r.checked === false) parts.push("Honesty check zala nahi — sagle claims Facts shi tapas, kinva 'AI proposal parat lihi'.");
+  if (r.overLimit === true) {
+    parts.push(`AI la ${max} characters madhe basavta ala nahi (${r.chars ?? (r.text ?? "").length}) — pathavnyapurvi kami kar.`);
+  }
+  if (!parts.length) return { notes, warning: null };
+  return { notes, warning: parts.join(" "), tone: r.checked === false ? "error" : "warn" };
 }

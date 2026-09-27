@@ -3,6 +3,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getJSON, patchState, postJSON } from "@/lib/client/api";
 import { describeProposal, limitWarning, type ProposalReply } from "@/lib/gigs/view";
+import { sendResultText } from "@/lib/state-rules";
+import type { LeadState } from "@/lib/types";
 
 type Live = { open: boolean; status: string; bidCount: number | null; bidAvg: number | null; currency: string };
 type ActionKey = "ai" | "save" | "copy" | "live" | "bid" | "skip";
@@ -68,7 +70,7 @@ export function GigPanel(props: {
       setText(r.text);
       setSaved(r.text);
       setChanges(v.notes);
-      if (v.warning) setToast({ text: v.warning, tone: "warn" });
+      if (v.warning) setToast({ text: v.warning, tone: v.tone ?? "warn" });
       router.refresh();
     });
 
@@ -104,8 +106,8 @@ export function GigPanel(props: {
       return;
     }
     void run("bid", async () => {
-      await patchState(props.param, "gig", { type: "bid", amount: n, currency });
-      setToast({ text: "Bid saved · follow-up 3 divasani", tone: "ok" });
+      const j = (await patchState(props.param, "gig", { type: "bid", amount: n, currency })) as { state?: LeadState };
+      setToast({ text: sendResultText(j.state?.status ?? "sent", "bid"), tone: "ok" });
       router.refresh();
     });
   };
