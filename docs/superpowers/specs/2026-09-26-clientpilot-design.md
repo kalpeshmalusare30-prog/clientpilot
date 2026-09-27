@@ -90,7 +90,7 @@ Keeping cron output and user decisions in separate documents means the cron neve
 | `POST /api/logout` | session | clear cookie |
 | `GET /api/cron/gigs` | `Authorization: Bearer CRON_SECRET` | fetch all sources (each isolated, 15 s timeout), score, merge, save |
 | `GET /api/gigs/[id]/live` | session | Freelancer API status + bid count |
-| `POST /api/ai/proposal` | session | `{ leadId }` → draft + check → text; saves as `drafted` |
+| `POST /api/ai/proposal` | session | `{ id }` (the lead id) → draft + check → text; saves as `drafted` |
 | `PATCH /api/state/[leadId]` | session | status / proposal / bid / follow-up / notes |
 | `POST /api/local/search` | session | `{ area, category }` → new businesses added (max duration 60 s) |
 | `PATCH /api/local/[id]` | session | edit message / details |
