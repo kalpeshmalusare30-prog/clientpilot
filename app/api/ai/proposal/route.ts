@@ -36,5 +36,12 @@ export async function POST(req: Request) {
     d.state[gig.id] = applyAction(d.state[gig.id], "gig", { type: "proposal", proposal: result.text }, now);
     return d;
   });
-  return Response.json({ ok: true, text: result.text, chars: result.text.length, changes: result.changes, removedLinks: result.removedLinks });
+  return Response.json({
+    ok: true,
+    text: result.text,
+    chars: result.text.length,
+    changes: result.changes,
+    removedLinks: result.removedLinks,
+    overLimit: result.overLimit,
+  });
 }
