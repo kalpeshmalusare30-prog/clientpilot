@@ -3,6 +3,7 @@ import { GET } from "@/app/d/[slug]/route";
 import { createStore, setStoreForTests } from "@/lib/store";
 import { MemoryBackend } from "@/lib/store/memory";
 import type { LocalBiz } from "@/lib/types";
+import { TEMPLATES } from "./templates.gen";
 
 const A9 = {
   id: "node/12395684120", slug: "a9-digital-prints", name: "A9 Digital Prints", area: "Andheri", catKey: "copyshop", catLabel: "print shop", addr: "",
@@ -14,12 +15,15 @@ const LOST = { ...A9, id: "node/3", slug: "said-no" } satisfies LocalBiz;
 const SKIPPED = { ...A9, id: "node/4", slug: "skipped-one" } satisfies LocalBiz;
 const REPLIED = { ...A9, id: "node/5", slug: "replied-one" } satisfies LocalBiz;
 const LANDLINE = { ...A9, id: "node/6", slug: "landline-shop", waNum: "", telNum: "912226741533", phoneDisplay: "" } satisfies LocalBiz;
+/** Stored before the trade designs existed, so its template is still "general". */
+const OLD_SALON = { ...A9, id: "node/7", slug: "old-salon", name: "Old Salon", catKey: "hairdresser", catLabel: "salon", template: "general" } satisfies LocalBiz;
+const PINNED = { ...OLD_SALON, id: "node/8", slug: "pinned-salon", templatePinned: true } satisfies LocalBiz;
 
 beforeEach(async () => {
   const s = createStore(new MemoryBackend());
   await s.mutateData((d) => ({
     ...d,
-    local: [A9, NOPHONE, LOST, SKIPPED, REPLIED, LANDLINE],
+    local: [A9, NOPHONE, LOST, SKIPPED, REPLIED, LANDLINE, OLD_SALON, PINNED],
     state: {
       "node/3": { kind: "local", status: "lost", updatedAt: "t" },
       "node/4": { kind: "local", status: "skipped", updatedAt: "t" },
@@ -75,5 +79,12 @@ describe("GET /d/[slug]", () => {
     expect(html).toContain("tel:+912226741533");
     const a9 = await (await get("a9-digital-prints")).text();
     expect(a9).not.toContain("[data-wa]{display:none!important}");
+  });
+  it("gives a lead stored as 'general' the design that now fits its trade, unless general was picked by hand", async () => {
+    const salon = await (await get("old-salon")).text();
+    expect(salon).toContain(TEMPLATES.salon.slice(0, 60));
+    expect(salon).toContain("Salon &amp; beauty");
+    const pinned = await (await get("pinned-salon")).text();
+    expect(pinned).not.toContain("Salon &amp; beauty");
   });
 });

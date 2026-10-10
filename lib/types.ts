@@ -47,7 +47,9 @@ export interface LeadState {
 }
 
 export type Segment = "site_down" | "no_website" | "old_site" | "social_only";
-export type TemplateKey = "print" | "dental" | "cafe" | "general";
+/** Demo page designs (lib/demo/templates/<key>.html). */
+export const TEMPLATE_KEYS = ["print", "dental", "cafe", "general", "salon", "fitness", "coaching", "health", "pro", "retail", "events", "auto"] as const;
+export type TemplateKey = (typeof TEMPLATE_KEYS)[number];
 
 export interface LocalBiz {
   id: string;
@@ -73,6 +75,8 @@ export interface LocalBiz {
   emailSubject: string;
   emailBody: string;
   template: TemplateKey;
+  /** The template was chosen by hand (PATCH): the demo keeps it even when it is "general". */
+  templatePinned?: boolean;
   createdAt: string;
 }
 

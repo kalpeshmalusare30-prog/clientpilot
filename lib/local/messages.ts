@@ -9,17 +9,23 @@ const BENEFIT_BULLETS = {
   education: "Parents and students can see your courses and batches, and send admission inquiries",
   beauty: "Clients can see your services and work photos, and book directly",
   shop: "Customers can browse your products and photos before they walk in",
+  pro: "Clients can read about your services and contact you directly for a consultation",
+  events: "Customers can see your venue or past work and send enquiries for their dates directly to you",
+  auto: "Vehicle owners nearby can see your services and send service or repair enquiries directly",
   default: "Customers can see your services and past work before they contact you",
 };
 
 export function benefitOf(catKey: string): string {
-  if (/restaurant|cafe|fast_food|bakery|confectionery|deli|seafood|beverages/.test(catKey)) return BENEFIT_BULLETS.food;
-  if (/clinic|dentist|doctors|hospital|pharmacy|veterinary|healthcare/.test(catKey)) return BENEFIT_BULLETS.health;
-  if (/gym|fitness|sports/.test(catKey)) return BENEFIT_BULLETS.fitness;
-  if (/hotel|guest_house/.test(catKey)) return BENEFIT_BULLETS.hotel;
-  if (/coaching|driving_school|school|college|educat|institut|tuition|university|kindergarten|music|dance/.test(catKey)) return BENEFIT_BULLETS.education;
-  if (/hairdresser|beauty|tailor|photo/.test(catKey)) return BENEFIT_BULLETS.beauty;
-  if (/supermarket|clothes|jewelry|furniture|electronics|mobile_phone|hardware|optician|store|books|gift|toys|shoes|florist/.test(catKey)) return BENEFIT_BULLETS.shop;
+  if (/restaurant|cafe|fast_food|bakery|confectionery|pastry|chocolate|ice_cream|deli|seafood|beverages|^tea$|^coffee$/.test(catKey)) return BENEFIT_BULLETS.food;
+  if (/clinic|dentist|doctor|hospital|pharmacy|chemist|veterinary|healthcare|physiotherapist|laboratory|sample_collection|optometrist|therapist|psychotherapist|counselling|rehabilitation|audiologist|nutrition|dialysis/.test(catKey)) return BENEFIT_BULLETS.health;
+  if (/gym|fitness|sports|yoga|aerobics|pilates|zumba|crossfit|martial|karate|taekwondo|boxing/.test(catKey)) return BENEFIT_BULLETS.fitness;
+  if (/hotel|guest_house|hostel|motel/.test(catKey)) return BENEFIT_BULLETS.hotel;
+  if (/coaching|driving_school|school|college|educat|institut|tuition|university|kindergarten|childcare|music|dance|training/.test(catKey)) return BENEFIT_BULLETS.education;
+  if (/events_venue|banquet|conference_centre|caterer|event_management|photographer/.test(catKey)) return BENEFIT_BULLETS.events;
+  if (/hairdresser|beauty|tailor|dressmaker|photo|massage|tattoo|^spa$/.test(catKey)) return BENEFIT_BULLETS.beauty;
+  if (/accountant|tax_advisor|lawyer|notary|insurance|financial|consulting|estate_agent|property|architect|interior|travel/.test(catKey)) return BENEFIT_BULLETS.pro;
+  if (/car_repair|motorcycle|tyres|car_wash|car_parts|^car$/.test(catKey)) return BENEFIT_BULLETS.auto;
+  if (/supermarket|clothes|boutique|fabric|jewelry|watches|bag|furniture|bed|kitchen|lighting|curtain|carpet|houseware|bathroom|tiles|electronics|mobile_phone|computer|appliance|hifi|hardware|optician|store|books|gift|toys|shoes|florist|pet|medical_supply/.test(catKey)) return BENEFIT_BULLETS.shop;
   return BENEFIT_BULLETS.default;
 }
 

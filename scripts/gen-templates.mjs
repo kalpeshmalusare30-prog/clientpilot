@@ -1,10 +1,11 @@
 // Bundles lib/demo/templates/*.html into lib/demo/templates.gen.ts (Vercel functions have no template files at runtime).
 // Transforms: tokens inside href="…" become URL-encoded variants; a robots noindex meta is ensured; badge wording unified;
 // a visible "sample content" notice follows the demo badge; every wa.me link is marked data-wa (hidden for landlines).
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 
 const dir = new URL("../lib/demo/templates/", import.meta.url);
-const keys = ["print", "dental", "cafe", "general"];
+// Every <key>.html is a template; TEMPLATES is typed Record<TemplateKey, string>, so tsc fails if lib/types.ts disagrees.
+const keys = readdirSync(dir).filter((f) => f.endsWith(".html")).map((f) => f.slice(0, -5)).sort();
 
 /** In normal page flow (not ellipsized like the fixed badge), so it is always readable. */
 export const SAMPLE_NOTICE =

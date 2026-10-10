@@ -1,5 +1,5 @@
 import { demoVarsFor, renderDemo } from "@/lib/demo/render";
-import { hasPhone } from "@/lib/local/biz";
+import { demoTemplateOf, hasPhone } from "@/lib/local/biz";
 import { getStore } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +31,6 @@ export async function GET(_req: Request, ctx: { params: Promise<{ slug: string }
   if (!biz || !hasPhone(biz) || (status && UNPUBLISHED.has(status))) {
     return new Response(NOT_FOUND, { status: 404, headers: { ...base, "cache-control": "public, s-maxage=60" } });
   }
-  const html = renderDemo(biz.template, demoVarsFor(biz, new Date().getFullYear()));
+  const html = renderDemo(demoTemplateOf(biz), demoVarsFor(biz, new Date().getFullYear()));
   return new Response(html, { headers: { ...base, "cache-control": "public, s-maxage=300, stale-while-revalidate=600" } });
 }

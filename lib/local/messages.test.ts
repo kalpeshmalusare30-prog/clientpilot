@@ -11,6 +11,20 @@ describe("messages", () => {
     expect(benefitOf("cafe")).toMatch(/menu/);
     expect(benefitOf("zzz")).toMatch(/past work/);
   });
+  it("benefit for the new picker categories", () => {
+    expect(benefitOf("physiotherapist")).toMatch(/Patients/);
+    expect(benefitOf("yoga")).toMatch(/membership/);
+    expect(benefitOf("prep_school")).toMatch(/admission/);
+    expect(benefitOf("massage")).toMatch(/book directly/);
+    expect(benefitOf("tax_advisor")).toMatch(/consultation/);
+    expect(benefitOf("estate_agent")).toMatch(/consultation/);
+    expect(benefitOf("events_venue")).toMatch(/dates/);
+    expect(benefitOf("photographer")).toMatch(/dates/);
+    expect(benefitOf("car_repair")).toMatch(/repair/);
+    expect(benefitOf("sports_centre")).toMatch(/membership/); // not health, despite "centre"
+    expect(benefitOf("boutique")).toMatch(/browse/);
+    expect(benefitOf("pastry")).toMatch(/menu/);
+  });
   it("intro by segment, never claiming Google", () => {
     expect(introFor(biz)).toBe("Hello! I came across Sai Dental Care, your dental clinic in Andheri, and could not find a website listed for it online.");
     expect(introFor({ ...biz, segment: "site_down", evidence: "it is not opening (the server is not responding)", auditedAt: NOW }, NOW)).toBe(

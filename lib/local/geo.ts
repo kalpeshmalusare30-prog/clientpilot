@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { OsmElement } from "./classify";
+import { overpassClosedStatements } from "./closed";
 
 const OSM_UA = "ClientPilot/1.0 (personal lead research; kalpeshmalusare30@gmail.com)";
 export const OVERPASS_MIRRORS = [
@@ -61,9 +62,20 @@ export async function geocode(area: string, signal?: AbortSignal): Promise<{ bbo
   return entry;
 }
 
-export function overpassQuery(b: Bbox, selectors: string[]): string {
+/** Matches the selectors, then subtracts permanently closed places (lib/local/closed.ts) before output. */
+export function overpassQuery(b: Bbox, selectors: string[], now: Date = new Date()): string {
   const bb = `(${b.south},${b.west},${b.north},${b.east})`;
-  return `[out:json][timeout:25];\n(\n${selectors.map((s) => `  nwr${s}${bb};`).join("\n")}\n);\nout tags center 3000;`;
+  return [
+    "[out:json][timeout:25];",
+    "(",
+    ...selectors.map((s) => `  nwr${s}${bb};`),
+    ")->.found;",
+    "(",
+    ...overpassClosedStatements(now).map((s) => `  ${s}`),
+    ")->.closed;",
+    "(.found; - .closed;);",
+    "out tags center 3000;",
+  ].join("\n");
 }
 
 export function splitBbox(b: Bbox, maxSpan = 0.09): Bbox[] {

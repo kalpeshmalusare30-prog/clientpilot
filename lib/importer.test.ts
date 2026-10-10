@@ -37,7 +37,7 @@ describe("buildImport", () => {
     expect(a9).toMatchObject({ slug: "a9-digital-prints", template: "print", emailSubject: "A9 Digital Prints - your free demo website is ready" });
     expect(a9.whatsapp).toBe("Namaste! Main Kalpesh…");
     const hosp = data.local.find((b) => b.id === "node/2")!;
-    expect(hosp.template).toBe("general");
+    expect(hosp.template).toBe("health");
     expect(hosp.whatsapp).toContain("https://cp.app/d/kalyan-hospital");
     expect(hosp.whatsapp).not.toMatch(/google/i);
     expect(hosp.evidence).toMatch(/not opening/);

@@ -1,14 +1,36 @@
 import { describe, expect, it } from "vitest";
-import { demoUrl, hasPhone, slugify, templateFor, uniqueSlug } from "./biz";
+import { demoTemplateOf, demoUrl, hasPhone, slugify, templateFor, uniqueSlug } from "./biz";
 
 describe("templateFor", () => {
-  it("picks print, dental (dentists only), cafe, else general", () => {
+  it("picks the trade design by OSM value: dental for dentists only, health for other clinics, else general", () => {
     expect(templateFor("copyshop", "print shop")).toBe("print");
     expect(templateFor("dentist", "dental clinic")).toBe("dental");
-    expect(templateFor("hospital", "hospital")).toBe("general");
-    expect(templateFor("clinic", "clinic")).toBe("general");
+    expect(templateFor("hospital", "hospital")).toBe("health");
+    expect(templateFor("clinic", "clinic")).toBe("health");
     expect(templateFor("restaurant", "restaurant")).toBe("cafe");
-    expect(templateFor("hairdresser", "salon")).toBe("general");
+    expect(templateFor("hairdresser", "salon")).toBe("salon");
+    expect(templateFor("hotel", "hotel")).toBe("general");
+    expect(templateFor("zzz", "zzz")).toBe("general");
+  });
+  it("falls back to label words for leads whose key is not an OSM value", () => {
+    expect(templateFor("business", "Ladies Beauty Parlour")).toBe("salon");
+    expect(templateFor("business", "Chartered Accountant")).toBe("pro");
+    expect(templateFor("business", "Pathology lab")).toBe("health");
+    expect(templateFor("business", "IIT-JEE coaching classes")).toBe("coaching");
+    expect(templateFor("business", "Two wheeler garage")).toBe("auto");
+    expect(templateFor("business", "Banquet hall")).toBe("events");
+    expect(templateFor("business", "Saree boutique")).toBe("retail");
+    expect(templateFor("business", "Xerox centre")).toBe("print");
+    expect(templateFor("business", "Hotel")).toBe("general");
+  });
+});
+
+describe("demoTemplateOf", () => {
+  it("upgrades an old 'general' lead to the design that now fits, unless general was picked by hand", () => {
+    expect(demoTemplateOf({ template: "general", catKey: "hairdresser", catLabel: "salon" })).toBe("salon");
+    expect(demoTemplateOf({ template: "general", templatePinned: true, catKey: "hairdresser", catLabel: "salon" })).toBe("general");
+    expect(demoTemplateOf({ template: "cafe", catKey: "hairdresser", catLabel: "salon" })).toBe("cafe");
+    expect(demoTemplateOf({ template: "general", catKey: "hotel", catLabel: "hotel" })).toBe("general");
   });
 });
 

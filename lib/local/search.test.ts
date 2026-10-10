@@ -37,7 +37,7 @@ describe("searchLocal", () => {
     expect(r.areaLabel).toBe("Andheri");
     expect(r.added.map((b) => [b.name, b.segment, b.template])).toEqual([
       ["Sai Dental Care", "no_website", "dental"],
-      ["Old Site Clinic", "old_site", "general"],
+      ["Old Site Clinic", "old_site", "health"],
     ]);
     const sai = r.added[0]!;
     expect(sai.slug).toBe("sai-dental-care");

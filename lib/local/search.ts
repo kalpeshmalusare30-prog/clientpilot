@@ -74,7 +74,7 @@ export async function searchLocal(input: SearchInput, deps: SearchDeps = realDep
   const seenIds = new Set<string>();
   const cands: Candidate[] = [];
   for (const el of elements) {
-    const c = toCandidate(el, geo.label);
+    const c = toCandidate(el, geo.label, new Date(input.nowIso));
     if (!c || c === "excluded" || seenIds.has(c.id) || knownIds.has(c.id)) continue;
     seenIds.add(c.id);
     cands.push(c);

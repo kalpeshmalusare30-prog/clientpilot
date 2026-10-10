@@ -5,7 +5,11 @@ describe("categoryOf", () => {
   it("maps known OSM values and builds labels for unknown ones", () => {
     expect(categoryOf({ amenity: "dentist" })).toEqual({ key: "dentist", label: "dental clinic" });
     expect(categoryOf({ shop: "copyshop" })).toEqual({ key: "copyshop", label: "print shop" });
-    expect(categoryOf({ office: "educational_institution" })).toEqual({ key: "educational_institution", label: "educational institution office" });
+    expect(categoryOf({ office: "educational_institution" })).toEqual({ key: "educational_institution", label: "educational institute" });
+    expect(categoryOf({ office: "surveyor" })).toEqual({ key: "surveyor", label: "surveyor office" });
+    expect(categoryOf({ leisure: "fitness_centre", sport: "yoga" })).toEqual({ key: "yoga", label: "yoga studio" });
+    expect(categoryOf({ sport: "karate" })).toEqual({ key: "karate", label: "karate class" });
+    expect(categoryOf({ healthcare: "physiotherapist" })).toEqual({ key: "physiotherapist", label: "physiotherapy clinic" });
     expect(categoryOf({ shop: "yes", amenity: "cafe" })).toEqual({ key: "cafe", label: "cafe" });
     expect(categoryOf({})).toEqual({ key: "business", label: "business" });
   });

@@ -38,6 +38,17 @@ describe("PATCH /api/local/[id]", () => {
     const b = (await getStore().readData()).local[0]!;
     expect(b.whatsapp).toBe("new text");
     expect(b.template).toBe("general");
+    expect(b.templatePinned).toBe(true); // picked by hand: the demo keeps it
+  });
+  it("accepts every template key, including the trade designs", async () => {
+    for (const template of ["salon", "fitness", "coaching", "health", "pro", "retail", "events", "auto"]) {
+      expect((await patch(A9.id, { template })).status).toBe(200);
+      expect((await getStore().readData()).local[0]!.template).toBe(template);
+    }
+  });
+  it("does not pin the template when other fields change", async () => {
+    await patch(A9.id, { whatsapp: "x" });
+    expect((await getStore().readData()).local[0]!.templatePinned).toBeUndefined();
   });
   it("regenerates messages from the settings template with the demo link", async () => {
     await patch(A9.id, { regenerate: true });

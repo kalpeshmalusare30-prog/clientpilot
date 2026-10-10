@@ -5,7 +5,7 @@ import { demoUrl, hasPhone } from "@/lib/local/biz";
 import { buildMessages } from "@/lib/local/messages";
 import { publicOrigin } from "@/lib/origin";
 import { getStore } from "@/lib/store";
-import type { LocalBiz } from "@/lib/types";
+import { TEMPLATE_KEYS, type LocalBiz } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +18,7 @@ const Body = z
     area: z.string().trim().min(1).max(80),
     waNum: z.string().regex(/^\d{0,15}$/),
     phoneDisplay: z.string().max(40),
-    template: z.enum(["print", "dental", "cafe", "general"]),
+    template: z.enum(TEMPLATE_KEYS),
     regenerate: z.boolean(),
   })
   .partial();
@@ -42,7 +42,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   await getStore().mutateData((d) => {
     const i = d.local.findIndex((b) => b.id === id);
     if (i < 0) return d;
-    let b: LocalBiz = { ...d.local[i]!, ...fields };
+    let b: LocalBiz = { ...d.local[i]!, ...fields, ...(fields.template ? { templatePinned: true } : {}) };
     if (regenerate) b = { ...b, ...buildMessages(b, d.settings, hasPhone(b) ? demoUrl(origin, b.slug) : null, now) };
     d.local[i] = b;
     updated = b;

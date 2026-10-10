@@ -1,4 +1,5 @@
 import type { Segment } from "@/lib/types";
+import { isClosed } from "./closed";
 import { isValidEmail } from "./messages";
 
 const CAT_LABELS: Record<string, string> = {
@@ -21,6 +22,26 @@ const CAT_LABELS: Record<string, string> = {
   variety_store: "variety store", kiosk: "shop", deli: "deli", seafood: "seafood shop",
   it: "IT company", company: "company", ngo: "NGO", lawyer: "law firm", accountant: "accounting firm",
   insurance: "insurance agency", architect: "architecture firm", coworking: "coworking space",
+  // Categories added with the wider picker (lib/local/categories.ts).
+  massage: "spa & massage centre", tattoo: "tattoo studio", spa: "spa", yoga: "yoga studio", fitness: "fitness studio",
+  aerobics: "fitness studio", pilates: "pilates studio", zumba: "zumba class", crossfit: "crossfit gym", martial_arts: "martial arts academy",
+  karate: "karate class", taekwondo: "taekwondo academy", boxing: "boxing gym", training: "training institute",
+  prep_school: "tuition classes", language_school: "language classes", music_school: "music classes", dancing_school: "dance classes",
+  educational_institution: "educational institute", kindergarten: "preschool", childcare: "day care", school: "school",
+  physiotherapist: "physiotherapy clinic", laboratory: "diagnostic lab", sample_collection: "diagnostic lab", centre: "health centre",
+  alternative: "ayurveda / alternative therapy clinic", psychotherapist: "counselling centre", counselling: "counselling centre",
+  rehabilitation: "rehabilitation centre", speech_therapist: "speech therapy clinic", occupational_therapist: "occupational therapy clinic",
+  audiologist: "hearing clinic", nutrition_counselling: "nutrition clinic", dialysis: "dialysis centre", doctor: "clinic",
+  optometrist: "eye clinic", property_management: "property management office", tax_advisor: "tax consultant", notary: "notary office",
+  financial: "financial services office", financial_advisor: "financial advisor", consulting: "consultancy", interior_design: "interior design studio",
+  interior_decoration: "interior design & decor", photographer: "photographer", banquet_hall: "banquet hall", conference_centre: "conference venue",
+  caterer: "catering service", event_management: "event management company", travel_agent: "travel agency", hostel: "hostel", motel: "motel",
+  ice_cream: "ice cream parlour", tea: "tea shop", coffee: "coffee shop", pastry: "cake shop", chocolate: "chocolate shop",
+  boutique: "boutique", fabric: "fabric shop", bag: "bag shop", watches: "watch shop", dressmaker: "tailoring shop", kitchen: "kitchen studio",
+  lighting: "lighting store", curtain: "curtain & furnishing store", carpet: "carpet store", houseware: "home & kitchen store",
+  bathroom_furnishing: "bathroom fittings store", tiles: "tiles showroom", computer: "computer shop", appliance: "home appliance store",
+  hifi: "audio store", motorcycle_repair: "bike service centre", motorcycle: "bike showroom", car_wash: "car wash", pet_grooming: "pet grooming",
+  medical_supply: "medical supplies shop", printer: "printing press",
 };
 const EXCLUDE_CATS = new Set(["bank", "government", "personal", "blood_donation", "atm", "blood_bank", "social_facility", "townhall", "police", "post_office", "courthouse"]);
 const EXCLUDE_NAME_RE = /\b(fortis|apollo|tata|reliance|hdfc|icici|axis bank|state bank|sbi\b|kotak|\blic\b|dmart|d-mart|croma|jio|airtel|vodafone|mcdonald|domino|kfc|subway|starbucks)\b/i;
@@ -35,7 +56,11 @@ export const SEGMENT_LABELS: Record<Segment, { label: string; hint: string }> = 
 };
 
 export function categoryOf(tags: Record<string, string>): { key: string; label: string } {
-  for (const key of ["shop", "amenity", "healthcare", "craft", "leisure", "tourism", "office"]) {
+  // A gym or sports centre that only teaches yoga is a yoga studio.
+  if (tags.sport === "yoga" && !tags.shop && !tags.amenity && (!tags.leisure || /^(fitness_centre|sports_centre)$/.test(tags.leisure))) {
+    return { key: "yoga", label: CAT_LABELS.yoga! };
+  }
+  for (const key of ["shop", "amenity", "healthcare", "craft", "leisure", "tourism", "office", "sport"]) {
     const v = tags[key];
     if (!v || v === "yes") continue;
     if (CAT_LABELS[v]) return { key: v, label: CAT_LABELS[v]! };
@@ -111,10 +136,11 @@ function firstValue(raw: string): string {
   );
 }
 
-/** "excluded" = chain/bank/non-Latin (counted), null = unusable (no name or no contact). */
-export function toCandidate(el: OsmElement, area: string): Candidate | "excluded" | null {
+/** "excluded" = chain/bank/non-Latin/permanently closed (counted), null = unusable (no name or no contact). */
+export function toCandidate(el: OsmElement, area: string, now: Date = new Date()): Candidate | "excluded" | null {
   const t = el.tags ?? {};
   if (!t.name) return null;
+  if (isClosed(t, now)) return "excluded";
   if (!/[A-Za-z]/.test(t.name)) return "excluded";
   if (EXCLUDE_NAME_RE.test(t.name)) return "excluded";
   const phone = normalizePhone(t.phone || t["contact:phone"] || t["contact:mobile"]);
