@@ -3,10 +3,15 @@ import type { OsmElement } from "./classify";
 import { overpassClosedStatements } from "./closed";
 
 const OSM_UA = "ClientPilot/1.0 (personal lead research; kalpeshmalusare30@gmail.com)";
+/** Tried in order. The main overpass-api.de host is often overloaded (504) while its lz4/z siblings answer in seconds. */
 export const OVERPASS_MIRRORS = [
+  "https://lz4.overpass-api.de/api/interpreter",
+  "https://z.overpass-api.de/api/interpreter",
   "https://overpass-api.de/api/interpreter",
   "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
 ];
+/** Per-mirror cap: short enough that every mirror gets a turn inside the 50 s search deadline. */
+export const OVERPASS_ATTEMPT_MS = 12_000;
 
 export interface Bbox {
   south: number;
@@ -66,7 +71,7 @@ export async function geocode(area: string, signal?: AbortSignal): Promise<{ bbo
 export function overpassQuery(b: Bbox, selectors: string[], now: Date = new Date()): string {
   const bb = `(${b.south},${b.west},${b.north},${b.east})`;
   return [
-    "[out:json][timeout:25];",
+    "[out:json][timeout:12];",
     "(",
     ...selectors.map((s) => `  nwr${s}${bb};`),
     ")->.found;",
@@ -92,7 +97,7 @@ export function splitBbox(b: Bbox, maxSpan = 0.09): Bbox[] {
   return tiles;
 }
 
-/** One pass over the mirrors; each attempt capped at 25 s and by the caller's deadline signal. */
+/** One pass over the mirrors; each attempt capped at OVERPASS_ATTEMPT_MS and by the caller's deadline signal. */
 export async function fetchElements(bbox: Bbox, selectors: string[], signal?: AbortSignal): Promise<OsmElement[]> {
   let lastErr: unknown = new Error("no Overpass mirror answered");
   for (const mirror of OVERPASS_MIRRORS) {
@@ -101,7 +106,7 @@ export async function fetchElements(bbox: Bbox, selectors: string[], signal?: Ab
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": OSM_UA },
         body: "data=" + encodeURIComponent(overpassQuery(bbox, selectors)),
-        signal: withTimeout(25_000, signal),
+        signal: withTimeout(OVERPASS_ATTEMPT_MS, signal),
         cache: "no-store",
       });
       if (!res.ok) throw new Error(`Overpass HTTP ${res.status}`);

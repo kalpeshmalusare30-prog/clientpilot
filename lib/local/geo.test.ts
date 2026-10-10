@@ -18,8 +18,16 @@ describe("geo", () => {
   });
   it("builds an Overpass query with the given selectors", () => {
     const q = overpassQuery({ south: 1, west: 2, north: 3, east: 4 }, ['["amenity"="dentist"]["name"]']);
-    expect(q).toContain("[out:json][timeout:25];");
+    expect(q).toContain("[out:json][timeout:12];");
     expect(q).toContain('nwr["amenity"="dentist"]["name"](1,2,3,4);');
     expect(q).toContain("out tags center");
+  });
+});
+
+import { OVERPASS_ATTEMPT_MS, OVERPASS_MIRRORS } from "./geo";
+describe("overpass mirrors", () => {
+  it("gives every mirror a turn inside the 50 s search deadline", () => {
+    expect(OVERPASS_MIRRORS.length).toBeGreaterThanOrEqual(3);
+    expect(OVERPASS_MIRRORS.length * OVERPASS_ATTEMPT_MS).toBeLessThanOrEqual(50_000);
   });
 });
