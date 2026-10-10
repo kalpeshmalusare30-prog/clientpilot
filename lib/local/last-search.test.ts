@@ -60,3 +60,13 @@ describe("lastSearchItems", () => {
     expect(lastSearchItems(local, state, { ...LAST, at: "2026-10-10T10:00:00.000Z", added: 0 })).toEqual([]);
   });
 });
+
+describe("last search lists saved businesses found again", () => {
+  it("includes a business whose lastSeenAt matches the search", async () => {
+    const { lastSearchItems } = await import("./last-search");
+    const at = "2026-10-10T10:00:00.000Z";
+    const mk = (id: string, extra: object) => ({ id, name: id, createdAt: "2026-09-01T00:00:00.000Z", ...extra }) as never;
+    const items = lastSearchItems([mk("a", { lastSeenAt: at }), mk("b", {}), mk("c", { createdAt: at })], {}, { at } as never);
+    expect(items.map((x) => x.biz.id).sort()).toEqual(["a", "c"]);
+  });
+});

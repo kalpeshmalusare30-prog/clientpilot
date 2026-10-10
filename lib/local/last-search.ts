@@ -17,6 +17,7 @@ const Schema = z.object({
   category: z.string().max(40),
   areaLabel: z.string().max(120),
   added: z.number().int().min(0),
+  known: z.number().int().min(0).optional(),
   scanned: z.number().int().min(0),
   partial: z.boolean(),
   skippedAudits: z.number().int().min(0),
@@ -42,14 +43,14 @@ export function parseLastSearch(raw: string | undefined | null): LastSearch | nu
 }
 
 export function lastSearchReply(s: LastSearch): SearchReply {
-  return { added: s.added, partial: s.partial, scanned: s.scanned, skippedAudits: s.skippedAudits, areaLabel: s.areaLabel };
+  return { added: s.added, known: s.known, partial: s.partial, scanned: s.scanned, skippedAudits: s.skippedAudits, areaLabel: s.areaLabel };
 }
 
 /** The businesses that search added, in the order the list uses (new first, then by name), with their status. */
 export function lastSearchItems(local: LocalBiz[], state: Record<string, LeadState>, s: LastSearch | null): { biz: LocalBiz; status: Status }[] {
   if (!s) return [];
   return local
-    .filter((b) => b.createdAt === s.at)
+    .filter((b) => b.createdAt === s.at || b.lastSeenAt === s.at)
     .map((biz) => ({ biz, status: state[biz.id]?.status ?? ("new" as Status) }))
     .sort((a, b) => Number(a.status !== "new") - Number(b.status !== "new") || a.biz.name.localeCompare(b.biz.name));
 }

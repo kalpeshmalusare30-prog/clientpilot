@@ -78,6 +78,8 @@ export interface LocalBiz {
   /** The template was chosen by hand (PATCH): the demo keeps it even when it is "general". */
   templatePinned?: boolean;
   createdAt: string;
+  /** When a later search found this already-saved business again (it is listed under "Last search"). */
+  lastSeenAt?: string;
 }
 
 export interface Settings {

@@ -41,7 +41,7 @@ describe("POST /api/local/search", () => {
     searchMock.mockResolvedValue({ added: [biz("node/1"), biz("node/2")], partial: true, scanned: 40, skippedAudits: 3, areaLabel: "Andheri" });
     const res = await post({ area: "Andheri", category: "dental" });
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ ok: true, added: 2, partial: true, scanned: 40, skippedAudits: 3, areaLabel: "Andheri" });
+    expect(await res.json()).toEqual({ ok: true, added: 2, known: 0, partial: true, scanned: 40, skippedAudits: 3, areaLabel: "Andheri" });
     expect((await getStore().readData()).local.map((b) => b.id)).toEqual(["node/1", "node/2"]);
     expect(searchMock.mock.calls[0]![0]).toMatchObject({ area: "Andheri", category: "dental", origin: "https://x.test" });
   });
@@ -56,7 +56,7 @@ describe("POST /api/local/search", () => {
     const last = parseLastSearch(decodeURIComponent(/^[^=]+=([^;]*)/.exec(set)![1]!));
     expect(last).toEqual({
       at: searchMock.mock.calls[0]![0].nowIso, area: "Dombivli East", category: "beauty", areaLabel: "Dombivli East",
-      added: 0, scanned: 12, partial: false, skippedAudits: 0,
+      added: 0, known: 0, scanned: 12, partial: false, skippedAudits: 0,
     });
   });
   it("leaves the last search alone when a search fails", async () => {
@@ -81,5 +81,17 @@ describe("POST /api/local/search", () => {
     expect((await first).status).toBe(200);
     searchMock.mockResolvedValueOnce({ added: [], partial: false, scanned: 0, skippedAudits: 0, areaLabel: "Bandra" });
     expect((await post({ area: "Bandra", category: "all" })).status).toBe(200);
+  });
+});
+
+describe("POST /api/local/search — saved businesses found again", () => {
+  it("stamps them with lastSeenAt so Last search lists them", async () => {
+    const at0 = "2026-09-01T00:00:00.000Z";
+    await getStore().mutateData((d) => { d.local.push({ ...biz("node/9"), createdAt: at0 } as never); return d; });
+    searchMock.mockResolvedValue({ added: [], knownMatched: ["node/9"], partial: false, scanned: 5, skippedAudits: 0, areaLabel: "Andheri" });
+    const res = await post({ area: "Andheri", category: "all" });
+    expect(await res.json()).toMatchObject({ added: 0, known: 1 });
+    const saved = (await getStore().readData()).local.find((b) => b.id === "node/9")!;
+    expect(saved.lastSeenAt).toBe(searchMock.mock.calls.at(-1)![0].nowIso);
   });
 });

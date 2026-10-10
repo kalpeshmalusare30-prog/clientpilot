@@ -40,6 +40,8 @@ export interface SearchResult {
   scanned: number;
   skippedAudits: number;
   areaLabel: string;
+  /** Already-saved businesses this search matched again (not re-audited). */
+  knownMatched: string[];
 }
 
 export async function searchLocal(input: SearchInput, deps: SearchDeps = realDeps): Promise<SearchResult> {
@@ -72,10 +74,15 @@ export async function searchLocal(input: SearchInput, deps: SearchDeps = realDep
   // Normalise, exclude, and drop anything already stored (by OSM id).
   const knownIds = new Set(input.existing.map((b) => b.id));
   const seenIds = new Set<string>();
+  const knownMatched = new Set<string>();
   const cands: Candidate[] = [];
   for (const el of elements) {
     const c = toCandidate(el, geo.label, new Date(input.nowIso));
-    if (!c || c === "excluded" || seenIds.has(c.id) || knownIds.has(c.id)) continue;
+    if (!c || c === "excluded" || seenIds.has(c.id)) continue;
+    if (knownIds.has(c.id)) {
+      knownMatched.add(c.id);
+      continue;
+    }
     seenIds.add(c.id);
     cands.push(c);
   }
@@ -144,7 +151,7 @@ export async function searchLocal(input: SearchInput, deps: SearchDeps = realDep
     added.push({ ...c, segment: c.segment, ...audited, slug, template, ...msgs, createdAt: input.nowIso });
   }
   added.sort((a, b) => rank(a.segment) - rank(b.segment) || a.name.localeCompare(b.name));
-  return { added, partial, scanned: elements.length, skippedAudits, areaLabel: geo.label };
+  return { added, partial, scanned: elements.length, skippedAudits, areaLabel: geo.label, knownMatched: [...knownMatched] };
 }
 
 function regDomainOf(u: string): string {

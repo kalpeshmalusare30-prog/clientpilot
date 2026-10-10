@@ -40,15 +40,20 @@ export async function POST(req: Request) {
       nowIso,
       deadline: Date.now() + 50_000,
     });
-    if (result.added.length) {
+    if (result.added.length || (result.knownMatched ?? []).length) {
+      // One write: append the new businesses and stamp the saved ones this search found again,
+      // so "Last search" lists everything in the area, not only what was new.
+      const again = new Set(result.knownMatched ?? []);
       await store.mutateData((d) => {
         const known = new Set(d.local.map((b) => b.id));
+        for (const b of d.local) if (again.has(b.id)) b.lastSeenAt = nowIso;
         d.local.push(...result.added.filter((b) => !known.has(b.id)));
         return d;
       });
     }
     const reply = {
       added: result.added.length,
+      known: (result.knownMatched ?? []).length,
       partial: result.partial,
       scanned: result.scanned,
       skippedAudits: result.skippedAudits,

@@ -24,11 +24,12 @@ export function groupLocal(local: LocalBiz[], state: Record<string, LeadState>, 
 }
 
 /** What POST /api/local/search replies: the search result with the added businesses counted. */
-export type SearchReply = Omit<SearchResult, "added"> & { added: number };
+export type SearchReply = Omit<SearchResult, "added" | "knownMatched"> & { added: number; known?: number };
 
 /** One line after a search. A partial search says so and asks for another run (spec: "partial — search again for more"). */
 export function searchSummary(r: SearchReply): string {
-  const head = `${r.areaLabel}: ${r.added} navin dukane (${r.scanned} tapasli)`;
+  const again = r.known ? `, ${r.known} aadhich saved` : "";
+  const head = `${r.areaLabel}: ${r.added} navin dukane${again} (${r.scanned} tapasli)`;
   if (!r.partial) return head;
   const unchecked = r.skippedAudits ? ` (${r.skippedAudits} website tapasayche rahile)` : "";
   return `${head} — partial${unchecked}, jast sathi parat shodha`;
