@@ -122,51 +122,61 @@ export function GigPanel(props: {
   const actions: Record<ActionKey, () => void> = { ai: draft, save, copy, live: checkLive, bid, skip };
 
   return (
-    <div className="card" style={{ marginTop: 12 }}>
+    <div className="stack">
       {props.isFreelancer ? (
-        <div className="btn-row" style={{ marginTop: 0 }}>
-          <button className="btn btn--ghost" onClick={checkLive} disabled={!!busy}>{busy === "live" ? "Checking…" : "Live check"}</button>
-          {live ? (
-            <span className="note" style={{ alignSelf: "center" }}>
-              {live.open ? "Open" : `Closed (${live.status})`} · {live.bidCount ?? "?"} bids{live.bidAvg ? ` · avg ${live.currency} ${live.bidAvg}` : ""}
-            </span>
+        <section className="card">
+          <div className="live-line">
+            <button className="btn btn--ghost i-pulse" onClick={checkLive} disabled={!!busy}>{busy === "live" ? "Checking…" : "Live check"}</button>
+            {live ? (
+              <>
+                <span className={`badge ${live.open ? "badge--ok" : "badge--danger"}`}>{live.open ? "Open" : `Closed (${live.status})`}</span>
+                <span className="badge">{live.bidCount ?? "?"} bids</span>
+                {live.bidAvg ? <span className="badge">avg {live.currency} {live.bidAvg}</span> : null}
+              </>
+            ) : (
+              <span className="note">Bid karnyapurvi project open ahe ka bagh.</span>
+            )}
+          </div>
+        </section>
+      ) : null}
+
+      <section className="card">
+        <h2 className="card__title" style={{ marginBottom: 12 }}>Proposal</h2>
+        <button className="btn btn--primary btn--block btn--lg i-sparkles" onClick={draft} disabled={!!busy}>{busy === "ai" ? "AI lihitoy… (30 s paryant)" : text ? "AI proposal parat lihi" : "AI proposal lihi"}</button>
+
+        <label className="field" style={{ marginTop: 14 }}>
+          <span className="field__label">Proposal text</span>
+          <textarea className="textarea-lg" value={text} onChange={(e) => setText(e.target.value)} placeholder="AI proposal lihi dab, kinva swatah lihi." />
+        </label>
+        <div className={`counter${over ? " counter--over" : ""}`}>{text.length}/{max}</div>
+        {over ? <p className="limit-alert" role="alert">{over}</p> : null}
+        {changes.length ? (
+          <details className="note"><summary>AI ne kay sudharla ({changes.length})</summary><ul>{changes.map((c, i) => <li key={i}>{c}</li>)}</ul></details>
+        ) : null}
+
+        <div className="btn-row">
+          {text !== saved ? <button className="btn btn--ghost i-save" onClick={save} disabled={!!busy}>Save edits</button> : null}
+          <button className="btn i-copy" onClick={copy} disabled={!text || !!busy}>Copy</button>
+          {props.url ? (
+            <a className="btn i-external" href={props.url} target="_blank" rel="noopener noreferrer">{props.isFreelancer ? "Open in Freelancer" : "Open post"}</a>
           ) : null}
         </div>
-      ) : null}
+      </section>
 
-      <div className="btn-row">
-        <button className="btn btn--primary" onClick={draft} disabled={!!busy}>{busy === "ai" ? "AI lihitoy… (30 s paryant)" : text ? "AI proposal parat lihi" : "AI proposal lihi"}</button>
-      </div>
+      <section className="card">
+        <h2 className="card__title">Bid lavla?</h2>
+        <p className="card__sub">Amount tak ani save kar. Follow-up apoap lagel.</p>
+        <div className="bid-row">
+          <input className="field__input" inputMode="decimal" placeholder="Amount" aria-label="Bid amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
+          <select className="field__input" aria-label="Currency" value={currency} onChange={(e) => setCurrency(e.target.value)}>
+            {["INR", "USD", "EUR", "GBP", "AUD", "CAD"].map((c) => <option key={c}>{c}</option>)}
+          </select>
+        </div>
+        <button className="btn btn--ok btn--block i-check" style={{ marginTop: 10 }} onClick={bid} disabled={!!busy}>Bid kela</button>
+      </section>
 
-      <label className="field" style={{ marginTop: 12 }}>
-        <span className="field__label">Proposal</span>
-        <textarea className="textarea-lg" value={text} onChange={(e) => setText(e.target.value)} placeholder="AI proposal lihi dab, kinva swatah lihi." />
-      </label>
-      <div className={`counter${over ? " counter--over" : ""}`}>{text.length}/{max}</div>
-      {over ? <p className="limit-alert" role="alert">{over}</p> : null}
-      {changes.length ? (
-        <details className="note"><summary>AI ne kay sudharla ({changes.length})</summary><ul>{changes.map((c, i) => <li key={i}>{c}</li>)}</ul></details>
-      ) : null}
+      <button className="btn btn--quiet btn--block i-skip" onClick={skip} disabled={!!busy}>Skip</button>
 
-      <div className="btn-row">
-        {text !== saved ? <button className="btn" onClick={save} disabled={!!busy}>Save edits</button> : null}
-        <button className="btn" onClick={copy} disabled={!text || !!busy}>Copy</button>
-        {props.url ? (
-          <a className="btn" href={props.url} target="_blank" rel="noopener noreferrer">{props.isFreelancer ? "Open in Freelancer" : "Open post"}</a>
-        ) : null}
-      </div>
-
-      <div className="section-label">Bid lavla?</div>
-      <div className="btn-row" style={{ marginTop: 0 }}>
-        <input className="field__input" style={{ flex: 1, minWidth: 110 }} inputMode="decimal" placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
-        <select className="field__input" style={{ width: 92 }} value={currency} onChange={(e) => setCurrency(e.target.value)}>
-          {["INR", "USD", "EUR", "GBP", "AUD", "CAD"].map((c) => <option key={c}>{c}</option>)}
-        </select>
-        <button className="btn btn--ok" onClick={bid} disabled={!!busy}>Bid kela</button>
-      </div>
-      <div className="btn-row">
-        <button className="btn btn--ghost" onClick={skip} disabled={!!busy}>Skip</button>
-      </div>
       {toast ? (
         <div className={`toast toast--${toast.tone}`} role={toast.tone === "ok" ? "status" : "alert"}>
           <span className="toast__text">{toast.text}</span>

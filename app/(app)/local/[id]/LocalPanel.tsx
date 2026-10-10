@@ -115,34 +115,43 @@ export function LocalPanel(p: {
   const actions: Record<ActionKey, () => void> = { wa: sendWa, email: sendEmail, mark: markSent, save, regen, demo: copyDemo };
 
   return (
-    <div className="card" style={{ marginTop: 12 }}>
-      {p.demoUrl ? (
-        <div className="btn-row" style={{ marginTop: 0 }}>
-          <a className="btn" href={p.demoUrl} target="_blank" rel="noopener noreferrer">Demo bagh</a>
-          <button className="btn btn--ghost" onClick={copyDemo} disabled={!!busy}>Copy demo link</button>
-        </div>
-      ) : (
-        <p className="note" style={{ marginTop: 0 }}>Phone number nahi, mhanun demo page nahi.</p>
-      )}
-      <label className="field" style={{ marginTop: 12 }}>
-        <span className="field__label">WhatsApp message</span>
-        <textarea className="textarea-lg" value={text} maxLength={MAX_WA_CHARS} onChange={(e) => setText(e.target.value)} />
-      </label>
-      {!p.isMobile && p.phone ? <p className="note">Ha landline number ahe — WhatsApp var nasel. Call karun bagh, mag &quot;Contact kela&quot; dab.</p> : null}
-      <div className="btn-row">
-        {!p.isMobile && p.phone ? (
-          <a className="btn btn--ok" href={`tel:+${p.phone}`}>Call kar</a>
+    <div className="stack">
+      <section className="card">
+        <h2 className="card__title">Demo page</h2>
+        {p.demoUrl ? (
+          <>
+            <p className="card__sub">Tyanchya dukanasathi banvleli sample website. Message madhe link jate.</p>
+            <div className="btn-row" style={{ marginTop: 12 }}>
+              <a className="btn i-eye" href={p.demoUrl} target="_blank" rel="noopener noreferrer">Demo bagh</a>
+              <button className="btn btn--ghost i-link" onClick={copyDemo} disabled={!!busy}>Copy demo link</button>
+            </div>
+          </>
         ) : (
-          <button className="btn btn--ok" onClick={sendWa} disabled={!p.phone || !!busy}>WhatsApp var pathav</button>
+          <p className="note" style={{ marginTop: 4 }}>Phone number nahi, mhanun demo page nahi.</p>
         )}
-        {text !== saved ? <button className="btn" onClick={save} disabled={!!busy}>Save</button> : null}
-        <button className="btn btn--ghost" onClick={regen} disabled={!!busy}>Message parat banva</button>
-      </div>
-      <div className="btn-row">
-        {mailto ? <button className="btn" onClick={sendEmail} disabled={!!busy}>Email pathav</button> : null}
+      </section>
+
+      <section className="card">
+        <label className="field">
+          <span className="card__title">WhatsApp message</span>
+          <textarea className="textarea-lg" value={text} maxLength={MAX_WA_CHARS} onChange={(e) => setText(e.target.value)} />
+        </label>
+        {!p.isMobile && p.phone ? <p className="evidence" style={{ marginTop: 10 }}>Ha landline number ahe — WhatsApp var nasel. Call karun bagh, mag &quot;Contact kela&quot; dab.</p> : null}
+        <div className="btn-row">
+          {!p.isMobile && p.phone ? (
+            <a className="btn btn--ok btn--lg btn--block i-phone" href={`tel:+${p.phone}`}>Call kar</a>
+          ) : (
+            <button className="btn btn--ok btn--lg btn--block i-chat" onClick={sendWa} disabled={!p.phone || !!busy}>WhatsApp var pathav</button>
+          )}
+        </div>
+        <div className="btn-row" style={{ marginTop: 8 }}>
+          {text !== saved ? <button className="btn btn--ghost i-save" onClick={save} disabled={!!busy}>Save</button> : null}
+          <button className="btn btn--ghost i-refresh" onClick={regen} disabled={!!busy}>Message parat banva</button>
+          {mailto ? <button className="btn i-mail" onClick={sendEmail} disabled={!!busy}>Email pathav</button> : null}
+        </div>
         {/* Records a call, or a WhatsApp/email sent outside the app. */}
-        <button className="btn btn--ghost" onClick={markSent} disabled={!!busy}>Contact kela (sent mark kar)</button>
-      </div>
+        <button className="btn btn--quiet btn--block i-check" style={{ marginTop: 8 }} onClick={markSent} disabled={!!busy}>Contact kela (sent mark kar)</button>
+      </section>
       {toast ? (
         <div className={`toast toast--${toast.tone}`} role={toast.tone === "ok" ? "status" : "alert"}>
           <span className="toast__text">{toast.text}</span>

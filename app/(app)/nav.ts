@@ -1,9 +1,9 @@
 export const NAV = [
-  { href: "/", label: "Aaj", icon: "today" },
-  { href: "/gigs", label: "Gigs", icon: "gigs" },
-  { href: "/local", label: "Local", icon: "local" },
-  { href: "/pipeline", label: "Pipeline", icon: "pipeline" },
-  { href: "/settings", label: "Settings", icon: "settings" },
+  { href: "/", label: "Aaj", icon: "sun" },
+  { href: "/gigs", label: "Gigs", icon: "briefcase" },
+  { href: "/local", label: "Local", icon: "store" },
+  { href: "/pipeline", label: "Pipeline", icon: "kanban" },
+  { href: "/settings", label: "Settings", icon: "sliders" },
 ] as const;
 
 export type NavIcon = (typeof NAV)[number]["icon"];

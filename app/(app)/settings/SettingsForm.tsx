@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { Icon, type IconName } from "@/components/ui/Icon";
 import { postJSON, putJSON } from "@/lib/client/api";
 import { settingsResult } from "@/lib/client-forms";
 import { DEFAULT_ALLOWED_LINKS } from "@/lib/defaults";
@@ -39,38 +40,44 @@ export function SettingsForm({ initial }: { initial: Settings }) {
     window.location.href = "/login";
   }
 
-  const area = (key: "facts" | "never" | "pricing" | "waTemplate", label: string, hint: string) => (
-    <label className="field">
-      <span className="field__label">{label}</span>
-      <textarea className="textarea-lg" value={s[key]} onChange={(e) => setS({ ...s, [key]: e.target.value })} />
-      <span className="note">{hint}</span>
-    </label>
+  const area = (key: "facts" | "never" | "pricing" | "waTemplate", label: string, hint: string, icon: IconName) => (
+    <section className="card">
+      <label className="field">
+        <span className="card__title"><Icon name={icon} size={18} />{label}</span>
+        <span className="field__hint">{hint}</span>
+        <textarea className="textarea-lg" value={s[key]} onChange={(e) => setS({ ...s, [key]: e.target.value })} />
+      </label>
+    </section>
   );
 
   return (
-    <div style={{ display: "grid", gap: 16 }}>
-      {area("facts", "Facts (AI fakt hech vaparel)", "Tuzya baddal khari mahiti. Navin project/experience aala ki ithe jod.")}
-      {area("never", "Kadhich claim karu naye", "Ek line = ek gosht.")}
-      <label className="field">
-        <span className="field__label">Allowed links</span>
-        <textarea value={links} onChange={(e) => setLinks(e.target.value)} rows={4} />
-        <span className="note">
-          Ek line = ek link. Proposal madhe fakt hech links rahtil. Fakt {DEFAULT_ALLOWED_LINKS.join(", ")} kiva tyanche subpaths chaltat.
-        </span>
-      </label>
-      {area("pricing", "Pricing notes", "AI bid amount suchavtana he vachte.")}
-      {area("waTemplate", "WhatsApp template", "Placeholders: {intro} {name} {area} {category} {benefit} {demo_line}. Juni messages 'Message parat banva' ne update hotat.")}
-      <div className="btn-row">
-        <button className="btn btn--primary" onClick={save} disabled={busy}>{busy ? "Saving…" : "Save"}</button>
-        <button className="btn btn--ghost" onClick={logout}>Logout</button>
-      </div>
-      {/* Inline under the buttons, never a fixed toast over them. */}
-      {result ? (
-        <div className="btn-row" style={{ marginTop: 0, alignItems: "center" }}>
-          <p className="note" role={result.role} style={{ margin: 0, flex: 1, color: result.role === "alert" ? "var(--danger)" : undefined }}>{result.text}</p>
-          <button className="btn btn--ghost" onClick={() => setResult(null)} aria-label="Close">✕</button>
+    <div className="stack" style={{ marginTop: 0 }}>
+      {area("facts", "Facts (AI fakt hech vaparel)", "Tuzya baddal khari mahiti. Navin project/experience aala ki ithe jod.", "shield")}
+      {area("never", "Kadhich claim karu naye", "Ek line = ek gosht.", "alert")}
+      <section className="card">
+        <label className="field">
+          <span className="card__title"><Icon name="link" size={18} />Allowed links</span>
+          <span className="field__hint">
+            Ek line = ek link. Proposal madhe fakt hech links rahtil. Fakt {DEFAULT_ALLOWED_LINKS.join(", ")} kiva tyanche subpaths chaltat.
+          </span>
+          <textarea value={links} onChange={(e) => setLinks(e.target.value)} rows={4} />
+        </label>
+      </section>
+      {area("pricing", "Pricing notes", "AI bid amount suchavtana he vachte.", "rupee")}
+      {area("waTemplate", "WhatsApp template", "Placeholders: {intro} {name} {area} {category} {benefit} {demo_line}. Juni messages 'Message parat banva' ne update hotat.", "chat")}
+      <div className="save-bar">
+        <div className="btn-row">
+          <button className="btn btn--primary i-save" onClick={save} disabled={busy}>{busy ? "Saving…" : "Save"}</button>
+          <button className="btn btn--ghost i-logout" onClick={logout}>Logout</button>
         </div>
-      ) : null}
+        {/* Inline under the buttons, never a fixed toast over them. */}
+        {result ? (
+          <div className="inline-error" style={{ color: result.role === "alert" ? "var(--danger)" : "var(--ok)" }}>
+            <p role={result.role}>{result.text}</p>
+            <button className="btn btn--quiet" onClick={() => setResult(null)} aria-label="Close">✕</button>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

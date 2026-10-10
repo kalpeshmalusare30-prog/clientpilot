@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDaysISO, ageLabel, followUpState, istDayEnd } from "./time";
+import { addDaysISO, ageLabel, followUpState, formatISTDay, istDayEnd, istDayStart, istHour, istWeekStart } from "./time";
 
 // 2026-09-27T20:00:00Z is 28 Sep 01:30 IST.
 const NOW = Date.parse("2026-09-27T20:00:00Z");
@@ -39,5 +39,23 @@ describe("addDaysISO / ageLabel", () => {
     expect(ageLabel(new Date(NOW - 3 * 3_600_000).toISOString(), NOW)).toBe("3h");
     expect(ageLabel(new Date(NOW - 2 * 86_400_000).toISOString(), NOW)).toBe("2d");
     expect(ageLabel("", NOW)).toBe("");
+  });
+});
+
+describe("IST day and week starts", () => {
+  it("starts the day at IST midnight", () => {
+    expect(new Date(istDayStart(NOW)).toISOString()).toBe("2026-09-27T18:30:00.000Z"); // 28 Sep 00:00 IST
+  });
+  it("starts the week on Monday 00:00 IST, also when now is a Monday or a Sunday night", () => {
+    // 28 Sep 2026 is a Monday (IST).
+    expect(new Date(istWeekStart(NOW)).toISOString()).toBe("2026-09-27T18:30:00.000Z");
+    const sunNight = Date.parse("2026-10-04T18:00:00Z"); // Sun 4 Oct 23:30 IST
+    expect(new Date(istWeekStart(sunNight)).toISOString()).toBe("2026-09-27T18:30:00.000Z");
+    const monAfter = Date.parse("2026-10-04T18:30:00Z"); // Mon 5 Oct 00:00 IST
+    expect(new Date(istWeekStart(monAfter)).toISOString()).toBe("2026-10-04T18:30:00.000Z");
+  });
+  it("reads the IST hour and names the IST day", () => {
+    expect(istHour(NOW)).toBe(1);
+    expect(formatISTDay(NOW)).toMatch(/Monday.*28 September|28 September.*Monday/);
   });
 });

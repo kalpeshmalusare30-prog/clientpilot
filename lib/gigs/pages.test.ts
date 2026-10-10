@@ -87,8 +87,13 @@ describe("Gigs list page", () => {
     const metas = [...walk(tree)].filter((el) => hasClass(el, "list-row__meta"));
     expect(metas).toHaveLength(2);
     for (const m of metas) expect(hasClass(m, "list-row__meta--wrap")).toBe(true);
-    expect(text(metas[0]!.props.children)).toMatch(/^freelancer\.com · ₹12500–₹37500 · \d+[mhd] · score 14 · 40 bids$/);
+    expect(text(metas[0]!.props.children)).toMatch(/^freelancer\.com · ₹12500–₹37500 · \d+[mhd] · 40 bids$/);
     expect(text(metas[1]!.props.children)).toContain("remotive · no budget");
+    // The score has its own tile on every row, labelled for screen readers.
+    const rows = [...walk(tree)].filter((el) => hasClass(el, "list-row"));
+    const tiles = rows.map((r) => [...walk(r.props.children)].find((el) => hasClass(el, "lead-tile")));
+    expect(tiles.map((t) => t?.props["aria-label"])).toEqual(["score 14", "score 14"]);
+    for (const t of tiles) expect(text(t!.props.children)).toMatch(/^14/);
   });
 
   it("says when the list is cut at the cap", async () => {

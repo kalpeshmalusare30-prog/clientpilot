@@ -40,7 +40,7 @@ const rulesFor = (selector: string) => {
   return [...additions.matchAll(new RegExp(`(?:^|[}\\s])${esc}\\s*\\{([^}]*)\\}`, "g"))].map((m) => m[1]!);
 };
 
-describe("Aaj Gigs row at phone width (T11-1)", () => {
+describe("Aaj gigs-fetch status at phone width (T11-1)", () => {
   beforeEach(async () => {
     const s = createStore(new MemoryBackend());
     await s.mutateGigs((g) => ({
@@ -52,9 +52,12 @@ describe("Aaj Gigs row at phone width (T11-1)", () => {
 
   it("lets the text column shrink and the meta wrap, so every failed source shows without widening the page", async () => {
     const tree = await TodayPage();
-    const row = [...walk(tree)].find((el) => el.props.href === "/gigs?f=new");
+    // The dashboard still links to the new gigs.
+    expect([...walk(tree)].some((el) => el.props.href === "/gigs?f=new")).toBe(true);
+    const row = [...walk(tree)].find((el) => hasClass(el, "cron-row"));
     expect(row).toBeDefined();
-    const col = [...walk(row!.props.children)][0]!;
+    const col = [...walk(row!.props.children)].find((el) => el.type === "div")!;
+    expect(col).toBeDefined();
     // A flex item defaults to min-width:auto (its min-content width); without minWidth:0 a long meta line widens the page.
     expect(col.props.style).toMatchObject({ flex: 1, minWidth: 0 });
 

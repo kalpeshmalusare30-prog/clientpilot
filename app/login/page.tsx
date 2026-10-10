@@ -5,16 +5,13 @@ export const dynamic = "force-dynamic";
 export default function LoginPage() {
   return (
     <main
-      className="wrap"
+      className="wrap login"
       style={{
-        minHeight: "80vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
         paddingTop: "max(var(--space-3), env(safe-area-inset-top))",
+        paddingBottom: "max(var(--space-3), env(safe-area-inset-bottom))",
       }}
     >
-      <div className="card" style={{ width: "100%", maxWidth: 360 }}>
+      <div className="card login__card">
         <LoginForm />
       </div>
     </main>

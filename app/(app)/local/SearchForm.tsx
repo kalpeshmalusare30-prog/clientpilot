@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState, useTransition, type FormEvent } from "react";
+import { Icon } from "@/components/ui/Icon";
 import { postJSON } from "@/lib/client/api";
 import { CATEGORY_OPTIONS } from "@/lib/local/categories";
 
@@ -38,10 +39,17 @@ export function SearchForm({ initial }: { initial?: { area: string; category: st
   const canSearch = !working && area.trim().length >= 2;
 
   return (
-    <form className="card" onSubmit={go} style={{ display: "grid", gap: 10 }}>
+    <form id="shodh" className="card search-card" onSubmit={go}>
+      <div>
+        <h2 className="card__title"><Icon name="search" size={18} />Navin dukane shodh</h2>
+        <p className="card__sub">Area ani prakar nivad. Website nasleli dukane ithe yetil.</p>
+      </div>
       <label className="field">
         <span className="field__label">Area</span>
-        <input value={area} onChange={(e) => setArea(e.target.value)} placeholder="Andheri, Mumbai" />
+        <span className="input-icon">
+          <Icon name="pin" size={18} />
+          <input value={area} onChange={(e) => setArea(e.target.value)} placeholder="Andheri, Mumbai" />
+        </span>
       </label>
       <label className="field">
         <span className="field__label">Prakar</span>
@@ -49,10 +57,10 @@ export function SearchForm({ initial }: { initial?: { area: string; category: st
           {CATEGORY_OPTIONS.map((c) => <option key={c.key} value={c.key}>{c.label}</option>)}
         </select>
       </label>
-      <button className="btn btn--primary" disabled={!canSearch}>{working ? "Shodhtoy… (1 minute paryant)" : "Navin shodh"}</button>
+      <button className="btn btn--primary btn--block btn--lg i-search" disabled={!canSearch}>{working ? "Shodhtoy… (1 minute paryant)" : "Navin shodh"}</button>
       {error ? (
-        <div role="alert" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <p className="note" style={{ margin: 0, flex: 1, minWidth: 0 }}>{error}</p>
+        <div role="alert" className="inline-error">
+          <p>{error}</p>
           <button type="button" className="btn btn--ghost" onClick={search} disabled={!canSearch}>Retry</button>
         </div>
       ) : null}

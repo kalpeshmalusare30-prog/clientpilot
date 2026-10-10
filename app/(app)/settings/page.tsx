@@ -9,7 +9,10 @@ export default async function SettingsPage() {
   const data = await getStore().readData();
   return (
     <>
-      <h1 className="page-title">Settings</h1>
+      <div className="page-head">
+        <h1 className="page-title">Settings</h1>
+        <p className="page-sub">AI proposals ani WhatsApp messages hech vachtat.</p>
+      </div>
       <SettingsForm initial={data.settings} />
     </>
   );

@@ -95,16 +95,27 @@ describe("Local list page", () => {
     ));
 
   const labels = (tree: ReactNode) => [...walk(tree)].filter((el) => hasClass(el, "section-label")).map((el) => text(el.props.children));
+  /** Segment group headers as "<label> (<count>) · <hint>": the label and count chip, then the hint line under them. */
+  const groupHeads = (tree: ReactNode) => {
+    const all = [...walk(tree)];
+    const hints = all.filter((el) => hasClass(el, "section-hint")).map((el) => text(el.props.children));
+    return all.filter((el) => hasClass(el, "seg-head")).map((h, i) => {
+      const parts = [...walk(h.props.children)];
+      const label = text(parts.find((el) => hasClass(el, "seg-head__label"))?.props.children);
+      const n = text(parts.find((el) => hasClass(el, "chip__n"))?.props.children);
+      return `${label} (${n}) · ${hints[i]}`;
+    });
+  };
 
   it("groups by segment, most urgent first, and hides closed leads until All", async () => {
     const open = await LocalPage({ searchParams: Promise.resolve({}) });
-    expect(labels(open)).toEqual(["Site DOWN (1) · website band hai — sabse garam lead", "No website (2) · phone hai, website nahi"]);
+    expect(groupHeads(open)).toEqual(["Site DOWN (1) · website band hai — sabse garam lead", "No website (2) · phone hai, website nahi"]);
     const rows = [...walk(open)].filter((el) => hasClass(el, "list-row"));
     expect(rows.map((r) => r.props.href)).toEqual(["node/2", "node/1", "node/4"].map((id) => `/local/${toParam(id)}`));
     expect([...walk(open)].filter((el) => hasClass(el, "chip--active")).map((c) => c.props.href)).toEqual(["/local"]);
 
     const all = await LocalPage({ searchParams: Promise.resolve({ show: "all" }) });
-    expect(labels(all)[1]).toMatch(/^No website \(3\)/);
+    expect(groupHeads(all)[1]).toMatch(/^No website \(3\)/);
     expect([...walk(all)].filter((el) => hasClass(el, "chip--active")).map((c) => c.props.href)).toEqual(["/local?show=all"]);
   });
 

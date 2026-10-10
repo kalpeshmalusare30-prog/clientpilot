@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { celebrate } from "@/components/ui/celebrate";
 import { patchState } from "@/lib/client/api";
 import { followUpActionFor, notSaved, revertFollowUpInput } from "@/lib/client-forms";
 
@@ -26,8 +27,10 @@ export function StageControls(p: { param: string; kind: "gig" | "local"; status:
     setErr("");
     setLast(action);
     try {
-      await patchState(p.param, p.kind, action);
+      const j = (await patchState(p.param, p.kind, action)) as { state?: { status?: string } };
       setLast(null);
+      // Celebrate only what the server stored: a lead that is now Won.
+      if (action.type === "stage" && j.state?.status === "won" && p.status !== "won") celebrate("Client zala! Abhinandan");
       router.refresh();
     } catch (e) {
       // The UI never shows what was not stored: the picker goes back to the saved date.
@@ -42,24 +45,28 @@ export function StageControls(p: { param: string; kind: "gig" | "local"; status:
   const pending = when !== stored ? followUpActionFor(when) : null;
 
   return (
-    <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
-      <div className="btn-row" style={{ marginTop: 0 }}>
-        <select className="field__input" value={p.status} disabled={busy} onChange={(e) => act({ type: "stage", status: e.target.value })}>
+    <div className="controls">
+      <div className="controls__row">
+        <select className="field__input stage-select" aria-label="Stage" style={{ ["--c" as string]: `var(--st-${p.status})` }} value={p.status} disabled={busy} onChange={(e) => act({ type: "stage", status: e.target.value })}>
           {["drafted", "sent", "replied", "won", "lost", "skipped"].map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
-        <input className="field__input" type="datetime-local" value={when} disabled={busy} onChange={(e) => setWhen(e.target.value)} />
-        {pending ? <button className="btn" disabled={busy} onClick={() => act(pending)}>Set</button> : null}
-        {p.followUpAt && !pending ? (
-          <button className="btn btn--ghost" disabled={busy} onClick={() => act({ type: "followUp", followUpAt: null })}>Clear</button>
-        ) : null}
+        <input className="field__input" type="datetime-local" aria-label="Follow-up" value={when} disabled={busy} onChange={(e) => setWhen(e.target.value)} />
       </div>
-      <div className="btn-row" style={{ marginTop: 0 }}>
-        <input className="field__input" style={{ flex: 1 }} placeholder="Note" maxLength={2000} value={notes} onChange={(e) => setNotes(e.target.value)} />
+      {pending || p.followUpAt ? (
+        <div className="controls__actions">
+          {pending ? <button className="btn btn--primary" disabled={busy} onClick={() => act(pending)}>Set follow-up</button> : null}
+          {p.followUpAt && !pending ? (
+            <button className="btn btn--quiet" disabled={busy} onClick={() => act({ type: "followUp", followUpAt: null })}>Clear follow-up</button>
+          ) : null}
+        </div>
+      ) : null}
+      <div className="controls__row controls__row--note">
+        <input className="field__input" placeholder="Note" aria-label="Note" maxLength={2000} value={notes} onChange={(e) => setNotes(e.target.value)} />
         {notes !== p.notes ? <button className="btn" disabled={busy} onClick={() => act({ type: "notes", notes })}>Save</button> : null}
       </div>
       {err ? (
-        <div className="btn-row" style={{ marginTop: 0, alignItems: "center" }} role="alert">
-          <p style={{ color: "var(--danger)", margin: 0, flex: 1 }}>{err}</p>
+        <div className="inline-error" role="alert">
+          <p>{err}</p>
           {last ? <button className="btn btn--ghost" disabled={busy} onClick={() => act(last)}>Retry</button> : null}
         </div>
       ) : null}
