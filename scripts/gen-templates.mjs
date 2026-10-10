@@ -14,7 +14,8 @@ export const SAMPLE_NOTICE =
 
 const out = {};
 for (const k of keys) {
-  let html = readFileSync(new URL(`${k}.html`, dir), "utf8");
+  // LF only, so the bundle is the same whether git checked the templates out with CRLF (Windows) or LF (Vercel).
+  let html = readFileSync(new URL(`${k}.html`, dir), "utf8").replace(/\r\n/g, "\n");
   html = html.replace(/href="([^"]*)"/g, (_, v) =>
     `href="${v.replaceAll("{{BIZ_NAME}}", "{{BIZ_NAME_URL}}").replaceAll("{{AREA}}", "{{AREA_URL}}").replaceAll("{{PHONE_DISPLAY}}", "{{PHONE_DISPLAY_URL}}")}"`,
   );
