@@ -9,8 +9,11 @@ vi.mock("next/navigation", async (importOriginal) => ({
   useRouter: () => ({ refresh() {}, push() {} }),
 }));
 // pageOrigin() reads the request host when VERCEL_PROJECT_PRODUCTION_URL is not set.
-const req = vi.hoisted(() => ({ headers: new Headers({ host: "localhost:3107" }) }));
-vi.mock("next/headers", () => ({ headers: async () => req.headers }));
+const req = vi.hoisted(() => ({ headers: new Headers({ host: "localhost:3107" }), cookies: new Map<string, string>() }));
+vi.mock("next/headers", () => ({
+  headers: async () => req.headers,
+  cookies: async () => ({ get: (name: string) => (req.cookies.has(name) ? { name, value: req.cookies.get(name)! } : undefined) }),
+}));
 
 import LocalPage from "@/app/(app)/local/page";
 import LocalBizPage from "@/app/(app)/local/[id]/page";
@@ -18,6 +21,7 @@ import { LocalPanel } from "@/app/(app)/local/[id]/LocalPanel";
 import { SearchForm } from "@/app/(app)/local/SearchForm";
 import { toParam } from "@/lib/ids";
 import { CATEGORY_OPTIONS } from "@/lib/local/categories";
+import { LAST_SEARCH_COOKIE, encodeLastSearch } from "@/lib/local/last-search";
 import { createStore, setStoreForTests } from "@/lib/store";
 import { MemoryBackend } from "@/lib/store/memory";
 import type { LeadState, LocalBiz } from "@/lib/types";
@@ -115,6 +119,51 @@ describe("Local list page", () => {
     // No empty evidence line for a business the audit said nothing about.
     expect(metasOf(rows[1]!).map((m) => text(m.props.children))).toEqual(["dental clinic · Andheri · +91 98765 43210"]);
     expect([...walk(rows[2]!.props.children)].filter((el) => hasClass(el, "badge")).map((b) => text(b.props.children))).toEqual(["sent"]);
+  });
+
+  it("keeps the last search's businesses on top, and the form's inputs, until the next search", async () => {
+    const at = "2026-10-10T09:30:00.000Z";
+    await seed(
+      [biz("node/1", { name: "Smile Dental" }), biz("node/7", { name: "New Glow Salon", createdAt: at }), biz("node/8", { name: "Asha Parlour", createdAt: at })],
+      { "node/8": st("sent") },
+    );
+    req.cookies.set(LAST_SEARCH_COOKIE, encodeLastSearch({ at, area: "Dombivli East", category: "beauty", areaLabel: "Dombivli East", added: 2, scanned: 90, partial: false, skippedAudits: 0 }));
+    try {
+      const tree = await LocalPage({ searchParams: Promise.resolve({}) });
+      const section = [...walk(tree)].find((el) => hasClass(el, "last-search"))!;
+      expect(section).toBeDefined();
+      expect(labels(section)).toEqual(["Last search · Salon / parlour / spa"]);
+      expect(text(section.props.children)).toContain("Dombivli East: 2 navin dukane (90 tapasli)");
+      const rows = [...walk(section.props.children)].filter((el) => hasClass(el, "list-row"));
+      expect(rows.map((r) => r.props.href)).toEqual(["node/7", "node/8"].map((id) => `/local/${toParam(id)}`));
+      // Listed once: the groups below leave them out (a sent one would otherwise show there too).
+      const all = [...walk(tree)].filter((el) => hasClass(el, "list-row")).map((r) => r.props.href);
+      expect(all).toEqual(["node/7", "node/8", "node/1"].map((id) => `/local/${toParam(id)}`));
+      const form = [...walk(tree)].find((el) => el.type === SearchForm)!;
+      expect(form.props.initial).toEqual({ area: "Dombivli East", category: "beauty" });
+      // The restored inputs reach the form's fields.
+      const h = renderToStaticMarkup(createElement(SearchForm, { initial: { area: "Dombivli East", category: "beauty" } }));
+      expect(h).toMatch(/<input[^>]*value="Dombivli East"/);
+      expect(h).toMatch(/<option value="beauty" selected="">/);
+      expect(h).toMatch(/<button[^>]*>Navin shodh<\/button>/);
+      expect(h).not.toMatch(/<button[^>]*disabled[^>]*>Navin shodh/);
+    } finally {
+      req.cookies.clear();
+    }
+  });
+
+  it("says when the last search found nothing new, and ignores a damaged cookie", async () => {
+    req.cookies.set(LAST_SEARCH_COOKIE, encodeLastSearch({ at: "2026-10-10T10:00:00.000Z", area: "Thane", category: "all", areaLabel: "Thane", added: 0, scanned: 30, partial: false, skippedAudits: 0 }));
+    try {
+      const tree = await LocalPage({ searchParams: Promise.resolve({}) });
+      const section = [...walk(tree)].find((el) => hasClass(el, "last-search"))!;
+      expect(text(section.props.children)).toMatch(/Thane: 0 navin dukane \(30 tapasli\).*navin dukane nahit/);
+      req.cookies.set(LAST_SEARCH_COOKIE, "garbage");
+      const again = await LocalPage({ searchParams: Promise.resolve({}) });
+      expect([...walk(again)].some((el) => hasClass(el, "last-search"))).toBe(false);
+    } finally {
+      req.cookies.clear();
+    }
   });
 
   it("points to the search form when nothing is stored", async () => {

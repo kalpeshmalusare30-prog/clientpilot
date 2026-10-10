@@ -1,27 +1,29 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent } from "react";
 import { postJSON } from "@/lib/client/api";
 import { CATEGORY_OPTIONS } from "@/lib/local/categories";
-import { searchSummary, type SearchReply } from "@/lib/local/view";
 
-export function SearchForm() {
+/** `initial` is the last search (from its cookie), so the inputs survive opening a business and coming back.
+ * The result itself is listed by the page under "Last search". */
+export function SearchForm({ initial }: { initial?: { area: string; category: string } }) {
   const router = useRouter();
-  const [area, setArea] = useState("");
-  const [category, setCategory] = useState("all");
+  const [area, setArea] = useState(initial?.area ?? "");
+  const [category, setCategory] = useState(initial?.category ?? "all");
   const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<{ text: string; error: boolean } | null>(null);
+  const [refreshing, startRefresh] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
   /** Also the Retry action: it searches with the area and category as they are now. */
   async function search() {
     setBusy(true);
-    setMsg(null);
+    setError(null);
     try {
-      const j = (await postJSON("/api/local/search", { area, category })) as unknown as SearchReply;
-      setMsg({ text: searchSummary(j), error: false });
-      router.refresh();
+      await postJSON("/api/local/search", { area, category });
+      // The reply set the last-search cookie; the refreshed page lists what this search added.
+      startRefresh(() => router.refresh());
     } catch (err) {
-      setMsg({ text: `Shodh zala nahi — ${(err as Error).message}`, error: true });
+      setError(`Shodh zala nahi — ${(err as Error).message}`);
     } finally {
       setBusy(false);
     }
@@ -32,7 +34,8 @@ export function SearchForm() {
     void search();
   }
 
-  const canSearch = !busy && area.trim().length >= 2;
+  const working = busy || refreshing;
+  const canSearch = !working && area.trim().length >= 2;
 
   return (
     <form className="card" onSubmit={go} style={{ display: "grid", gap: 10 }}>
@@ -46,11 +49,11 @@ export function SearchForm() {
           {CATEGORY_OPTIONS.map((c) => <option key={c.key} value={c.key}>{c.label}</option>)}
         </select>
       </label>
-      <button className="btn btn--primary" disabled={!canSearch}>{busy ? "Shodhtoy… (1 minute paryant)" : "Navin shodh"}</button>
-      {msg ? (
-        <div role={msg.error ? "alert" : "status"} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <p className="note" style={{ margin: 0, flex: 1, minWidth: 0 }}>{msg.text}</p>
-          {msg.error ? <button type="button" className="btn btn--ghost" onClick={search} disabled={!canSearch}>Retry</button> : null}
+      <button className="btn btn--primary" disabled={!canSearch}>{working ? "Shodhtoy… (1 minute paryant)" : "Navin shodh"}</button>
+      {error ? (
+        <div role="alert" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <p className="note" style={{ margin: 0, flex: 1, minWidth: 0 }}>{error}</p>
+          <button type="button" className="btn btn--ghost" onClick={search} disabled={!canSearch}>Retry</button>
         </div>
       ) : null}
     </form>

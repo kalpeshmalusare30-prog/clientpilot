@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { requireSession } from "@/lib/auth/guard";
+import { NextResponse } from "next/server";
 import { CATEGORY_OPTIONS } from "@/lib/local/categories";
+import { LAST_SEARCH_COOKIE, LAST_SEARCH_MAX_AGE_S, encodeLastSearch } from "@/lib/local/last-search";
 import { searchLocal } from "@/lib/local/search";
 import { publicOrigin } from "@/lib/origin";
 import { getStore } from "@/lib/store";
@@ -27,13 +29,15 @@ export async function POST(req: Request) {
   try {
     const store = getStore();
     const data = await store.readData();
+    // Every business this search adds gets this createdAt; the "Last search" cookie points at it.
+    const nowIso = new Date().toISOString();
     const result = await searchLocal({
       area: parsed.data.area,
       category: parsed.data.category,
       existing: data.local,
       settings: data.settings,
       origin: publicOrigin(req),
-      nowIso: new Date().toISOString(),
+      nowIso,
       deadline: Date.now() + 50_000,
     });
     if (result.added.length) {
@@ -43,14 +47,23 @@ export async function POST(req: Request) {
         return d;
       });
     }
-    return Response.json({
-      ok: true,
+    const reply = {
       added: result.added.length,
       partial: result.partial,
       scanned: result.scanned,
       skippedAudits: result.skippedAudits,
       areaLabel: result.areaLabel,
+    };
+    const res = NextResponse.json({ ok: true, ...reply });
+    // A new search replaces the last one, also when it found nothing new.
+    res.cookies.set(LAST_SEARCH_COOKIE, encodeLastSearch({ at: nowIso, area: parsed.data.area, category: parsed.data.category, ...reply }), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: LAST_SEARCH_MAX_AGE_S,
     });
+    return res;
   } catch (e) {
     return Response.json({ ok: false, error: `Search failed: ${String((e as Error)?.message ?? e).slice(0, 160)}` }, { status: 502 });
   } finally {
