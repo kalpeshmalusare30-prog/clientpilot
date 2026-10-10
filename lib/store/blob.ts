@@ -7,7 +7,8 @@ export class BlobBackend implements Backend {
     const res = await get(path, { access: "private", useCache: !opts.fresh });
     if (!res || res.statusCode !== 200) return null;
     const text = await new Response(res.stream).text();
-    return { text, etag: res.blob.etag };
+    // get() can report a weak etag (W/"…") when the response was compressed; ifMatch needs the strong form.
+    return { text, etag: strongEtag(res.blob.etag) };
   }
 
   async put(path: string, text: string, opts: { ifMatch?: string; create?: boolean }): Promise<{ etag: string }> {
@@ -43,4 +44,8 @@ export class BlobBackend implements Backend {
       throw e;
     }
   }
+}
+
+export function strongEtag(etag: string): string {
+  return etag.replace(/^W\//, "");
 }
