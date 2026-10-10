@@ -2,760 +2,451 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{BIZ_NAME}} - Dental Clinic in {{AREA}}</title>
-<meta name="description" content="{{BIZ_NAME}} - dental clinic in {{AREA}}. Cleaning, braces, root canal, implants and kids dentistry. Message or call to book.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>{{BIZ_NAME}} — Dental clinic in {{AREA}}</title>
+<meta name="description" content="{{BIZ_NAME}} — dental clinic in {{AREA}}. Check-ups, cleaning, fillings, root canal, braces and more. Book on WhatsApp or call.">
+<meta name="theme-color" content="#0f766e">
 <style>
+  /* Self-contained: system fonts only, no external requests. */
   :root{
-    --mint-50:#f2fbf9;
-    --mint-100:#e2f6f1;
-    --mint-200:#c6ece3;
-    --teal-400:#3ab89e;
-    --teal-500:#1f9c85;
-    --teal-600:#137a68;
-    --navy-900:#0c2831;
-    --navy-800:#123742;
-    --ink:#183037;
-    --muted:#456068;
-    --white:#ffffff;
-    --wa:#22c65b;
-    --wa-ink:#052e17;
-    --amber:#e0902a;
-    --shadow-sm:0 1px 2px rgba(12,40,49,.06), 0 2px 8px rgba(12,40,49,.05);
-    --shadow-md:0 8px 24px rgba(12,40,49,.09), 0 2px 6px rgba(12,40,49,.05);
-    --shadow-lg:0 22px 55px rgba(12,40,49,.14), 0 6px 16px rgba(12,40,49,.08);
-    --r-sm:12px; --r-md:18px; --r-lg:26px; --r-xl:34px;
-    --maxw:1120px;
-    --font-body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    --font-display:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --teal:#0f766e;--teal-2:#14a394;--teal-deep:#0b4f4a;--mint:#dff7f2;--mint-2:#effbf8;
+    --bg:#f7fbfa;--card:#fff;--line:#dcebe8;
+    --text:#0f2a2a;--muted:#4a6461;
+    --wa-1:#1fae55;--wa-2:#138a43;
+    --r:18px;--r-sm:14px;--r-btn:14px;
+    --shadow-sm:0 1px 2px rgba(15,42,42,.05),0 6px 16px -8px rgba(15,42,42,.12);
+    --shadow-lg:0 26px 50px -24px rgba(11,79,74,.45);
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",Helvetica,Arial,sans-serif;
+    --dock:96px;
   }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    margin:0;
-    font-family:var(--font-body);
-    color:var(--ink);
-    background:var(--mint-50);
-    line-height:1.6;
-    font-size:16px;
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
-    overflow-x:hidden;
-  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:76px}
+  body{margin:0;font:16px/1.6 var(--sans);color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-wrap:break-word}
+  h1,h2,h3,p{margin:0}
+  h1,h2,h3{letter-spacing:-.02em}
   a{color:inherit;text-decoration:none}
-  img{max-width:100%;display:block}
-  h1,h2,h3{margin:0;font-family:var(--font-display);font-weight:600;letter-spacing:-.01em;color:var(--navy-900);line-height:1.1}
-  p{margin:0}
-  .wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 20px}
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:9px;
-    font-size:13px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
-    color:var(--teal-600);font-family:var(--font-body);
-  }
-  .eyebrow::before{content:"";width:22px;height:2px;border-radius:2px;background:var(--teal-400)}
+  svg{flex:none}
+  .wrap{width:100%;max-width:1080px;margin-inline:auto;padding-inline:20px}
+  @media (max-width:340px){.wrap{padding-inline:16px}}
+  a:focus-visible,.btn:focus-visible{outline:3px solid var(--teal-2);outline-offset:3px;border-radius:12px}
 
-  /* ---------- Honesty badge ---------- */
+  /* ---------- honesty badge: a thin strip glued to the top of the action bar ---------- */
   .demo-badge{
-    position:fixed;top:12px;left:12px;z-index:80;
-    display:inline-flex;align-items:center;gap:7px;
-    font-size:12px;font-weight:700;color:var(--navy-800);
-    background:rgba(255,255,255,.86);
-    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-    border:1px solid rgba(19,122,104,.24);
-    padding:7px 12px;border-radius:999px;
-    box-shadow:var(--shadow-sm);
-    max-width:calc(100vw - 24px);
+    position:fixed;z-index:61;left:0;right:0;bottom:calc(70px + env(safe-area-inset-bottom));
+    padding:5px 16px;text-align:center;
+    font:600 11.5px/1.4 var(--sans);letter-spacing:.01em;
+    background:var(--teal-deep);color:#d4efea;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
-  .demo-badge svg{width:14px;height:14px;flex:0 0 auto;color:var(--teal-600)}
+  .demo-badge svg{display:inline-block;width:13px;height:13px;vertical-align:-2px;margin-right:6px}
+  .demo-badge b{color:#fff;font-weight:700}
 
-  /* ---------- Header ---------- */
-  header.site{
-    position:sticky;top:0;z-index:60;
-    background:rgba(242,251,249,.82);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    border-bottom:1px solid rgba(19,122,104,.12);
-  }
-  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
-  .brand{display:flex;align-items:center;gap:11px;font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--navy-900);letter-spacing:-.01em}
-  .brand .logo{
-    width:40px;height:40px;border-radius:12px;flex:0 0 auto;
-    display:grid;place-items:center;
-    background:linear-gradient(150deg,var(--teal-400),var(--teal-600));
-    box-shadow:0 6px 14px rgba(19,122,104,.32), inset 0 1px 0 rgba(255,255,255,.4);
-  }
-  .brand .logo svg{width:22px;height:22px}
-  .nav-links{display:none;gap:30px;align-items:center}
-  .nav-links a{font-size:15px;font-weight:600;color:var(--ink);opacity:.82;transition:opacity .2s,color .2s;padding:6px 0}
-  .nav-links a:hover{opacity:1;color:var(--teal-600)}
-  .nav-cta{display:none}
+  /* ---------- top bar ---------- */
+  .top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .top-in{display:flex;align-items:center;gap:12px;min-height:64px;padding-block:8px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0;flex:1}
+  .logo{width:40px;height:40px;border-radius:12px;flex:none;display:grid;place-items:center;background:linear-gradient(150deg,var(--teal-2),var(--teal));box-shadow:0 6px 14px -6px rgba(15,118,110,.6)}
+  .logo svg{width:22px;height:22px}
+  .brand-txt{min-width:0}
+  .brand-name{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;font-weight:750;font-size:15.5px;line-height:1.25;color:var(--text)}
+  .brand-sub{display:block;margin-top:1px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top-call{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;width:44px;height:44px;border-radius:12px;background:var(--mint);color:var(--teal-deep);border:1px solid #c4ebe3}
+  .top-call svg{width:19px;height:19px}
+  .top-call span{display:none}
+  @media (min-width:640px){.top-call{width:auto;padding:0 16px;font-weight:650;font-size:14.5px}.top-call span{display:inline}.brand-name{font-size:17px}}
 
-  .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:9px;
-    font-family:var(--font-body);font-weight:700;font-size:15.5px;
-    padding:14px 22px;min-height:50px;border-radius:999px;cursor:pointer;border:0;
-    transition:transform .18s cubic-bezier(.2,.7,.3,1), box-shadow .18s, background .2s, border-color .2s, color .2s;
-    white-space:nowrap;
-  }
-  .btn:active{transform:translateY(1px) scale(.99)}
-  .btn svg{width:20px;height:20px;flex:0 0 auto}
-  .btn-wa{background:var(--wa);color:var(--wa-ink);box-shadow:0 10px 22px rgba(34,198,91,.34)}
-  .btn-wa:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(34,198,91,.44)}
-  .btn-call{background:var(--white);color:var(--navy-900);border:1.5px solid rgba(19,122,104,.24);box-shadow:var(--shadow-sm)}
-  .btn-call:hover{transform:translateY(-2px);border-color:var(--teal-400);color:var(--teal-600)}
+  /* ---------- buttons ---------- */
+  .btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:12px 20px;border-radius:var(--r-btn);border:1.5px solid transparent;font:700 16px/1.25 var(--sans);text-align:center;cursor:pointer;transition:transform .15s ease,background .2s ease}
+  .btn svg{width:20px;height:20px}
+  .btn:active{transform:scale(.98)}
+  .btn-wa{background:linear-gradient(180deg,var(--wa-1),var(--wa-2));color:#fff;box-shadow:0 12px 24px -12px rgba(19,138,67,.8)}
+  .btn-teal{background:var(--teal-deep);color:#fff}
+  .btn-line{background:#fff;color:var(--teal-deep);border-color:#c4e3dd}
+  .btn-white{background:#fff;color:var(--teal-deep)}
+  .btn-ghost{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.45)}
+  .cta-stack{display:grid;gap:12px}
 
-  /* ---------- Hero ---------- */
-  .hero{position:relative;padding:36px 0 32px;overflow:hidden}
-  .hero::before{
-    content:"";position:absolute;inset:0;z-index:-2;
-    background:
-      radial-gradient(120% 90% at 88% -10%, var(--mint-200) 0%, rgba(198,236,227,0) 55%),
-      radial-gradient(90% 70% at -10% 8%, #e6fbf4 0%, rgba(230,251,244,0) 60%),
-      linear-gradient(180deg,var(--mint-50),#ffffff 78%);
-  }
-  .hero-inner{display:flex;flex-direction:column;gap:30px}
-  .hero-copy h1{font-size:clamp(35px,8.8vw,60px);margin-top:18px}
-  .hero-copy h1 .accent{
-    color:var(--teal-600);font-style:italic;
-  }
-  .hero-copy .lede{margin-top:18px;font-size:17px;color:var(--muted);max-width:48ch;font-weight:500}
-  .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
-  .hero-actions .btn{flex:1 1 auto;min-width:160px}
-  .hero-meta{display:flex;align-items:center;gap:16px;margin-top:22px;flex-wrap:wrap}
-  .stars{display:inline-flex;gap:2px;color:var(--amber)}
-  .stars svg{width:17px;height:17px}
-  .hero-meta small{font-size:13.5px;color:var(--muted);font-weight:600}
-  .hero-meta .divider{width:1px;height:26px;background:rgba(19,122,104,.2)}
+  /* ---------- section shell ---------- */
+  .sec{padding:56px 0}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+  .eyebrow::before{content:"";width:20px;height:2px;border-radius:2px;background:currentColor;flex:none}
+  .sec-head{max-width:620px;margin-bottom:26px}
+  .sec-head h2{margin-top:12px;font-size:clamp(26px,7vw,38px);line-height:1.15;color:var(--text)}
+  .sec-head p{margin-top:10px;color:var(--muted);font-size:16.5px}
 
-  /* hero visual - pure CSS/SVG, no external image */
-  .hero-visual{position:relative}
-  .hero-stage{
-    position:relative;border-radius:var(--r-xl);overflow:hidden;
-    aspect-ratio:4/3.4;
-    background:
-      radial-gradient(70% 60% at 68% 26%, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 55%),
-      radial-gradient(90% 80% at 30% 88%, #a7ddd0 0%, rgba(167,221,208,0) 60%),
-      linear-gradient(158deg,#d9f4ec 0%, #7fccb9 52%, #1f9c85 100%);
-    box-shadow:var(--shadow-lg);
-    border:6px solid #fff;
-    display:grid;place-items:center;
-  }
-  .hero-stage::before{
-    content:"";position:absolute;inset:0;
-    background:
-      radial-gradient(circle at 22% 18%, rgba(255,255,255,.5) 0 2px, transparent 3px) 0 0/46px 46px,
-      radial-gradient(circle at 70% 60%, rgba(255,255,255,.35) 0 2px, transparent 3px) 0 0/64px 64px;
-    opacity:.5;mix-blend-mode:screen;
-  }
-  .medallion{
-    position:relative;width:46%;aspect-ratio:1;border-radius:50%;
-    display:grid;place-items:center;
-    background:radial-gradient(circle at 34% 28%, #ffffff, #eafaf5 70%);
-    box-shadow:0 24px 50px rgba(9,47,40,.28), inset 0 2px 0 rgba(255,255,255,.9);
-  }
-  .medallion::after{
-    content:"";position:absolute;inset:-11%;border-radius:50%;
-    border:2px dashed rgba(255,255,255,.6);
-  }
-  .medallion svg{width:54%;height:54%;color:var(--teal-500)}
-  .hero-stage .shine{
-    position:absolute;top:-30%;left:-10%;width:60%;height:160%;
-    background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.28),rgba(255,255,255,0));
-    transform:rotate(18deg);
-  }
-  .float-card{
-    position:absolute;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-    border-radius:15px;padding:12px 14px;box-shadow:var(--shadow-md);
-    display:flex;align-items:center;gap:11px;border:1px solid rgba(255,255,255,.8);
-  }
-  .float-card .ic{width:36px;height:36px;border-radius:11px;background:var(--mint-100);display:grid;place-items:center;color:var(--teal-600);flex:0 0 auto}
-  .float-card .ic svg{width:20px;height:20px}
-  .float-card b{font-size:14px;color:var(--navy-900);display:block;line-height:1.2}
-  .float-card span{font-size:12px;color:var(--muted);font-weight:600}
-  .fc-1{left:10px;bottom:34px;animation:floaty 5s ease-in-out infinite}
-  .fc-2{right:10px;top:22px;animation:floaty 6s ease-in-out infinite .6s}
-  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  /* reveal is progressive enhancement: the script adds .js-reveal to <html>; without it everything is visible */
+  .js-reveal .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+  .js-reveal .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js-reveal .reveal{opacity:1;transform:none;transition:none}}
+  @media print{.reveal{opacity:1!important;transform:none!important}.dock,.demo-badge{position:static}}
 
-  /* ---------- Trust badges ---------- */
-  .trust{margin-top:8px;padding:22px 0}
-  .trust-grid{
-    display:grid;grid-template-columns:repeat(2,1fr);gap:14px;
-    background:var(--white);border:1px solid rgba(19,122,104,.12);
-    border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow-sm);
-  }
-  .trust-item{display:flex;align-items:center;gap:12px}
-  .trust-item .tic{
-    width:46px;height:46px;flex:0 0 auto;border-radius:14px;display:grid;place-items:center;
-    background:linear-gradient(150deg,var(--mint-100),var(--mint-200));color:var(--teal-600);
-  }
-  .trust-item .tic svg{width:24px;height:24px}
-  .trust-item b{font-size:14.5px;color:var(--navy-900);display:block;line-height:1.25}
-  .trust-item span{font-size:12.5px;color:var(--muted);font-weight:600}
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;background:radial-gradient(80% 60% at 100% 0%,rgba(20,163,148,.18),transparent 60%),radial-gradient(70% 60% at 0% 100%,rgba(14,165,233,.1),transparent 60%),linear-gradient(180deg,#eefaf7,#f7fbfa)}
+  .hero::before{content:"";position:absolute;right:-70px;top:-70px;width:220px;height:220px;border-radius:50%;border:1.5px dashed rgba(15,118,110,.22);pointer-events:none}
+  .hero-grid{position:relative;z-index:1;display:grid;gap:30px;padding-block:36px 48px}
+  .hero h1{margin-top:16px;font-size:clamp(33px,9vw,56px);line-height:1.08;font-weight:800;color:var(--text)}
+  .hero h1 em{font-style:normal;color:var(--teal);background:linear-gradient(transparent 68%,rgba(20,163,148,.2) 68%)}
+  .lede{margin-top:16px;font-size:clamp(16px,4.3vw,19px);color:var(--muted);max-width:42ch}
+  .hero .cta-stack{margin-top:26px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;padding:0;list-style:none}
+  .chips li{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--teal-deep)}
+  .chips svg{width:14px;height:14px;color:var(--teal-2)}
 
-  /* ---------- Section shell ---------- */
-  section{scroll-margin-top:80px}
-  .sec-head{max-width:660px;margin:0 auto 34px;text-align:center}
-  .sec-head h2{font-size:clamp(28px,6.6vw,42px);margin-top:14px}
-  .sec-head p{margin-top:14px;color:var(--muted);font-size:16.5px;font-weight:500}
-  .band{padding:54px 0}
-  .band-tint{background:linear-gradient(180deg,#ffffff, var(--mint-50))}
+  /* sample appointment request */
+  .appt{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow-lg)}
+  .appt-head{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .appt-ic{width:44px;height:44px;border-radius:12px;flex:none;display:grid;place-items:center;background:var(--mint);color:var(--teal)}
+  .appt-ic svg{width:22px;height:22px}
+  .appt-head b{display:block;font-size:16.5px;line-height:1.3}
+  .appt-head span{display:block;font-size:13px;color:var(--muted)}
+  .arow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:15px}
+  .arow span:first-child{color:var(--muted)}
+  .arow span:last-child{font-weight:650;text-align:right}
+  .appt-foot{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;font-weight:650;color:var(--teal)}
+  .appt-foot i{width:8px;height:8px;border-radius:50%;background:var(--teal-2);box-shadow:0 0 0 3px rgba(20,163,148,.18)}
 
-  /* ---------- Services ---------- */
-  .services{display:grid;grid-template-columns:1fr;gap:16px}
-  .svc{
-    background:var(--white);border:1px solid rgba(19,122,104,.12);border-radius:var(--r-md);
-    padding:24px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
-    transition:transform .22s cubic-bezier(.2,.7,.3,1), box-shadow .22s, border-color .22s;
-  }
-  .svc::after{content:"";position:absolute;left:0;top:0;height:100%;width:4px;background:linear-gradient(var(--teal-400),var(--teal-600));opacity:0;transition:opacity .22s}
-  .svc:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:rgba(19,122,104,.24)}
-  .svc:hover::after{opacity:1}
-  .svc-ic{
-    width:54px;height:54px;border-radius:16px;display:grid;place-items:center;margin-bottom:16px;
-    background:linear-gradient(150deg,var(--mint-100),#cdeee4);color:var(--teal-600);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
-  }
-  .svc-ic svg{width:28px;height:28px}
-  .svc h3{font-size:20px;font-weight:600}
-  .svc p{margin-top:9px;font-size:15.5px;color:var(--muted);font-weight:500}
-  .svc .tag{margin-top:16px;font-size:13px;font-weight:700;color:var(--teal-600);display:inline-flex;align-items:center;gap:7px}
-  .svc .tag svg{width:15px;height:15px;flex:0 0 auto}
+  /* ---------- services ---------- */
+  .svc-sec{background:#fff;border-block:1px solid var(--line)}
+  .services{display:grid;gap:12px}
+  .svc{display:flex;gap:14px;align-items:flex-start;padding:18px;border-radius:var(--r-sm);background:var(--mint-2);border:1px solid var(--line)}
+  .svc-ic{width:46px;height:46px;border-radius:13px;flex:none;display:grid;place-items:center;background:#fff;color:var(--teal);box-shadow:var(--shadow-sm)}
+  .svc-ic svg{width:23px;height:23px}
+  .svc h3{font-size:17.5px;line-height:1.3}
+  .svc p{margin-top:4px;font-size:14.5px;color:var(--muted)}
 
-  /* ---------- Dentist card ---------- */
-  .dentist{
-    display:grid;grid-template-columns:1fr;
-    background:linear-gradient(160deg,var(--navy-900),var(--navy-800));
-    border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-lg);color:#eaf5f3;
-  }
-  .dentist-photo{
-    position:relative;min-height:280px;display:grid;place-items:center;
-    background:
-      radial-gradient(70% 60% at 32% 24%, rgba(58,184,158,.55), rgba(58,184,158,0) 62%),
-      linear-gradient(150deg,#1f9c85,#137a68 68%,#123742);
-  }
-  .dentist-photo::before{
-    content:"";position:absolute;inset:0;
-    background:radial-gradient(circle at 78% 82%, rgba(255,255,255,.14) 0 3px, transparent 4px) 0 0/54px 54px;
-    opacity:.6;
-  }
-  .avatar{
-    position:relative;width:130px;height:130px;border-radius:50%;
-    display:grid;place-items:center;
-    font-family:var(--font-display);font-size:52px;font-weight:600;color:var(--teal-600);
-    background:radial-gradient(circle at 35% 30%, #ffffff, #dff4ee 72%);
-    box-shadow:0 20px 44px rgba(6,32,27,.4), inset 0 2px 0 rgba(255,255,255,.9);
-  }
-  .avatar svg{width:46%;height:46%}
-  .avatar::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:2px solid rgba(255,255,255,.35)}
-  .dentist-photo .badge{
-    position:absolute;left:16px;bottom:16px;background:rgba(255,255,255,.96);color:var(--navy-900);
-    border-radius:13px;padding:9px 13px;font-size:12.5px;font-weight:700;box-shadow:var(--shadow-md);
-    display:flex;align-items:center;gap:8px;
-  }
-  .dentist-photo .badge svg{width:16px;height:16px;color:var(--teal-600)}
-  .dentist-body{padding:30px 24px}
-  .dentist-body .eyebrow{color:var(--teal-400)}
-  .dentist-body .eyebrow::before{background:var(--teal-400)}
-  .dentist-body h2{color:#fff;font-size:27px;margin-top:14px}
-  .dentist-body .role{color:var(--teal-400);font-weight:700;font-size:14.5px;margin-top:8px}
-  .dentist-body p{margin-top:15px;color:#c9dfdb;font-size:15.5px;font-weight:500}
-  .creds{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-  .creds span{font-size:12.5px;font-weight:600;color:#e2f0ec;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);padding:7px 12px;border-radius:999px}
+  /* ---------- first visit ---------- */
+  .steps{display:grid;gap:0;margin:0;padding:0;list-style:none}
+  .step{position:relative;display:flex;gap:16px;padding-bottom:22px}
+  .step:last-child{padding-bottom:0}
+  .step::before{content:"";position:absolute;left:21px;top:46px;bottom:4px;width:2px;background:linear-gradient(var(--teal-2),rgba(20,163,148,.15))}
+  .step:last-child::before{display:none}
+  .step-n{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--teal);color:#fff;font-weight:800;font-size:17px;box-shadow:0 0 0 5px var(--mint)}
+  .step h3{font-size:18px;line-height:1.3;padding-top:9px}
+  .step p{margin-top:4px;font-size:15px;color:var(--muted)}
 
-  /* ---------- Testimonials ---------- */
-  .reviews{display:grid;grid-template-columns:1fr;gap:16px}
-  .review{
-    background:var(--white);border:1px solid rgba(19,122,104,.12);border-radius:var(--r-md);
-    padding:24px;box-shadow:var(--shadow-sm);position:relative;
-  }
-  .review .rstars{color:var(--amber);display:inline-flex;gap:2px}
-  .review .rstars svg{width:16px;height:16px}
-  .review p{font-size:16px;color:var(--ink);font-weight:500;margin-top:12px;line-height:1.55}
-  .review .who{display:flex;align-items:center;gap:12px;margin-top:18px}
-  .review .av{
-    width:46px;height:46px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
-    font-weight:800;font-size:15px;color:#fff;
-  }
-  .av.a{background:linear-gradient(150deg,#3ab89e,#137a68)}
-  .av.b{background:linear-gradient(150deg,#5aa4d6,#2f6fa3)}
-  .av.c{background:linear-gradient(150deg,#e0902a,#bd6f24)}
-  .review .who b{font-size:14.5px;color:var(--navy-900);display:block;line-height:1.25}
-  .review .who span{font-size:13px;color:var(--muted);font-weight:600}
+  /* ---------- dentist placeholder ---------- */
+  .doc{display:grid;gap:18px;padding:24px 20px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+  .doc-photo{display:flex;align-items:center;gap:14px}
+  .avatar{width:72px;height:72px;border-radius:50%;flex:none;display:grid;place-items:center;background:linear-gradient(150deg,var(--mint),#c9efe7);color:var(--teal);border:2px dashed rgba(15,118,110,.35)}
+  .avatar svg{width:32px;height:32px}
+  .doc-photo b{display:block;font-size:17px;line-height:1.3}
+  .doc-photo span{display:block;font-size:14px;color:var(--muted)}
+  .doc p{font-size:15.5px;color:var(--muted)}
+  .doc ul{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+  .doc li{padding:6px 12px;border-radius:999px;background:var(--mint-2);border:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--teal-deep)}
 
-  /* ---------- Hours + Location ---------- */
-  .info-grid{display:grid;grid-template-columns:1fr;gap:18px}
-  .info-card{
-    background:var(--white);border:1px solid rgba(19,122,104,.12);border-radius:var(--r-lg);
-    padding:26px;box-shadow:var(--shadow-sm);
-  }
-  .info-card h3{font-size:21px;font-weight:600;display:flex;align-items:center;gap:11px}
-  .info-card h3 .hic{width:40px;height:40px;border-radius:12px;background:var(--mint-100);color:var(--teal-600);display:grid;place-items:center;flex:0 0 auto}
-  .info-card h3 .hic svg{width:21px;height:21px}
-  .pill-open{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--teal-600);background:var(--mint-100);padding:7px 13px;border-radius:999px;margin-top:14px}
-  .pill-open .dot{width:8px;height:8px;border-radius:50%;background:var(--wa);box-shadow:0 0 0 4px rgba(34,198,91,.2);animation:pulse 1.8s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-  .hours{margin-top:16px;list-style:none;padding:0}
-  .hours li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(19,122,104,.12);font-size:15px}
+  /* ---------- visit ---------- */
+  .info-grid{display:grid;gap:16px}
+  .info-card{min-width:0;padding:22px 20px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+  .info-card h3{display:flex;align-items:center;gap:10px;font-size:19px;line-height:1.3}
+  .info-card h3 svg{width:21px;height:21px;color:var(--teal)}
+  .pill{display:inline-flex;margin-top:10px;padding:5px 12px;border-radius:999px;background:var(--mint);color:var(--teal-deep);font-size:12.5px;font-weight:700}
+  .hours{margin:10px 0 0;padding:0;list-style:none}
+  .hours li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15.5px}
   .hours li:last-child{border-bottom:0}
-  .hours .day{font-weight:600;color:var(--navy-900)}
-  .hours .time{color:var(--muted);font-weight:600;font-size:14px;text-align:right}
-  .hours .on{color:var(--teal-600);font-weight:700}
-  .map{
-    margin-top:6px;border-radius:16px;overflow:hidden;position:relative;height:180px;
-    background:
-      linear-gradient(45deg, rgba(19,122,104,.07) 25%, transparent 25%, transparent 75%, rgba(19,122,104,.07) 75%) 0 0/26px 26px,
-      linear-gradient(45deg, rgba(19,122,104,.07) 25%, transparent 25%, transparent 75%, rgba(19,122,104,.07) 75%) 13px 13px/26px 26px,
-      linear-gradient(160deg,#e2f6f1,#c6ece3);
-    border:1px solid rgba(19,122,104,.14);
-  }
-  .map .road{position:absolute;background:rgba(255,255,255,.92)}
-  .map .r1{left:-5%;right:-5%;top:52%;height:13px;transform:rotate(-4deg)}
-  .map .r2{top:-5%;bottom:-5%;left:38%;width:11px;transform:rotate(6deg)}
-  .map .r3{left:-5%;right:-5%;top:22%;height:7px;background:rgba(255,255,255,.72)}
-  .map .pin{position:absolute;left:50%;top:48%;transform:translate(-50%,-100%);color:var(--teal-600);filter:drop-shadow(0 6px 8px rgba(12,40,49,.28))}
-  .map .pin svg{width:42px;height:42px}
-  .map .maplabel{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.96);border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;color:var(--navy-900);box-shadow:var(--shadow-sm)}
-  .map .maplabel svg{width:14px;height:14px;color:var(--teal-600);flex:0 0 auto}
-  .addr{margin-top:18px;font-size:15.5px;color:var(--ink);font-weight:500;line-height:1.55}
-  .addr .lbl{font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--teal-600);font-weight:800;display:block;margin-bottom:5px}
-  .info-card .btn{margin-top:20px;width:100%}
+  .hours .d{color:var(--muted)}
+  .hours .t{font-weight:650;font-variant-numeric:tabular-nums}
+  .info-card .btn{margin-top:14px}
+  .addr{margin-top:12px;color:var(--muted);font-size:15.5px;line-height:1.55}
+  .addr strong{display:block;color:var(--text)}
+  .map{position:relative;margin-top:14px;height:160px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(90deg,#e3f1ee 1px,transparent 1px) 0 0/28px 28px,linear-gradient(#e3f1ee 1px,transparent 1px) 0 0/28px 28px,#f3faf8}
+  .map .road{position:absolute;background:#fff;box-shadow:0 0 0 1px #d3e7e3}
+  .map .r1{left:-10%;right:-10%;top:58%;height:12px;transform:rotate(-5deg)}
+  .map .r2{top:-10%;bottom:-10%;left:40%;width:10px;transform:rotate(5deg)}
+  .map .r3{left:-10%;right:-10%;top:24%;height:7px;transform:rotate(3deg)}
+  .map .pin{position:absolute;left:42%;top:55%;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;filter:drop-shadow(0 4px 6px rgba(11,79,74,.35))}
+  .map .pin svg{width:36px;height:36px;color:var(--teal)}
+  .map .lbl{max-width:150px;margin-top:-2px;padding:3px 9px;border-radius:7px;background:var(--teal-deep);color:#fff;font-size:11.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .map .tag{position:absolute;right:10px;top:10px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.92);color:var(--muted);font-size:11px;font-weight:600}
 
-  /* ---------- Final CTA ---------- */
-  .final{
-    position:relative;overflow:hidden;border-radius:var(--r-xl);
-    background:linear-gradient(155deg,var(--teal-500),var(--teal-600) 58%,#0f6152);
-    color:#eafaf5;padding:44px 26px;text-align:center;box-shadow:var(--shadow-lg);
-  }
-  .final::before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.1);top:-120px;right:-80px}
-  .final::after{content:"";position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.08);bottom:-90px;left:-40px}
-  .final h2{color:#fff;font-size:clamp(27px,6.2vw,40px);position:relative}
-  .final p{margin-top:14px;color:#dbf5ee;font-size:16.5px;font-weight:500;position:relative;max-width:46ch;margin:14px auto 0}
-  .final .actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px;position:relative}
-  .final .actions .btn{flex:1 1 auto;min-width:180px;max-width:280px}
-  .final .btn-call{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.4)}
-  .final .btn-call:hover{background:rgba(255,255,255,.22);color:#fff;border-color:#fff}
+  /* ---------- CTA band ---------- */
+  .final{position:relative;overflow:hidden;padding:34px 22px;border-radius:22px;text-align:center;color:#fff;background:radial-gradient(80% 90% at 50% -10%,rgba(255,255,255,.18),transparent 60%),linear-gradient(150deg,var(--teal),var(--teal-deep));box-shadow:var(--shadow-lg)}
+  .final h2{max-width:20ch;margin:0 auto;font-size:clamp(25px,6.6vw,36px);line-height:1.15}
+  .final p{max-width:44ch;margin:12px auto 0;color:rgba(255,255,255,.9)}
+  .final .cta-stack{max-width:560px;margin:24px auto 0}
 
-  /* ---------- Footer ---------- */
-  footer{background:var(--navy-900);color:#b9d2cd;padding:46px 0 120px}
-  .foot-top{display:flex;flex-direction:column;gap:26px}
+  /* ---------- footer ---------- */
+  footer{background:#082f2c;color:#a9c9c3;padding:44px 0 calc(var(--dock) + 28px + env(safe-area-inset-bottom))}
+  .foot-grid{display:grid;gap:26px}
+  .foot-grid>*{min-width:0}
   .foot-brand{display:flex;align-items:center;gap:12px}
-  .foot-brand .logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(150deg,var(--teal-400),var(--teal-600));display:grid;place-items:center;flex:0 0 auto}
-  .foot-brand .logo svg{width:24px;height:24px}
-  .foot-brand .name{overflow-wrap:anywhere;font-family:var(--font-display);font-size:21px;color:#fff;font-weight:600}
-  .foot-brand .loc{font-size:13px;color:#8fb3ac;font-weight:600}
-  .foot-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-  .foot-cols h4{font-size:12.5px;text-transform:uppercase;letter-spacing:.1em;color:#79a49b;margin:0 0 13px;font-weight:800}
-  .foot-cols a,.foot-cols li{display:block;font-size:14.5px;color:#c9dfdb;padding:5px 0;font-weight:500}
-  .foot-cols a{transition:color .2s}
-  .foot-cols a:hover{color:var(--teal-400)}
-  .foot-cols ul{list-style:none;padding:0;margin:0}
-  .foot-bottom{margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:7px}
-  .foot-bottom .biz{overflow-wrap:anywhere;font-size:14px;color:#e6f2ef;font-weight:700}
-  .foot-bottom .credit{font-size:13.5px;color:#8fb3ac;font-weight:500}
-  .foot-bottom .credit b{color:var(--teal-400);font-weight:700}
+  .foot-name{font-weight:750;font-size:18px;line-height:1.3;color:#fff;overflow-wrap:anywhere}
+  .foot-desc{margin-top:10px;font-size:14.5px;color:#8fb3ad;max-width:40ch}
+  .foot-h{margin-bottom:4px;font-size:11.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#6f9993}
+  .foot-links a{display:flex;align-items:center;gap:11px;min-height:44px;font-size:15px;color:#d5ebe7}
+  .foot-links svg{width:18px;height:18px;color:#5eead4}
+  .foot-bottom{display:grid;gap:6px;margin-top:26px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:#7fa39d}
+  .foot-bottom b{color:#fff;font-weight:600}
 
-  /* ---------- Mobile sticky CTA ---------- */
-  .sticky-cta{
-    position:fixed;left:0;right:0;bottom:0;z-index:70;
-    display:flex;gap:10px;padding:11px 14px calc(11px + env(safe-area-inset-bottom));
-    background:rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    border-top:1px solid rgba(19,122,104,.16);
-    box-shadow:0 -6px 20px rgba(12,40,49,.09);
+  /* ---------- sticky action bar ---------- */
+  .dock{position:fixed;z-index:60;left:0;right:0;bottom:0;display:flex;gap:10px;height:calc(70px + env(safe-area-inset-bottom));padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+  .dock .btn{flex:1 1 0;min-height:50px;height:50px;padding:0 12px;font-size:15.5px;box-shadow:none}
+  .dock .btn-wa{flex-grow:1.6}
+  @media (max-width:359px){.dock .opt{display:none}}
+
+  /* ---------- larger screens ---------- */
+  @media (min-width:600px){
+    .cta-stack{grid-template-columns:1fr 1fr}
+    .services{grid-template-columns:1fr 1fr}
+    .doc{grid-template-columns:auto 1fr;align-items:center;column-gap:28px}
+    .doc-photo{grid-row:span 2}
   }
-  .sticky-cta .btn{flex:1;padding:14px 12px;font-size:15.5px;min-height:52px}
-  .sticky-cta .btn-wa{flex:2 1 0}
-  .sticky-cta .btn-call{flex:1 1 auto;padding:14px 20px}
-
-  /* reveal */
-  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1)}
-  .reveal.in{opacity:1;transform:none}
-
-  /* ---------- Responsive ---------- */
-  @media(min-width:600px){
-    .trust-grid{grid-template-columns:repeat(4,1fr);padding:24px}
-    .services{grid-template-columns:repeat(2,1fr)}
-    .reviews{grid-template-columns:repeat(2,1fr)}
-    .foot-cols{grid-template-columns:repeat(3,1fr)}
-  }
-  @media(min-width:860px){
-    .wrap{padding:0 32px}
-    .nav-links{display:flex}
-    .nav-cta{display:inline-flex}
-    .hero{padding:58px 0 50px}
-    .hero-inner{flex-direction:row;align-items:center;gap:52px}
-    .hero-copy{flex:1 1 52%}
-    .hero-visual{flex:1 1 48%}
-    .hero-actions .btn{flex:0 0 auto}
+  @media (min-width:900px){
+    :root{--dock:0px}
+    .sec{padding:80px 0}
+    .hero-grid{grid-template-columns:1.1fr .9fr;align-items:center;gap:56px;padding-block:80px 88px}
     .services{grid-template-columns:repeat(3,1fr)}
-    .reviews{grid-template-columns:repeat(3,1fr)}
-    .dentist{grid-template-columns:0.92fr 1.08fr;align-items:stretch}
-    .dentist-photo{min-height:100%}
-    .dentist-body{padding:44px 40px}
+    .steps{grid-template-columns:repeat(3,1fr);gap:24px}
+    .step{flex-direction:column;padding-bottom:0}
+    .step::before{display:none}
+    .step h3{padding-top:0}
     .info-grid{grid-template-columns:1fr 1fr}
-    .band{padding:80px 0}
-    .final{padding:60px 40px}
-    .foot-top{flex-direction:row;justify-content:space-between;align-items:flex-start}
-    .foot-cols{width:auto;min-width:460px}
-    .sticky-cta{display:none}
-    footer{padding-bottom:48px}
-  }
-  @media(prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-    .reveal{opacity:1;transform:none}
+    .foot-grid{grid-template-columns:1.5fr 1fr 1fr}
+    .dock{display:none}
+    .demo-badge{left:16px;right:auto;bottom:16px;max-width:calc(100vw - 32px);border-radius:999px;padding:7px 14px;box-shadow:var(--shadow-lg)}
   }
 </style>
 </head>
 <body>
 
-<div class="demo-badge">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
-  Demo preview - made for {{BIZ_NAME}}
-</div>
+<div class="demo-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Demo preview — made for <b>{{BIZ_NAME}}</b></div>
 
-<!-- ===== Header ===== -->
-<header class="site">
-  <div class="wrap nav">
-    <a class="brand" href="#top" aria-label="{{BIZ_NAME}} home">
-      <span class="logo" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.4C10.4 2 8.3 1.7 6.9 2.7 5.4 3.7 4.6 5.7 4.9 8.1c.2 1.6.6 2.9.9 4.6.4 2 .5 3.6 1.1 5.4.3 1 .8 2.3 1.7 2.3.8 0 1-1 1.2-1.9.2-1 .4-2.1 1.2-2.1s1 1.1 1.2 2.1c.2.9.4 1.9 1.2 1.9.9 0 1.4-1.3 1.7-2.3.6-1.8.7-3.4 1.1-5.4.3-1.7.7-3 .9-4.6.3-2.4-.5-4.4-2-5.4-1.4-1-3.5-.7-5.1.7Z" fill="#fff" fill-opacity=".96"/></svg>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#top">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.4C10.4 2 8.3 1.7 6.9 2.7 5.4 3.7 4.6 5.7 4.9 8.1c.2 1.6.6 2.9.9 4.6.4 2 .5 3.6 1.1 5.4.3 1 .8 2.3 1.7 2.3.8 0 1-1 1.2-1.9.2-1 .4-2.1 1.2-2.1s1 1.1 1.2 2.1c.2.9.4 1.9 1.2 1.9.9 0 1.4-1.3 1.7-2.3.6-1.8.7-3.4 1.1-5.4.3-1.7.7-3 .9-4.6.3-2.4-.5-4.4-2-5.4-1.4-1-3.5-.7-5.1.7Z" fill="#fff"/></svg></span>
+      <span class="brand-txt">
+        <span class="brand-name">{{BIZ_NAME}}</span>
+        <span class="brand-sub">Dental clinic · {{AREA}}</span>
       </span>
-      {{BIZ_NAME}}
     </a>
-    <nav class="nav-links" aria-label="Primary">
-      <a href="#services">Services</a>
-      <a href="#dentist">Your Dentist</a>
-      <a href="#reviews">Reviews</a>
-      <a href="#visit">Visit Us</a>
-    </nav>
-    <a class="btn btn-wa nav-cta" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6a10 10 0 0 1-3.8-3.4c-.3-.4-.9-1.3-.9-2.4 0-1.2.6-1.7.8-2 .2-.2.4-.2.6-.2h.4c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.5.9 1 1.4 1.7 1.9.3.2.5.2.7 0l.5-.6c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.2.1.7 0 1.2Z"/></svg>
-      Book Now
+    <a class="top-call" href="tel:+{{WA_NUMBER}}" aria-label="Call {{BIZ_NAME}} at {{PHONE_DISPLAY}}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+      <span>{{PHONE_DISPLAY}}</span>
     </a>
   </div>
 </header>
 
 <main id="top">
 
-  <!-- ===== Hero ===== -->
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <div class="hero-copy">
-        <span class="eyebrow">Dental clinic · {{AREA}}</span>
-        <h1>Dentistry in {{AREA}} that finally feels <span class="accent">calm.</span></h1>
-        <p class="lede">At {{BIZ_NAME}}, every treatment is explained in plain language before it starts, so the whole family feels at ease.</p>
-        <div class="hero-actions">
-          <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6a10 10 0 0 1-3.8-3.4c-.3-.4-.9-1.3-.9-2.4 0-1.2.6-1.7.8-2 .2-.2.4-.2.6-.2h.4c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.5.9 1 1.4 1.7 1.9.3.2.5.2.7 0l.5-.6c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.2.1.7 0 1.2Z"/></svg>
-            Book on WhatsApp
-          </a>
-          <a class="btn btn-call" href="tel:+{{WA_NUMBER}}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
-            Call {{PHONE_DISPLAY}}
-          </a>
-        </div>
-        <div class="hero-meta">
-          <small data-wa>Book on WhatsApp</small>
-          <span class="divider" aria-hidden="true" data-wa></span>
-          <small>Sample timings below</small>
-        </div>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Dental clinic · {{AREA}}</span>
+      <h1>Dentistry in {{AREA}} that feels <em>calm.</em></h1>
+      <p class="lede">At {{BIZ_NAME}}, every treatment is explained in plain language before it starts, so the whole family feels at ease.</p>
+      <div class="cta-stack">
+        <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.4.1.2.1.9-.3 1.6Z"/></svg>
+          Book on WhatsApp
+        </a>
+        <a class="btn btn-teal" href="tel:+{{WA_NUMBER}}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+          Call to book
+        </a>
       </div>
-
-      <div class="hero-visual">
-        <div class="hero-stage" role="img" aria-label="Illustration representing gentle, sterile dental care at {{BIZ_NAME}}">
-          <span class="shine" aria-hidden="true"></span>
-          <div class="medallion" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.4C10.4 2 8.3 1.7 6.9 2.7 5.4 3.7 4.6 5.7 4.9 8.1c.2 1.6.6 2.9.9 4.6.4 2 .5 3.6 1.1 5.4.3 1 .8 2.3 1.7 2.3.8 0 1-1 1.2-1.9.2-1 .4-2.1 1.2-2.1s1 1.1 1.2 2.1c.2.9.4 1.9 1.2 1.9.9 0 1.4-1.3 1.7-2.3.6-1.8.7-3.4 1.1-5.4.3-1.7.7-3 .9-4.6.3-2.4-.5-4.4-2-5.4-1.4-1-3.5-.7-5.1.7Z"/><path d="M8.6 6.6c1.1-.8 2.7-.8 3.4 0"/></svg>
-          </div>
-        </div>
-        <div class="float-card fc-1">
-          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <span><b>Painless &amp; gentle</b><span>Comfort-first care</span></span>
-        </div>
-        <div class="float-card fc-2">
-          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></span>
-          <span><b>Hygiene first</b><span>Clean, calm clinic</span></span>
-        </div>
-      </div>
+      <ul class="chips">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Check-ups &amp; cleaning</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Family &amp; kids</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Sample timings below</li>
+      </ul>
     </div>
-  </section>
 
-  <!-- ===== Trust badges ===== -->
-  <div class="wrap trust">
-    <div class="trust-grid reveal">
-      <div class="trust-item">
-        <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
-        <div><b>Painless treatment</b><span>Comfort-focused</span></div>
+    <div class="appt" aria-label="Sample appointment request">
+      <div class="appt-head">
+        <span class="appt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 15l2 2 4-4"/></svg></span>
+        <div><b>Sample appointment request</b><span>How a booking message could look</span></div>
       </div>
-      <div class="trust-item">
-        <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></span>
-        <div><b>Fully sterilised</b><span>Hospital-grade</span></div>
+      <div class="arow"><span>Treatment</span><span>Check-up &amp; cleaning</span></div>
+      <div class="arow"><span>Preferred day</span><span>Saturday</span></div>
+      <div class="arow"><span>Preferred time</span><span>Evening</span></div>
+      <div class="appt-foot"><i aria-hidden="true"></i>Sent on WhatsApp — the clinic confirms the slot</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec svc-sec" id="services">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Treatments</span>
+      <h2>Complete dental care, under one calm roof.</h2>
+      <p>A sample list — your real treatments go here.</p>
+    </div>
+    <div class="services">
+      <article class="svc reveal">
+        <span class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span>
+        <div><h3>Cleaning &amp; polishing</h3><p>Scaling removes tartar and stains; a polish leaves teeth smooth.</p></div>
+      </article>
+      <article class="svc reveal">
+        <span class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
+        <div><h3>Check-ups &amp; fillings</h3><p>Regular check-ups catch problems early; fillings fix cavities.</p></div>
+      </article>
+      <article class="svc reveal">
+        <span class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.5C10.6 4.2 8.7 3.9 7.4 4.8 6 5.7 5.3 7.5 5.6 9.7c.3 2.1 1 4 1.4 6.4.3 1.6.7 3.4 1.6 3.4s1.1-2.4 1.6-3.6c.4-1 1.4-1 1.8 0 .5 1.2.7 3.6 1.6 3.6s1.3-1.8 1.6-3.4c.4-2.4 1.1-4.3 1.4-6.4.3-2.2-.4-4-1.8-4.9-1.3-.9-3.2-.6-4.4.7Z"/><path d="M12 9v4"/></svg></span>
+        <div><h3>Root canal treatment</h3><p>Treats deep infection and aims to save the natural tooth.</p></div>
+      </article>
+      <article class="svc reveal">
+        <span class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="4"/><path d="M8 8v8M12 8v8M16 8v8M3 12h18"/></svg></span>
+        <div><h3>Braces &amp; aligners</h3><p>Metal, ceramic or clear aligners, with a clear plan and cost first.</p></div>
+      </article>
+      <article class="svc reveal">
+        <span class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg></span>
+        <div><h3>Teeth whitening</h3><p>Lifts tea, coffee and other stains for a brighter smile.</p></div>
+      </article>
+      <article class="svc reveal">
+        <span class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/><path d="M10 8h.01M14 8h.01"/></svg></span>
+        <div><h3>Kids dentistry</h3><p>Gentle first visits that help children feel comfortable.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="visit-steps">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Your first visit</span>
+      <h2>Simple from the first message.</h2>
+    </div>
+    <ol class="steps">
+      <li class="step reveal"><span class="step-n">1</span><div><h3>Send a message or call</h3><p>Tell us what is bothering you and a day that suits you.</p></div></li>
+      <li class="step reveal"><span class="step-n">2</span><div><h3>Check-up &amp; explanation</h3><p>The dentist examines and explains the options in plain words.</p></div></li>
+      <li class="step reveal"><span class="step-n">3</span><div><h3>A clear plan</h3><p>You know the steps and the cost before any treatment starts.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="dentist" style="padding-top:0">
+  <div class="wrap">
+    <div class="doc reveal">
+      <div class="doc-photo">
+        <span class="avatar" role="img" aria-label="Your dentist's photo goes here"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+        <div><b>Meet your dentist</b><span>Photo, name &amp; qualifications go here</span></div>
       </div>
-      <div class="trust-item">
-        <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14.1l-3-3"/></svg></span>
-        <div><b>Clear explanations</b><span>Before every treatment</span></div>
+      <p>This space introduces the dentist at {{BIZ_NAME}} with your real details — patients like to know who will treat them.</p>
+      <ul>
+        <li>Qualifications</li><li>Specialities</li><li>Languages spoken</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="visit" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Plan your visit</span>
+      <h2>Timings &amp; location in {{AREA}}</h2>
+      <p>Message or call before you come — the timings below are samples.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card reveal">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Clinic timings</h3>
+        <span class="pill">Sample timings</span>
+        <ul class="hours">
+          <li><span class="d">Monday – Friday</span><span class="t">10:00 AM – 8:30 PM</span></li>
+          <li><span class="d">Saturday</span><span class="t">10:00 AM – 6:00 PM</span></li>
+          <li><span class="d">Sunday</span><span class="t">By appointment</span></li>
+        </ul>
+        <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.4.1.2.1.9-.3 1.6Z"/></svg>
+          Book your slot
+        </a>
+        <a class="btn btn-line" href="tel:+{{WA_NUMBER}}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+          Call {{PHONE_DISPLAY}}
+        </a>
       </div>
-      <div class="trust-item">
-        <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>
-        <div><b>Kids friendly</b><span>Gentle with children</span></div>
+      <div class="info-card reveal">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-7.6 7-13a7 7 0 1 0-14 0c0 5.4 7 13 7 13Z"/><circle cx="12" cy="9" r="2.5"/></svg>Find the clinic</h3>
+        <p class="addr"><strong>{{BIZ_NAME}}</strong>{{AREA}}<br><small>{{ADDR}}</small></p>
+        <div class="map" role="img" aria-label="Map preview for {{AREA}}">
+          <span class="road r3"></span><span class="road r1"></span><span class="road r2"></span>
+          <span class="tag">Map preview</span>
+          <span class="pin"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/></svg><span class="lbl">{{AREA}}</span></span>
+        </div>
+        <a class="btn btn-teal" href="https://www.google.com/maps/search/?api=1&query={{BIZ_NAME}}+{{AREA}}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l19-9-9 19-2-8-8-2Z"/></svg>
+          Get directions
+        </a>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ===== Services ===== -->
-  <section id="services" class="band band-tint">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">What we do</span>
-        <h2>Complete dental care, under one calm roof</h2>
-        <p>From a quick clean-up to a full smile makeover, every treatment at {{BIZ_NAME}} uses modern equipment and a light, gentle hand.</p>
-      </div>
-
-      <div class="services">
-        <article class="svc reveal">
-          <div class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.4C10.4 2 8.3 1.7 6.9 2.7 5.4 3.7 4.6 5.7 4.9 8.1c.2 1.6.6 2.9.9 4.6.4 2 .5 3.6 1.1 5.4.3 1 .8 2.3 1.7 2.3.8 0 1-1 1.2-1.9.2-1 .4-2.1 1.2-2.1s1 1.1 1.2 2.1c.2.9.4 1.9 1.2 1.9.9 0 1.4-1.3 1.7-2.3.6-1.8.7-3.4 1.1-5.4.3-1.7.7-3 .9-4.6.3-2.4-.5-4.4-2-5.4-1.4-1-3.5-.7-5.1.7Z"/><path d="M8.5 7c1.2-.8 2.8-.8 3.5 0"/></svg></div>
-          <h3>Cleaning &amp; polishing</h3>
-          <p>Ultrasonic scaling lifts tartar and stains, then a fine polish leaves gums calm and teeth noticeably brighter.</p>
-          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Brighter in one visit</span>
-        </article>
-
-        <article class="svc reveal">
-          <div class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16"/><path d="M4 8v8"/><path d="M20 8v8"/><rect x="6.5" y="10.5" width="3" height="3" rx=".8"/><rect x="14.5" y="10.5" width="3" height="3" rx=".8"/><path d="M9.5 12h5"/></svg></div>
-          <h3>Braces &amp; clear aligners</h3>
-          <p>Metal, ceramic or near-invisible aligners, mapped out with a clear timeline and honest cost before you commit.</p>
-          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Clear plan before you start</span>
-        </article>
-
-        <article class="svc reveal">
-          <div class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3 0-5 2-5 5 0 2 .8 3.5 1.3 5.4.5 2 .5 5.6 1.9 5.6 1 0 1-2 1.8-2s.8 2 1.8 2c1.4 0 1.4-3.6 1.9-5.6.5-1.9 1.3-3.4 1.3-5.4 0-3-2-5-5-5Z"/><path d="M12 3v9"/></svg></div>
-          <h3>Root canal treatment</h3>
-          <p>Root canal treatment that aims to save the natural tooth and end that deep, throbbing ache.</p>
-          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Saves the natural tooth</span>
-        </article>
-
-        <article class="svc reveal">
-          <div class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-2.5 0-4.5 2-4.5 4.5 0 1.8.9 3 1.4 4.5h6.2c.5-1.5 1.4-2.7 1.4-4.5C16.5 4 14.5 2 12 2Z"/><path d="M9 13h6"/><path d="M10 16.5h4"/><path d="M11 20h2"/></svg></div>
-          <h3>Dental implants</h3>
-          <p>Titanium implants that look, bite and feel like real teeth, so you can eat and laugh without a second thought.</p>
-          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Lifelike, permanent fit</span>
-        </article>
-
-        <article class="svc reveal">
-          <div class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5C10.5 2.3 8.6 2 7.3 3s-2 2.8-1.7 5c.2 1.5.6 2.7.9 4.3.4 1.9.5 3.4 1 5 .3 1 .8 2.1 1.6 2.1.7 0 .9-1 1.1-1.8.2-.9.3-1.9 1.1-1.9"/><path d="M12 3.5c1.5-1.2 3.4-1.5 4.7-.5"/><path d="M17.5 6.5l1.8-1.8M19.5 9l2-.6M18.5 12l1.8.9"/></svg></div>
-          <h3>Teeth whitening</h3>
-          <p>Professional whitening that safely lifts years of chai, coffee and tobacco stains in one comfortable sitting.</p>
-          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Visibly brighter, same day</span>
-        </article>
-
-        <article class="svc reveal">
-          <div class="svc-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M9.3 10.5c-1.5.9-2.6 2.6-2.8 4.7-.1 1 .6 1.9 1.6 1.9m5.8-6.6c1.5.9 2.6 2.6 2.8 4.7.1 1-.6 1.9-1.6 1.9"/><path d="M9.5 8c.8.6 2.2.6 3 0"/></svg></div>
-          <h3>Kids dentistry</h3>
-          <p>Fear-free check-ups, fluoride and sealants that turn a nervous first visit into a habit your child keeps.</p>
-          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Calm with children</span>
-        </article>
+<section class="sec" id="contact" style="padding-top:0">
+  <div class="wrap">
+    <div class="final reveal">
+      <h2>Your calmest dental visit starts with one message.</h2>
+      <p>Tell {{BIZ_NAME}} what is bothering you — from a routine cleaning to the tooth you have been putting off.</p>
+      <div class="cta-stack">
+        <a class="btn btn-white" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color:#138a43"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.4.1.2.1.9-.3 1.6Z"/></svg>
+          Book on WhatsApp
+        </a>
+        <a class="btn btn-ghost" href="tel:+{{WA_NUMBER}}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+          Call {{PHONE_DISPLAY}}
+        </a>
       </div>
     </div>
-  </section>
-
-  <!-- ===== Meet the dentist ===== -->
-  <section id="dentist" class="band">
-    <div class="wrap">
-      <div class="dentist reveal">
-        <div class="dentist-photo">
-          <div class="avatar" aria-label="Photo of your dentist goes here" role="img"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.4C10.4 2 8.3 1.7 6.9 2.7 5.4 3.7 4.6 5.7 4.9 8.1c.2 1.6.6 2.9.9 4.6.4 2 .5 3.6 1.1 5.4.3 1 .8 2.3 1.7 2.3.8 0 1-1 1.2-1.9.2-1 .4-2.1 1.2-2.1s1 1.1 1.2 2.1c.2.9.4 1.9 1.2 1.9.9 0 1.4-1.3 1.7-2.3.6-1.8.7-3.4 1.1-5.4.3-1.7.7-3 .9-4.6.3-2.4-.5-4.4-2-5.4-1.4-1-3.5-.7-5.1.7Z" fill="currentColor"/></svg></div>
-          <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14.1l-3-3"/></svg> Your dentist</span>
-        </div>
-        <div class="dentist-body">
-          <span class="eyebrow">Meet your dentist</span>
-          <h2>We listen first, then treat</h2>
-          <p class="role">Your dentist's name &amp; qualifications go here</p>
-          <p>This section introduces the dentist at {{BIZ_NAME}} — qualifications, experience and how they care for patients — with your real details.</p>
-          <div class="creds">
-            <span>Qualifications</span>
-            <span>Specialities</span>
-            <span>Years of practice</span>
-            <span>Languages spoken</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== Testimonials ===== -->
-  <section id="reviews" class="band band-tint">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Reviews</span>
-        <h2>What patients say</h2>
-        <p>Your real Google reviews can be shown here.</p>
-      </div>
-      <div class="reviews">
-        <figure class="review reveal">
-          <p>I put off my root canal for two years out of fear. Here it was genuinely painless and done in one sitting. I can't believe I waited so long.</p>
-          <figcaption class="who">
-            <span><b>Sample review</b><span>Patient</span></span>
-          </figcaption>
-        </figure>
-
-        <figure class="review reveal">
-          <p>My six-year-old usually cries at clinics, but the team made it a game. Now he reminds me about his own check-up. That says everything.</p>
-          <figcaption class="who">
-            <span><b>Sample review</b><span>Patient</span></span>
-          </figcaption>
-        </figure>
-
-        <figure class="review reveal">
-          <p>Got my clear aligners here with the full plan and honest pricing upfront. Six months in and my smile is already transformed. Highly recommend.</p>
-          <figcaption class="who">
-            <span><b>Sample review</b><span>Patient</span></span>
-          </figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== Hours + Location ===== -->
-  <section id="visit" class="band">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Plan your visit</span>
-        <h2>Timings &amp; location in {{AREA}}</h2>
-        <p>Message or call before you come — the timings below are samples.</p>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-card reveal">
-          <h3><span class="hic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span> Clinic timings</h3>
-          <span class="pill-open"><span class="dot" aria-hidden="true"></span> Sample timings</span>
-          <ul class="hours">
-            <li><span class="day">Monday to Friday</span><span class="time">10:00 AM - 8:30 PM</span></li>
-            <li><span class="day">Saturday</span><span class="time">10:00 AM - 9:00 PM</span></li>
-            <li><span class="day">Sunday</span><span class="time">10:00 AM - 2:00 PM</span></li>
-            <li><span class="day">Emergency care</span><span class="time on">On call</span></li>
-          </ul>
-          <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6a10 10 0 0 1-3.8-3.4c-.3-.4-.9-1.3-.9-2.4 0-1.2.6-1.7.8-2 .2-.2.4-.2.6-.2h.4c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.5.9 1 1.4 1.7 1.9.3.2.5.2.7 0l.5-.6c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.2.1.7 0 1.2Z"/></svg>
-            Book your slot
-          </a>
-        </div>
-
-        <div class="info-card reveal">
-          <h3><span class="hic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span> Find us</h3>
-          <div class="map" role="img" aria-label="Map showing {{BIZ_NAME}} in {{AREA}}">
-            <span class="road r3"></span>
-            <span class="road r1"></span>
-            <span class="road r2"></span>
-            <span class="pin" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.6" fill="#fff"/></svg></span>
-            <span class="maplabel"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg> {{AREA}}</span>
-          </div>
-          <p class="addr">
-            <span class="lbl">{{BIZ_NAME}}</span>{{AREA}}<br><small>{{ADDR}}</small>
-          </p>
-          <a class="btn btn-call" style="margin-bottom:10px" href="https://www.google.com/maps/search/?api=1&query={{BIZ_NAME}}+{{AREA}}">Get directions</a>
-          <a class="btn btn-call" href="tel:+{{WA_NUMBER}}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
-            Call {{PHONE_DISPLAY}}
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== Final CTA ===== -->
-  <section class="band" style="padding-top:0">
-    <div class="wrap">
-      <div class="final reveal">
-        <h2>Your calmest dental visit starts with one message</h2>
-        <p>Tell {{BIZ_NAME}} what's bothering you, from a routine cleaning to the tooth you've been putting off.</p>
-        <div class="actions">
-          <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6a10 10 0 0 1-3.8-3.4c-.3-.4-.9-1.3-.9-2.4 0-1.2.6-1.7.8-2 .2-.2.4-.2.6-.2h.4c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.5.9 1 1.4 1.7 1.9.3.2.5.2.7 0l.5-.6c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.2.1.7 0 1.2Z"/></svg>
-            Book on WhatsApp
-          </a>
-          <a class="btn btn-call" href="tel:+{{WA_NUMBER}}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
-            Call {{PHONE_DISPLAY}}
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  </div>
+</section>
 
 </main>
 
-<!-- ===== Footer ===== -->
 <footer>
-  <div class="wrap">
-    <div class="foot-top">
-      <div>
-        <div class="foot-brand">
-          <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.4C10.4 2 8.3 1.7 6.9 2.7 5.4 3.7 4.6 5.7 4.9 8.1c.2 1.6.6 2.9.9 4.6.4 2 .5 3.6 1.1 5.4.3 1 .8 2.3 1.7 2.3.8 0 1-1 1.2-1.9.2-1 .4-2.1 1.2-2.1s1 1.1 1.2 2.1c.2.9.4 1.9 1.2 1.9.9 0 1.4-1.3 1.7-2.3.6-1.8.7-3.4 1.1-5.4.3-1.7.7-3 .9-4.6.3-2.4-.5-4.4-2-5.4-1.4-1-3.5-.7-5.1.7Z" fill="#fff" fill-opacity=".96"/></svg></span>
-          <div>
-            <div class="name">{{BIZ_NAME}}</div>
-            <div class="loc">Gentle &amp; modern dental care</div>
-          </div>
-        </div>
-        <p style="margin-top:16px;max-width:36ch;font-size:14.5px;color:#a7c6c0;font-weight:500">Caring for smiles in {{AREA}}, one calm visit at a time.</p>
+  <div class="wrap foot-grid">
+    <div>
+      <div class="foot-brand">
+        <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.4C10.4 2 8.3 1.7 6.9 2.7 5.4 3.7 4.6 5.7 4.9 8.1c.2 1.6.6 2.9.9 4.6.4 2 .5 3.6 1.1 5.4.3 1 .8 2.3 1.7 2.3.8 0 1-1 1.2-1.9.2-1 .4-2.1 1.2-2.1s1 1.1 1.2 2.1c.2.9.4 1.9 1.2 1.9.9 0 1.4-1.3 1.7-2.3.6-1.8.7-3.4 1.1-5.4.3-1.7.7-3 .9-4.6.3-2.4-.5-4.4-2-5.4-1.4-1-3.5-.7-5.1.7Z" fill="#fff"/></svg></span>
+        <span class="foot-name">{{BIZ_NAME}}</span>
       </div>
-
-      <div class="foot-cols">
-        <div>
-          <h4>Treatments</h4>
-          <ul>
-            <li><a href="#services">Cleaning &amp; polishing</a></li>
-            <li><a href="#services">Braces &amp; aligners</a></li>
-            <li><a href="#services">Root canal</a></li>
-            <li><a href="#services">Dental implants</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Clinic</h4>
-          <ul>
-            <li><a href="#dentist">Our dentist</a></li>
-            <li><a href="#reviews">Reviews</a></li>
-            <li><a href="#visit">Timings</a></li>
-            <li><a href="#visit">Location</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Reach us</h4>
-          <ul>
-            <li><a href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">WhatsApp booking</a></li>
-            <li><a href="tel:+{{WA_NUMBER}}">{{PHONE_DISPLAY}}</a></li>
-            <li>{{AREA}}</li>
-            <li>Call or message for timings</li>
-          </ul>
-        </div>
-      </div>
+      <p class="foot-desc">Dental clinic in {{AREA}}. Check-ups, cleaning, fillings, root canal, braces and more.</p>
     </div>
-
+    <div class="foot-links">
+      <p class="foot-h">Get in touch</p>
+      <a href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment."><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.4.1.2.1.9-.3 1.6Z"/></svg>WhatsApp {{PHONE_DISPLAY}}</a>
+      <a href="tel:+{{WA_NUMBER}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>Call {{PHONE_DISPLAY}}</a>
+      <a href="https://www.google.com/maps/search/?api=1&query={{BIZ_NAME}}+{{AREA}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-7.6 7-13a7 7 0 1 0-14 0c0 5.4 7 13 7 13Z"/><circle cx="12" cy="9" r="2.5"/></svg>{{AREA}} · Directions</a>
+    </div>
+    <div class="foot-links">
+      <p class="foot-h">On this page</p>
+      <a href="#services">Treatments</a>
+      <a href="#visit-steps">Your first visit</a>
+      <a href="#visit">Timings &amp; location</a>
+    </div>
+  </div>
+  <div class="wrap">
     <div class="foot-bottom">
-      <span class="biz">© {{YEAR}} {{BIZ_NAME}} · {{AREA}}</span>
-      <span class="credit">Website designed by <b>Kalpesh Malusare</b> · Web Developer, Mumbai</span>
+      <span><b>{{BIZ_NAME}}</b> · {{AREA}} · © {{YEAR}}</span>
+      <span>Website designed by Kalpesh Malusare · Web Developer, Mumbai</span>
     </div>
   </div>
 </footer>
 
-<!-- ===== Mobile sticky CTA ===== -->
-<div class="sticky-cta">
+<nav class="dock" aria-label="Contact {{BIZ_NAME}}">
   <a class="btn btn-wa" href="https://wa.me/{{WA_NUMBER}}?text=Hi%20{{BIZ_NAME}}%2C%20I%20would%20like%20to%20book%20a%20dental%20appointment.">
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6a10 10 0 0 1-3.8-3.4c-.3-.4-.9-1.3-.9-2.4 0-1.2.6-1.7.8-2 .2-.2.4-.2.6-.2h.4c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.4 0 .5l-.3.5c-.1.2-.3.3-.1.6.5.9 1 1.4 1.7 1.9.3.2.5.2.7 0l.5-.6c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.2.1.7 0 1.2Z"/></svg>
-    Book on WhatsApp
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .3-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.4.1.2.1.9-.3 1.6Z"/></svg>
+    <span><span class="opt">Book on </span>WhatsApp</span>
   </a>
-  <a class="btn btn-call" href="tel:+{{WA_NUMBER}}" aria-label="Call {{BIZ_NAME}} at {{PHONE_DISPLAY}}">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+  <a class="btn btn-teal" href="tel:+{{WA_NUMBER}}" aria-label="Call {{BIZ_NAME}} at {{PHONE_DISPLAY}}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
     Call
   </a>
-</div>
+</nav>
 
 <script>
-  (function(){
-    var els = document.querySelectorAll('.reveal');
-    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){ if(en.isIntersecting){en.target.classList.add('in'); io.unobserve(en.target);} });
-    },{threshold:.12, rootMargin:'0px 0px -40px 0px'});
-    els.forEach(function(e){io.observe(e)});
-  })();
+/* Scroll reveal as progressive enhancement: content is visible unless this runs. Sections already on screen are
+   never hidden; only those below the fold fade in, and everything shows for printing. */
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var els=document.querySelectorAll('.reveal'), vh=window.innerHeight||document.documentElement.clientHeight;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -6% 0px'});
+  for(var i=0;i<els.length;i++){ if(els[i].getBoundingClientRect().top<vh) els[i].classList.add('in'); else io.observe(els[i]); }
+  document.documentElement.classList.add('js-reveal');
+  window.addEventListener('beforeprint',function(){for(var j=0;j<els.length;j++) els[j].classList.add('in');});
+})();
 </script>
 </body>
 </html>

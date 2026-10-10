@@ -12,7 +12,7 @@ const biz = (over: Partial<LocalBiz> = {}): LocalBiz => ({
 const FORBIDDEN = [
   "Rane", "400 053", "400053", "Est. 2019", "on Google", "Open now", ".cafe", "Mumbai, Mumbai", "Thane, Mumbai", "+Thane+Mumbai",
   "Keema", "Omelette", "Egg", "Priya Sardesai", "Rahul Kamble", "Meher Doshi", "900+", "300+", "4.8", "4.9", "Open 7 days",
-  "Linking Road", "Sai Plaza",
+  "Linking Road", "Sai Plaza", "What patients say", "Sample review", "Hospital-grade", "unsplash", "fonts.googleapis",
 ];
 const NOTICE = "Free demo made for Shree Sai Snacks by Kalpesh Malusare. Text, menu, prices, timings and photos are samples, not real details of Shree Sai Snacks.";
 const KEYS = Object.keys(TEMPLATES) as TemplateKey[];
