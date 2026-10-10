@@ -55,3 +55,13 @@ describe("isPublicPath", () => {
     }
   });
 });
+
+import { normalizePassword } from "./guard";
+describe("phone-friendly password", () => {
+  it("ignores capitals, extra and trailing spaces", () => {
+    process.env.APP_PASSWORD = "wander cedar forest cactus 50";
+    expect(checkPassword("Wander  cedar forest cactus 50 ")).toBe(true);
+    expect(checkPassword("wander cedar forest cactus 51")).toBe(false);
+    expect(normalizePassword("  A  B ")).toBe("a b");
+  });
+});

@@ -5,6 +5,7 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [show, setShow] = useState(false);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -37,7 +38,10 @@ export function LoginForm() {
       </div>
       <label className="field">
         <span className="field__label">Password</span>
-        <input type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} autoFocus />
+        <input type={show ? "text" : "password"} autoComplete="current-password" autoCapitalize="none" autoCorrect="off" spellCheck={false} value={password} onChange={(e) => setPassword(e.target.value)} autoFocus />
+      </label>
+      <label style={{ display: "flex", gap: 8, alignItems: "center", minHeight: 44 }}>
+        <input type="checkbox" checked={show} onChange={(e) => setShow(e.target.checked)} /> Password dakhav
       </label>
       <button className="btn btn--primary" disabled={busy || !password}>{busy ? "Checking…" : "Login"}</button>
       {err ? <p style={{ color: "var(--danger)", margin: 0 }}>{err}</p> : null}

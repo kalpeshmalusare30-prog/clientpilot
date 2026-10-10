@@ -9,9 +9,14 @@ export function clientIp(req: Request): string {
   return "local";
 }
 
+/** Phone keyboards capitalise, add trailing spaces or double spaces; the passphrase is lowercase words. */
+export function normalizePassword(s: string): string {
+  return s.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
 export function checkPassword(input: string): boolean {
-  const expected = process.env.APP_PASSWORD ?? "";
-  return expected.length > 0 && constantTimeEqual(input, expected);
+  const expected = normalizePassword(process.env.APP_PASSWORD ?? "");
+  return expected.length > 0 && constantTimeEqual(normalizePassword(input), expected);
 }
 
 export function readCookie(req: Request, name: string): string | undefined {
